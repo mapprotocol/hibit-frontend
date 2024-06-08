@@ -1,0 +1,249 @@
+.header {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    position: relative;
+}
+
+.headerRight {
+    display: flex;
+    gap: 48px;
+}
+
+.home {
+    padding-left: calc(50% - 620px);
+    padding-right: calc(50% - 620px);
+}
+
+.icons {
+    display: flex;
+    gap: 16px;
+}
+
+.icons img {
+    cursor: pointer;
+}
+
+.offerings {
+    position: relative;
+
+    margin-top: 48px;
+
+}
+
+.title {
+    color: #FFF;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+
+    letter-spacing: 0.4px;
+}
+
+
+.banners {
+    display: flex;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+.bannerItem {
+    flex-basis: 50%;
+    border-radius: 20px;
+    overflow: hidden;
+    width: 690px;
+    height: 200px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.keywords {
+    position: relative;
+    margin-top: 48px;
+    height: 180px;
+}
+
+.messages {
+    display: flex;
+    flex-wrap: wrap;
+    position: absolute;
+    left: 0;
+    gap: 12px;
+    max-height: 120px;
+    overflow: hidden;
+    padding: 32px 0;
+    margin-top: 24px;
+    background: linear-gradient(180deg, #262626 31.56%, rgba(38, 38, 38, 0.00) 100%);
+}
+.messages::before, .messages::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40%;  /* 调整宽度以实现效果 */
+    z-index: 1;
+    pointer-events: none;  /* 确保点击事件不受影响 */
+}
+
+.messages::before {
+    left: 0;
+    background: linear-gradient(to right, #191919 0%, rgba(38, 0, 0, 0) 100%);
+}
+
+.messages::after {
+    right: 0;
+    background: linear-gradient(to left, #191919 0%, rgba(38, 38, 38, 0) 100%);
+}
+.messageItem {
+    width: auto;
+    height: 32px;
+    color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    gap: 4px;
+    padding: 4px 8px;
+    align-items: center;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 12px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.50);
+    /* 100% */
+    letter-spacing: 0.24px;
+}
+
+.list {
+    display: flex;
+    gap: 24px;
+    margin-top: 48px;
+}
+
+.hotCoins {
+    flex-basis: 50%;
+}
+
+.topGainers {
+    flex-basis: 50%;
+}
+
+.coinAvatar {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #FFF;
+}
+
+
+.hotCoinsList {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.hotCoinItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+    width: 186px;
+    height: 145px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: #262626;
+}
+
+.hotCoinName {
+    color: #FFF;
+    text-align: center;
+    font-family: Hanson;
+    margin-top: 8px;
+
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0.32px;
+}
+
+.changeLeft {
+    margin-top: 8px;
+    color: #3BF873;
+    font-family: Hanson;
+    display: flex;
+    gap: 2px;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 12px;
+
+}
+
+.topGainersItem {
+
+    display: flex;
+    margin-top: 24px;
+    width: 100%;
+    border-radius: 20px;
+    background: #262626;
+    height: 90px;
+    align-items: center;
+    padding: 0 24px;
+    justify-content: space-between;
+
+}
+
+.topGainersItemLeft {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.topGainersItemTime {
+    color: #fff;
+    text-align: right;
+    opacity: 0.4;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0.28px;
+}
+
+.bottomLine {
+    width: 100%;
+    height: 1px;
+    background-color: #fff;
+    opacity: 0.2;
+    margin-top: 48px;
+}
+
+.bottom {
+    display: flex;
+    margin-top: 32px;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 48px;
+}
+
+.bottomLeft {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    /* 100% */
+}
