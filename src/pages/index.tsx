@@ -1,5 +1,6 @@
 import Image from "next/image";
 import styles from './index.module.css'
+import { Router, useRouter } from "next/router";
 
 const bannerList = [
   {
@@ -239,6 +240,8 @@ const messages = [
   }
 ]
 export default function Home() {
+
+  const router = useRouter()
   return (
     <div className={styles.home}>
       <div style={{
@@ -278,7 +281,9 @@ export default function Home() {
               src={`/icons/x.svg`}
               alt="x" />
           </div>
-          <div className={styles.start}>
+          <div className={styles.start} onClick={()=>{
+            router.push('/hibit')
+          }}>
             <Image
               height={40}
               width={215}

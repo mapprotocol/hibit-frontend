@@ -1,0 +1,107 @@
+.leftTabs {
+    margin-top: 24px;
+    color: #FFF;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    display: flex;
+    line-height: 14px;
+    gap: 8px;
+}
+
+.leftTab {
+    width: 97px;
+    padding: 8px 0;
+    cursor: pointer;
+}
+
+.bottomBorder {
+    height: 4px;
+    background-color: #37F872;
+    border-radius: 4px;
+    width: 97px;
+    margin-top: 8px;
+}
+
+.leftBar {
+    background-color: #1A191B;
+    width: 240px;
+    flex-shrink: 0;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 24px;
+}
+
+.coinslist {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    width: 100%;
+}
+
+.coinItem {
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 44px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.coinItemLeft {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.coinAvatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+.coinName {
+    color: #F5F5F5;
+    text-align: center;
+    opacity: 0.8;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 14px;
+
+}
+
+.change {
+    color: #3BF873;
+    text-align: right;
+    display: flex;
+    gap: 2px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 14px;
+    margin-top: 6px;
+}
+
+.price {
+    color: #FFF;
+    text-align: right;
+    margin-top:  6px;
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 12px;
+    opacity: 0.5;
+
+
+}
