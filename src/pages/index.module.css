@@ -100,6 +100,7 @@
     right: 0;
     background: linear-gradient(to left, #191919 0%, rgba(38, 38, 38, 0) 100%);
 }
+
 .messageItem {
     width: auto;
     height: 32px;
@@ -116,8 +117,7 @@
     background: rgba(0, 0, 0, 0.50);
     /* 100% */
     letter-spacing: 0.24px;
-}
-
+  }
 .list {
     display: flex;
     gap: 24px;

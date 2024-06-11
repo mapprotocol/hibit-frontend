@@ -282,7 +282,7 @@ export default function Home() {
               alt="x" />
           </div>
           <div className={styles.start} onClick={()=>{
-            router.push('/hibit')
+            router.push('/app')
           }}>
             <Image
               height={40}
