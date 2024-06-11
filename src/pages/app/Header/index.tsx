@@ -22,7 +22,7 @@ export default function Header({ }) {
         }, 200);
     };
 
-    const handlePanelMouseDown = (event) => {
+    const handlePanelMouseDown = (event: any) => {
         event.preventDefault();
     };
     return (

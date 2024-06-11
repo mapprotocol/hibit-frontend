@@ -92,7 +92,7 @@
 .searchPanel {
     position: absolute;
     background-color: #262626;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
     width: 420px;
     height: 448px;
     flex-shrink: 0;
