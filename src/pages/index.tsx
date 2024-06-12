@@ -115,7 +115,7 @@ const messages = [
       height={24}
       width={24}
       src={`/icons/doge.svg`}
-      alt="doge" />前方预警!!!前方预警!!!垃圾币!!!</>,
+      alt="doge" />No.1 MemeNo.1 Meme</>,
 
   },
   {
@@ -135,7 +135,7 @@ const messages = [
       height={24}
       width={24}
       src={`/icons/doge.svg`}
-      alt="doge" />前方预警!!!垃圾币!!!</>,
+      alt="doge" />No.1 Meme</>,
 
   },
   {
@@ -155,7 +155,7 @@ const messages = [
       height={24}
       width={24}
       src={`/icons/doge.svg`}
-      alt="doge" />前方预警!!!垃圾币!!!</>,
+      alt="doge" />No.1 Meme</>,
 
   },
   {
@@ -175,7 +175,7 @@ const messages = [
       height={24}
       width={24}
       src={`/icons/doge.svg`}
-      alt="doge" />前方预警!!!垃圾币!!!</>,
+      alt="doge" />No.1 Meme</>,
 
   },
   {
@@ -195,7 +195,7 @@ const messages = [
       height={24}
       width={24}
       src={`/icons/doge.svg`}
-      alt="doge" />前方预警!!!垃圾币!!!</>,
+      alt="doge" />No.1 Meme</>,
 
   },
   {
@@ -215,7 +215,7 @@ const messages = [
       height={24}
       width={24}
       src={`/icons/doge.svg`}
-      alt="doge" />前方预警!!!垃圾币!!!</>,
+      alt="doge" />No.1 Meme</>,
 
   },
   {
@@ -235,7 +235,7 @@ const messages = [
       height={24}
       width={24}
       src={`/icons/doge.svg`}
-      alt="doge" />前方预警!!!前方预警!!!垃圾币!!!</>,
+      alt="doge" />No.1 Meme</>,
 
   }
 ]
