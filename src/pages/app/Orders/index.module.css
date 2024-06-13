@@ -1,4 +1,4 @@
-.orders {
+.order_area {
     width: 800px;
     flex-shrink: 0;
     margin-top: 24px;
@@ -9,6 +9,67 @@
     width: 100%;
     .evaluate_img{
         width: 100%;
+    }
+}
+
+.orders{
+    flex-shrink: 0;
+    background-color: #1A191B;
+    margin-top: 24px;
+    border-radius: 8px;
+    padding: 28px 28px;
+    .orders_title{
+        display: grid;
+        grid-template-columns: 2fr 2fr 2fr 2fr 4fr;
+        margin-bottom: 20px;
+        .orders_title_content{
+            color: #F5F5F5;
+            text-align: center;
+            font-family: Poppins;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 500;
+            opacity: .8;
+            text-align: left;
+        }
+    }
+
+    .order{
+        border-top: 1px solid #333;
+        line-height: 42px;
+        display: grid;
+        grid-template-columns: 2fr 2fr 2fr 2fr 4fr;
+        color: #fff;
+        opacity: 0.95;
+        font-size: 12px;
+        .order_user{
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            color: #FFF;
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: 400;
+            opacity: .95;
+
+            .order_user_img{
+                width: 22px;
+                border-radius: 11px;
+            }
+        }
+        .buy{
+            color: #39EE6F;
+            font-family: Poppins;
+            font-size: 12px;
+            font-weight: 400;
+        }
+        .sell{
+            color: #F64982;
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: 400;
+        }
     }
 }
 
