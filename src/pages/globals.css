@@ -9,20 +9,3 @@ body {
 }
 
 
-.messageItem {
-  width: auto;
-  height: 32px;
-  color: rgba(255, 255, 255, 0.5);
-  display: flex;
-  gap: 4px;
-  padding: 4px 8px;
-  align-items: center;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 12px;
-  border-radius: 20px;
-  background: rgba(0, 0, 0, 0.50);
-  /* 100% */
-  letter-spacing: 0.24px;
-}

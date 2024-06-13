@@ -70,7 +70,7 @@ const hotCoins = [
 ]
 
 const topCoins = [
- 
+
   {
     bg: 'https://s3-alpha-sig.figma.com/img/2a5a/72d0/22a2e0d21fab55de9af04226ec36c557?Expires=1718582400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=T77SWhCIj9i-aV5lap4Q2OO6voD3m~5F66f~aOWkfZk1UsIoq-d8P7mT004MiS0KOoUWM5Dtb-X0yE8aKUmIqqYWanssI4OfQ0SKyQ-kkxTK7lX8YvRALg0nNpD8iRXz~T5Ghry2o8PpxiPLbr6HDN4cGsRXZNbN4djScfEvnQyLjVgoZSx6ZjbOxwQIIa-BBo~4lQxDAkPzgti4Ck8MEFVeLNar388NVK64ETZfcvYYgOF7EMjf6XaidGaB5XlgfXGaeSJfmYUNXCfDXVKdK6G9pvJh1BVhb7~ysv2QiMxKhB1db2VKFlFex8rSWzONrjw8ylgG8-N6RYLRXQODJw__',
     name: 'BRETT',
@@ -125,12 +125,12 @@ const messages = [
       src={`/icons/hat.svg`}
       alt="hat" />
       <Image
-      height={40}
-      width={40}
-      src={`/icons/moon.svg`}
-      alt="moon" />To da moon</>,
+        height={40}
+        width={40}
+        src={`/icons/moon.svg`}
+        alt="moon" />To da moon</>,
 
-  },{
+  }, {
     content: <>  <Image
       height={24}
       width={24}
@@ -145,12 +145,12 @@ const messages = [
       src={`/icons/hat.svg`}
       alt="hat" />
       <Image
-      height={40}
-      width={40}
-      src={`/icons/moon.svg`}
-      alt="moon" />To da moon</>,
+        height={40}
+        width={40}
+        src={`/icons/moon.svg`}
+        alt="moon" />To da moon</>,
 
-  },{
+  }, {
     content: <>  <Image
       height={24}
       width={24}
@@ -165,12 +165,12 @@ const messages = [
       src={`/icons/hat.svg`}
       alt="hat" />
       <Image
-      height={40}
-      width={40}
-      src={`/icons/moon.svg`}
-      alt="moon" />To da moon</>,
+        height={40}
+        width={40}
+        src={`/icons/moon.svg`}
+        alt="moon" />To da moon</>,
 
-  },{
+  }, {
     content: <>  <Image
       height={24}
       width={24}
@@ -185,12 +185,12 @@ const messages = [
       src={`/icons/hat.svg`}
       alt="hat" />
       <Image
-      height={40}
-      width={40}
-      src={`/icons/moon.svg`}
-      alt="moon" />To da moon</>,
+        height={40}
+        width={40}
+        src={`/icons/moon.svg`}
+        alt="moon" />To da moon</>,
 
-  },{
+  }, {
     content: <>  <Image
       height={24}
       width={24}
@@ -205,12 +205,12 @@ const messages = [
       src={`/icons/hat.svg`}
       alt="hat" />
       <Image
-      height={40}
-      width={40}
-      src={`/icons/moon.svg`}
-      alt="moon" />To da moon</>,
+        height={40}
+        width={40}
+        src={`/icons/moon.svg`}
+        alt="moon" />To da moon</>,
 
-  },{
+  }, {
     content: <>  <Image
       height={24}
       width={24}
@@ -225,10 +225,10 @@ const messages = [
       src={`/icons/hat.svg`}
       alt="hat" />
       <Image
-      height={40}
-      width={40}
-      src={`/icons/moon.svg`}
-      alt="moon" />To da moon</>,
+        height={40}
+        width={40}
+        src={`/icons/moon.svg`}
+        alt="moon" />To da moon</>,
 
   }, {
     content: <>  <Image
@@ -265,7 +265,7 @@ export default function Home() {
           alt="logo" />
         <div className={styles.headerRight}>
           <div className={styles.icons}>
-            <Image
+            {/* <Image
               height={32}
               width={32}
               src={`/icons/discord.svg`}
@@ -274,16 +274,22 @@ export default function Home() {
               height={32}
               width={32}
               src={`/icons/telegram.svg`}
-              alt="telegram" />
+              alt="telegram" /> */}
             <Image
               height={32}
               width={32}
+              onClick={() => {
+                router.push('https://x.com/Bibobibo_fun')
+              }}
               src={`/icons/x.svg`}
               alt="x" />
           </div>
-          <div className={styles.start} onClick={()=>{
-            router.push('/app')
-          }}>
+          <div className={styles.start}
+
+            // onClick={() => {
+            //   router.push('/app')
+            // }}
+          >
             <Image
               height={40}
               width={215}
@@ -423,7 +429,7 @@ export default function Home() {
         </div>
         <div className={styles.bottomRight}>
           <div className={styles.icons}>
-            <Image
+            {/* <Image
               height={32}
               width={32}
               src={`/icons/discord.svg`}
@@ -432,10 +438,13 @@ export default function Home() {
               height={32}
               width={32}
               src={`/icons/telegram.svg`}
-              alt="telegram" />
+              alt="telegram" /> */}
             <Image
               height={32}
               width={32}
+              onClick={() => {
+                router.push('https://x.com/Bibobibo_fun')
+              }}
               src={`/icons/x.svg`}
               alt="x" />
           </div>

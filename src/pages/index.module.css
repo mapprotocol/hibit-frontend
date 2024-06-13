@@ -81,14 +81,18 @@
     margin-top: 24px;
     background: linear-gradient(180deg, #262626 31.56%, rgba(38, 38, 38, 0.00) 100%);
 }
-.messages::before, .messages::after {
+
+.messages::before,
+.messages::after {
     content: '';
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 40%;  /* 调整宽度以实现效果 */
+    width: 40%;
+    /* 调整宽度以实现效果 */
     z-index: 1;
-    pointer-events: none;  /* 确保点击事件不受影响 */
+    pointer-events: none;
+    /* 确保点击事件不受影响 */
 }
 
 .messages::before {
@@ -117,11 +121,17 @@
     background: rgba(0, 0, 0, 0.50);
     /* 100% */
     letter-spacing: 0.24px;
-  }
+}
+
 .list {
     display: flex;
     gap: 24px;
     margin-top: 48px;
+}
+
+.start {
+
+    cursor: not-allowed;
 }
 
 .hotCoins {
