@@ -1,0 +1,14 @@
+.orders {
+    width: 800px;
+    flex-shrink: 0;
+    margin-top: 24px;
+    border-radius: 8px;
+}
+
+.evaluate{
+    width: 100%;
+    .evaluate_img{
+        width: 100%;
+    }
+}
+

@@ -5,6 +5,7 @@ import { useState } from "react";
 import Comments from "./Comments";
 import Swap from "./Swap";
 import Header from "./Header";
+import Orders from "@/pages/app/Orders";
 
 export default function Hibit() {
     const [selectedCoin, setSelectedCoin] = useState(1)
@@ -15,7 +16,10 @@ export default function Hibit() {
                 <Header />
                 <div className={styles.content}>
                     <Comments />
-                    <Swap />
+                    <div className={styles.buy_area}>
+                        <Swap />
+                        <Orders />
+                    </div>
                 </div>
             </div>
         </div>

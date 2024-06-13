@@ -1,7 +1,211 @@
 .swap {
-    width: 372px;
+    width: 400px;
     height: 408px;
     flex-shrink: 0;
     background-color: #1A191B;
     margin-top: 24px;
+    border-radius: 8px;
+    padding: 28px 28px;
+}
+
+.buy_sell {
+    width: 100%;
+    height: 40px;
+    position: relative;
+    border-radius: 8px;
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.05) 100%), #191919;
+
+    padding-right: 26px;
+
+    color: #FFF;
+    font-family: Hanson;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px; /* 100% */
+    letter-spacing: 0.28px;
+    text-align: right;
+    cursor: pointer;
+
+    .buy_btn {
+        width: 270px;
+        height: 80px;
+        position: absolute;
+        left: -18px;
+        bottom: -12px;
+
+    }
+}
+
+.market {
+    cursor: pointer;
+    width: 76px;
+    margin-top: 12px;
+    height: 26px;
+    flex-shrink: 0;
+    color: #F5F5F5;
+    text-align: right;
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 26px; /* 166.667% */
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 9px;
+    padding-right: 9px;
+
+    border-radius: 14px;
+    border: 1px solid #3c3c3c;
+
+    .market_img {
+        width: 10px;
+    }
+}
+
+
+.percent_area {
+    margin-top: 12px;
+    width: 100%;
+    background-color: #252525;
+    border-radius: 8px;
+    padding: 10px 12px;
+
+    .percent_top {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .number {
+            color: #FFF;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 18px; /* 100% */
+        }
+
+        .token {
+            border-radius: 14px;
+            width: 82px;
+            height: 26px;
+            background-color: #333333;
+            display: flex;
+            justify-content: space-between;
+            padding-right: 12px;
+
+            .token_img {
+                width: 26px;
+            }
+
+            .token_symbol {
+                color: #FFF;
+                text-align: center;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 26px; /* 100% */
+            }
+        }
+    }
+
+    .wallet {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+
+        .total {
+
+            color: #FFF;
+            font-family: Poppins;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 500;
+            opacity: 0.6;
+
+        }
+
+        .balance {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            opacity: 0.6;
+            color: #FFF;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 12px; /* 100% */
+
+
+            .balance_img {
+                width: 12px;
+            }
+
+            .balance_all {
+                cursor: pointer;
+                color: #3AED6F;
+                font-family: Poppins;
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 500;
+            }
+        }
+    }
+
+    .percents {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+
+        .percent {
+            cursor: pointer;
+            border-radius: 4px;
+            background: #333;
+            width: 22%;
+            line-height: 24px;
+            text-align: center;
+            color: #FFF;
+            text-align: center;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 400;
+            opacity: 0.6;
+        }
+    }
+}
+
+.confirm_area{
+    margin-top: 12px;
+    width: 100%;
+    background-color: #252525;
+    border-radius: 8px;
+    padding: 10px 12px 20px 12px;
+
+    .confirm{
+        display: flex;
+        justify-content: space-between;
+        .left{
+            .left_content{
+                display: flex;
+                justify-content: flex-start;
+                gap: 4px;
+                align-items: center;
+                color: #FFF;
+                font-family: Poppins;
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 400;
+                opacity: 0.6;
+            }
+        }
+        .confirm_btn{
+            cursor: pointer;
+            .conform_btn_img{
+                width: 120px;
+            }
+        }
+    }
 }
