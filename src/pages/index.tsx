@@ -128,7 +128,7 @@ const messages = [
       alt="doge" />
       <Image
         height={40}
-      className={styles.messageImage}
+        className={styles.messageImage}
 
         width={40}
         src={`/icons/message1.svg`}
@@ -281,29 +281,35 @@ export default function Home() {
 
   const router = useRouter()
   return (
-    <div className={styles.home}>
-      <div style={{
-        width: '100%', height: 'auto', position: 'absolute',
-        top: 0, left: 0, zIndex: 0,
-      }}>
-        <Image
-          layout="responsive"
-          width={1920}
-          height={1080}
-          style={{ objectFit: "contain" }}
-          src={`/images/banner-background-pc.png`}
-          alt="map"
-        />
-      </div>
-      <div className={styles.header}>
-        <Image
-          height={52}
-          width={110}
-          src={`/icons/logo.svg`}
-          alt="logo" />
-        <div className={styles.headerRight}>
-          <div className={styles.icons}>
-            {/* <Image
+    <>
+      <title>{"bibobibo"}</title>
+      <meta name="description" content={""} />
+      <link rel="icon" href="/icons/logo.svg" />
+      <meta property="og:image" content="/icons/logo.svg" />
+      <div className={styles.home}>
+
+        <div style={{
+          width: '100%', height: 'auto', position: 'absolute',
+          top: 0, left: 0, zIndex: 0,
+        }}>
+          <Image
+            layout="responsive"
+            width={1920}
+            height={1080}
+            style={{ objectFit: "contain" }}
+            src={`/images/banner-background-pc.png`}
+            alt="map"
+          />
+        </div>
+        <div className={styles.header}>
+          <Image
+            height={52}
+            width={110}
+            src={`/icons/logo.svg`}
+            alt="logo" />
+          <div className={styles.headerRight}>
+            <div className={styles.icons}>
+              {/* <Image
               height={32}
               width={32}
               src={`/icons/discord.svg`}
@@ -313,119 +319,85 @@ export default function Home() {
               width={32}
               src={`/icons/telegram.svg`}
               alt="telegram" /> */}
-            <Image
-              height={32}
-              width={32}
-              onClick={() => {
-                router.push('https://x.com/Bibobibo_fun')
-              }}
-              src={`/icons/x.svg`}
-              alt="x" />
-          </div>
-          <div className={styles.start}
+              <Image
+                height={32}
+                width={32}
+                onClick={() => {
+                  router.push('https://x.com/Bibobibo_fun')
+                }}
+                src={`/icons/x.svg`}
+                alt="x" />
+            </div>
+            <div className={styles.start}
 
-          // onClick={() => {
-          //   router.push('/app')
-          // }}
-          >
-            <Image
-              height={40}
-              width={215}
-              src={`/images/btn-start-trading.png`}
-              alt="x" />
+            // onClick={() => {
+            //   router.push('/app')
+            // }}
+            >
+              <Image
+                height={40}
+                width={215}
+                src={`/images/btn-start-trading.png`}
+                alt="x" />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className={styles.offerings}>
-        <div className={styles.title}>
-          {'New Offerings'}
+        <div className={styles.offerings}>
+          <div className={styles.title}>
+            {'New Offerings'}
+          </div>
+          <div className={styles.banners}>
+
+            {bannerList.map((item) =>
+              <div key={item.bg} className={styles.bannerItem}>
+                <div className={styles.coming}>{"Coming Soon"}</div>
+                <Image
+                  style={{ objectFit: "contain" }}
+                  src={item.bg}
+                  fill
+                  alt="banner" />
+              </div>)}
+
+          </div>
         </div>
-        <div className={styles.banners}>
 
-          {bannerList.map((item) =>
-            <div key={item.bg} className={styles.bannerItem}>
-              <div className={styles.coming}>{"Coming Soon"}</div>
+
+        <div className={styles.keywords}>
+          <div className={styles.title}>
+            <Image
+              style={{ objectFit: "contain" }}
+              src={`/icons/keywords.svg`}
+              height={28}
+              width={28}
+              alt="keywords" />
+            {"Keywords Today"}</div>
+
+          <div className={styles.messages}>
+
+            {messages.map((item, index) => <div key={index} className={styles.messageItem}>
+              {item.content}
+            </div>)}
+            {messages.map((item, index) => <div key={index} className={styles.messageItem}>
+              {item.content}
+            </div>)}
+          </div>
+          <div></div>
+
+        </div>
+        <div className={styles.list}>
+          <div className={styles.hotCoins}>
+            <div className={styles.title}>
               <Image
                 style={{ objectFit: "contain" }}
-                src={item.bg}
-                fill
-                alt="banner" />
-            </div>)}
-
-        </div>
-      </div>
-
-
-      <div className={styles.keywords}>
-        <div className={styles.title}>
-          <Image
-            style={{ objectFit: "contain" }}
-            src={`/icons/keywords.svg`}
-            height={28}
-            width={28}
-            alt="keywords" />
-          {"Keywords Today"}</div>
-
-        <div className={styles.messages}>
-
-          {messages.map((item, index) => <div key={index} className={styles.messageItem}>
-            {item.content}
-          </div>)}
-          {messages.map((item, index) => <div key={index} className={styles.messageItem}>
-            {item.content}
-          </div>)}
-        </div>
-        <div></div>
-
-      </div>
-      <div className={styles.list}>
-        <div className={styles.hotCoins}>
-          <div className={styles.title}>
-            <Image
-              style={{ objectFit: "contain" }}
-              src={`/icons/hotcoins.svg`}
-              height={28}
-              width={28}
-              alt="hotcoins" />{"Hot Coins"}</div>
-          <div className={styles.hotCoinsList}>
-            {
-              hotCoins.concat(hotCoins).map(item =>
-                <div key={item.bg} className={styles.hotCoinItem}>
-                  <div className={styles.coinAvatar}>
-                    <img
-                      style={{ objectFit: "contain" }}
-                      src={item.bg}
-                      alt="avatar" /></div>
-                  <div className={styles.hotCoinName}>{item.name}</div>
-                  <div className={styles.changeLeft}>
-                    <Image
-                      style={{ objectFit: "contain" }}
-                      src={`/icons/arrow-up.svg`}
-                      height={10}
-                      width={10}
-                      alt="arrow" />{item.change}
-                  </div>
-
-                </div>
-
-              )
-            }
-          </div>
-        </div>
-        <div className={styles.topGainers}>
-          <div className={styles.title}>
-            <Image
-              style={{ objectFit: "contain" }}
-              src={`/icons/topgainers.svg`}
-              height={28}
-              width={28}
-              alt="topgainers" />{"Top Gainers"}</div>
-          <div className={styles.topGainersList}>
-            {
-              topCoins.map(item =>
-                <div key={item.bg} className={styles.topGainersItem}>
-                  <div className={styles.topGainersItemLeft}>
+                src={`/icons/hotcoins.svg`}
+                height={28}
+                width={28}
+                alt="hotcoins" />{"Hot Coins"}</div>
+            <div className={styles.hotCoinsList}>
+              {
+                hotCoins.concat(hotCoins).map(item =>
+                  <div key={item.bg} className={styles.hotCoinItem}>
                     <div className={styles.coinAvatar}>
                       <img
                         style={{ objectFit: "contain" }}
@@ -440,35 +412,69 @@ export default function Home() {
                         width={10}
                         alt="arrow" />{item.change}
                     </div>
+
                   </div>
-                  <div className={styles.topGainersItemTime}>{'Apr 12'}</div>
-                </div>
-              )
-            }
+
+                )
+              }
+            </div>
+          </div>
+          <div className={styles.topGainers}>
+            <div className={styles.title}>
+              <Image
+                style={{ objectFit: "contain" }}
+                src={`/icons/topgainers.svg`}
+                height={28}
+                width={28}
+                alt="topgainers" />{"Top Gainers"}</div>
+            <div className={styles.topGainersList}>
+              {
+                topCoins.map(item =>
+                  <div key={item.bg} className={styles.topGainersItem}>
+                    <div className={styles.topGainersItemLeft}>
+                      <div className={styles.coinAvatar}>
+                        <img
+                          style={{ objectFit: "contain" }}
+                          src={item.bg}
+                          alt="avatar" /></div>
+                      <div className={styles.hotCoinName}>{item.name}</div>
+                      <div className={styles.changeLeft}>
+                        <Image
+                          style={{ objectFit: "contain" }}
+                          src={`/icons/arrow-up.svg`}
+                          height={10}
+                          width={10}
+                          alt="arrow" />{item.change}
+                      </div>
+                    </div>
+                    <div className={styles.topGainersItemTime}>{'Apr 12'}</div>
+                  </div>
+                )
+              }
+            </div>
+
           </div>
 
         </div>
+        <div className={styles.bottomLine}></div>
+        <div className={styles.bottom}>
+          <div className={styles.bottomLeft}>
+            <Image
+              height={48}
+              width={102}
+              src={`/icons/logo-bottom.svg`}
+              alt="logo" />
+            <div className={styles.bottomTab}>{"Terms of Use"}</div>
+            <div className={styles.bottomTab}>{"Privacy Policy"}</div>
 
-      </div>
-      <div className={styles.bottomLine}></div>
-      <div className={styles.bottom}>
-        <div className={styles.bottomLeft}>
-          <Image
-            height={48}
-            width={102}
-            src={`/icons/logo-bottom.svg`}
-            alt="logo" />
-          <div className={styles.bottomTab}>{"Terms of Use"}</div>
-          <div className={styles.bottomTab}>{"Privacy Policy"}</div>
+            <div className={styles.bottomTab}>{"Disclaimer"}</div>
 
-          <div className={styles.bottomTab}>{"Disclaimer"}</div>
+            <div className={styles.bottomTab}>{"Contact Us"}</div>
 
-          <div className={styles.bottomTab}>{"Contact Us"}</div>
-
-        </div>
-        <div className={styles.bottomRight}>
-          <div className={styles.icons}>
-            {/* <Image
+          </div>
+          <div className={styles.bottomRight}>
+            <div className={styles.icons}>
+              {/* <Image
               height={32}
               width={32}
               src={`/icons/discord.svg`}
@@ -478,17 +484,18 @@ export default function Home() {
               width={32}
               src={`/icons/telegram.svg`}
               alt="telegram" /> */}
-            <Image
-              height={32}
-              width={32}
-              onClick={() => {
-                router.push('https://x.com/Bibobibo_fun')
-              }}
-              src={`/icons/x.svg`}
-              alt="x" />
+              <Image
+                height={32}
+                width={32}
+                onClick={() => {
+                  router.push('https://x.com/Bibobibo_fun')
+                }}
+                src={`/icons/x.svg`}
+                alt="x" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
