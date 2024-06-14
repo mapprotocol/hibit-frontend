@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styles from './index.module.css'
 import { Router, useRouter } from "next/router";
+import Head from "next/head";
 
 const bannerList = [
   {
@@ -282,10 +283,14 @@ export default function Home() {
   const router = useRouter()
   return (
     <>
-      <title>{"bibobibo"}</title>
-      <meta name="description" content={""} />
-      <link rel="icon" href="/icons/logo.svg" />
-      <meta property="og:image" content="/icons/logo.svg" />
+      <Head>
+
+        <title>{"bibobibo"}</title>
+        <meta name="description" content={""} />
+        <link rel="icon" href="/images/logo.jpg" />
+        <meta property="og:image" content="/icons/logo.svg" />
+      </Head>
+
       <div className={styles.home}>
 
         <div style={{
