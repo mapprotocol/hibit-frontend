@@ -1,18 +1,27 @@
 import Image from "next/image";
 import styles from './index.module.css'
 import { useState } from "react";
+import CylinderCanvas from "@/components/cylinder";
 
 const emoticons = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
 
 export default function Comments({ }) {
 
+    const initialPrice = 100; // Initial price
+    const [price, setPrice] = useState(initialPrice);
 
+    const increasePrice = () => setPrice((prevPrice) => prevPrice + 10);
+    const decreasePrice = () => setPrice((prevPrice) => Math.max(prevPrice - 10, 0));
     return (
         <div className={styles.comments}>
-            <div className={styles.shadow}></div>
+            {/* <div className={styles.shadow}></div> */}
 
             <div className={styles.left}>
-                <div className={styles.pirce}></div>
+                <div className={styles.pirce}>
+                    <button onClick={increasePrice}>Increase Price</button>
+                    <button onClick={decreasePrice}>Decrease Price</button>
+                    <CylinderCanvas price={price} initialPrice={initialPrice} />
+                </div>
                 <div className={styles.coinsInfo}>
                     <div className={styles.infoItem}>
                         <div className={styles.infoItemTitle}>{"Market Cap"}</div>

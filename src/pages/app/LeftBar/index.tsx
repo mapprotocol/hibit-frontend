@@ -1,6 +1,9 @@
 import Image from "next/image";
 import styles from './index.module.css'
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchWatchList } from "@/api";
+import { useAccount } from "wagmi";
+import axios from "axios";
 
 
 const coins = [
@@ -54,7 +57,15 @@ const coins = [
 ]
 
 export default function LeftBar({ selectedCoin }: { selectedCoin: number }) {
+    const { address, isConnected, isConnecting } = useAccount();
 
+    useEffect(()=>{
+        console.log(axios.defaults.headers)
+        if(address)
+        fetchWatchList(address).then(res=>{
+            console.log(res)
+        })
+    },[])
     const [active, setActive] = useState(0)
     return (
         <div className={styles.leftBar}>

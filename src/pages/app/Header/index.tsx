@@ -1,15 +1,30 @@
+'use client';
 import Image from "next/image";
 import styles from './index.module.css'
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useAccount } from "wagmi";
+import { ellipsis } from "@/utils";
+import { fetchNonce, loginRequest } from "@/api";
+import { signMessage } from "wagmi/actions";
+import axios from "axios";
+
 
 
 
 export default function Header({ }) {
     const [showPanel, setShowPanel] = useState(false);
     const timeoutRef = useRef(null);
+    const { openAccountModal } = useAccountModal();
+    const { address, isConnected, isConnecting } = useAccount();
+
+    const { openConnectModal } = useConnectModal();
+
+  
 
     const handleFocus = () => {
-
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
@@ -25,6 +40,12 @@ export default function Header({ }) {
     const handlePanelMouseDown = (event: any) => {
         event.preventDefault();
     };
+
+    const conncet = () => {
+        if (openConnectModal && !address) {
+            openConnectModal();
+        }
+    }
     return (
         <div className={styles.header}>
             <div className={styles.selectedCoin}>
@@ -68,7 +89,13 @@ export default function Header({ }) {
                         </div>
                     )}
                 </div>
+                {(isConnected && address) ?
+                    <div className={styles.connect}>
+                        {ellipsis(address)}
+                    </div> : <div className={styles.connect} onClick={conncet}>
+                        {"Connect Wallet"}
 
+                    </div>}
                 <div className={styles.share}>
 
                 </div>

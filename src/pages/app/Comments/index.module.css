@@ -12,7 +12,11 @@
     z-index: 10;
     overflow: hidden;
 }
-
+.pirce{
+    position: absolute;
+    top: 0;
+    color: #FFF;
+}
 
 .shadow {
 
