@@ -6,15 +6,16 @@ import { useEffect, useRef, useState } from "react";
 import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from "wagmi";
-import { ellipsis } from "@/utils";
+import { ellipsis, formatNumber } from "@/utils";
 import { fetchNonce, loginRequest } from "@/api";
 import { signMessage } from "wagmi/actions";
 import axios from "axios";
+import { Coin } from "@/type";
 
 
 
 
-export default function Header({ }) {
+export default function Header({ selectedCoin, setSelectedCoin }: { selectedCoin: Coin | undefined, setSelectedCoin?: Function }) {
     const [showPanel, setShowPanel] = useState(false);
     const timeoutRef = useRef(null);
     const { openAccountModal } = useAccountModal();
@@ -22,7 +23,7 @@ export default function Header({ }) {
 
     const { openConnectModal } = useConnectModal();
 
-  
+
 
     const handleFocus = () => {
         if (timeoutRef.current) {
@@ -48,26 +49,28 @@ export default function Header({ }) {
     }
     return (
         <div className={styles.header}>
-            <div className={styles.selectedCoin}>
+            {selectedCoin && <div className={styles.selectedCoin}>
                 <div className={styles.coinAvatar}>
                     <img
                         style={{ objectFit: "contain" }}
-                        src={"https://s3-alpha-sig.figma.com/img/2a5a/72d0/22a2e0d21fab55de9af04226ec36c557?Expires=1718582400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=T77SWhCIj9i-aV5lap4Q2OO6voD3m~5F66f~aOWkfZk1UsIoq-d8P7mT004MiS0KOoUWM5Dtb-X0yE8aKUmIqqYWanssI4OfQ0SKyQ-kkxTK7lX8YvRALg0nNpD8iRXz~T5Ghry2o8PpxiPLbr6HDN4cGsRXZNbN4djScfEvnQyLjVgoZSx6ZjbOxwQIIa-BBo~4lQxDAkPzgti4Ck8MEFVeLNar388NVK64ETZfcvYYgOF7EMjf6XaidGaB5XlgfXGaeSJfmYUNXCfDXVKdK6G9pvJh1BVhb7~ysv2QiMxKhB1db2VKFlFex8rSWzONrjw8ylgG8-N6RYLRXQODJw__"}
+                        src={selectedCoin.tokenLogoUrl}
                         alt="avatar" /></div>
-                <div className={styles.coinName}>{"DOGE"}</div>
-                <div className={styles.price}>{"$0.000217"}</div>
+                <div className={styles.coinName}>{selectedCoin.tokenName}</div>
+                <div className={styles.price}>{"$" + formatNumber(selectedCoin.price)}</div>
 
-                <div className={styles.change}>
-                    <Image
+                <div className={styles.change}
+                    style={{ color: Number(selectedCoin.priceChangePercent) > 0 ? '#3BF873' : '#FF4B87' }}>
+                    {<Image
                         style={{ objectFit: "contain" }}
-                        src={`/icons/arrow-up.svg`}
+                        src={`/icons/arrow-${Number(selectedCoin.priceChangePercent) > 0 ? "up" : "down"}.svg`}
                         height={10}
                         width={10}
-                        alt="arrow" />{"28.8%"}
+                        alt="arrow" />}
+                    {Math.abs(Number(selectedCoin.priceChangePercent)).toFixed(1) + "%"}
                 </div>
-            </div>
+            </div>}
             <div className={styles.headerRight}>
-                <div className={styles.search}>
+                {/* <div className={styles.search}>
                     <div className={styles.searchInput}>
                         <Image
                             style={{ objectFit: "contain" }}
@@ -88,7 +91,7 @@ export default function Header({ }) {
 
                         </div>
                     )}
-                </div>
+                </div> */}
                 {(isConnected && address) ?
                     <div className={styles.connect}>
                         {ellipsis(address)}

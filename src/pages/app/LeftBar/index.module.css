@@ -15,6 +15,47 @@
     width: 97px;
     padding: 8px 0;
     cursor: pointer;
+    overflow-x: visible; 
+    overflow-y: scroll;  
+}
+
+
+.selectedImage {
+    top: -32px;
+    pointer-events: none;
+    left: -4px;
+    position: absolute;
+    width: 263.181px;
+    height: 120.566px;
+
+}
+
+.selectedcoinName {
+    color: #F3F3F3;
+    text-align: center;
+    text-shadow: 0px 1px 0px #000;
+    -webkit-text-stroke-width: 1.5;
+    -webkit-text-stroke-color: #060606;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 14px;
+    z-index: 10;
+    letter-spacing: 1.12px;
+
+}
+
+.selectedprice {
+    opacity: 0.6;
+    color: #000;
+    text-align: right;
+    margin-top: 6px;
+    font-family: Hanson;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 12px;
+    z-index: 10;
 }
 
 .bottomBorder {
@@ -26,6 +67,7 @@
 }
 
 .leftBar {
+    user-select: none; 
     background-color: #1A191B;
     width: 240px;
     flex-shrink: 0;
@@ -40,12 +82,14 @@
 .coinslist {
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
+  
     width: 100%;
+    transition: all 1 linear;
 }
 
 .coinItem {
     width: 100%;
+    transition: all 1 linear;
     position: relative;
     display: flex;
     justify-content: space-between;
@@ -67,6 +111,7 @@
     border-radius: 50%;
     position: relative;
     overflow: hidden;
+    border: #000 1px solid;
 }
 
 .coinName {
@@ -80,11 +125,26 @@
 
 }
 
+.selectedchange {
+    z-index: 10;
+    color: #000;
+    text-align: right;
+    font-family: Hanson;
+    margin-top: 6px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 12px;
+    /* 100% */
+    display: flex;
+    gap: 4px;
+}
+
 .change {
     color: #3BF873;
     text-align: right;
     display: flex;
-    gap: 2px;
+    gap: 4px;
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
@@ -92,10 +152,17 @@
     margin-top: 6px;
 }
 
+.coinRight {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 2px;
+}
+
 .price {
     color: #FFF;
     text-align: right;
-    margin-top:  6px;
+    margin-top: 6px;
     font-family: Poppins;
     font-size: 12px;
     font-style: normal;

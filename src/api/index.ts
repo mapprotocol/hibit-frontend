@@ -29,6 +29,63 @@ export const fetchWatchList = async (address: string) => {
     }
 };
 
+export const fetchTokenList = async () => {
+    try {
+        console.log()
+        const response = await api.get(`/token/list`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching nonce:', error);
+        throw error;
+    }
+};
+
+
+
+
+export const fetchTokenComments = async (tokenid: number) => {
+    try {
+        console.log()
+        const response = await api.get(`/comments/token?tokenId=${tokenid}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching nonce:', error);
+        throw error;
+    }
+};
+
+export const sendComment = async ({
+    walletAddress,
+    tokenId,
+    text,
+    commentType,
+    tradeType
+}: {
+
+    walletAddress: string
+    tokenId: number
+    text?: string
+    commentType: string
+    tradeType?: string
+    tradeAmount?: string
+}) => {
+    try {
+        console.log()
+        const response = await api.post(`/comments/token/user`, {
+            walletAddress,
+            tokenId,
+            text,
+            approved: true,
+            commentType,
+            tradeType
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching nonce:', error);
+        throw error;
+    }
+};
+
 export const loginRequest = async (nonce: string, signature: string, address: string) => {
     try {
         const response = await api.post('/user/login', {
@@ -36,7 +93,7 @@ export const loginRequest = async (nonce: string, signature: string, address: st
             signature,
             walletAddress: address
         });
-      
+
         return response.data;
     } catch (error) {
         console.error('Error fetching nonce:', error);

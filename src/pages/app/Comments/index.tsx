@@ -1,39 +1,159 @@
 import Image from "next/image";
 import styles from './index.module.css'
-import { useState } from "react";
+import lottie from 'lottie-web';
+import { useEffect, useRef, useState } from "react";
 import CylinderCanvas from "@/components/cylinder";
+import { Coin } from "@/type";
+import { fetchTokenComments, sendComment } from "@/api";
+import { useAccount } from "wagmi";
 
-const emoticons = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+const emoticons = [
+    {
+        id: 0,
+        content:
+            <div className={styles.messageItemText}>
+                <Image
+                    height={40}
+                    width={40}
+                    className={styles.messageImageBig}
+                    src={`/icons/message/rocket.svg`}
+                    alt="hat" />
+                Rocket High
+            </div>
+    },
+    {
+        id: 1,
+        content:
+            <div className={styles.messageItemText}>
+                <Image
+                    height={40}
+                    width={40}
+                    className={styles.messageImageBig}
+                    src={`/icons/message/etf.svg`}
+                    alt="hat" />
+                ETF
+            </div>
+    },
+    {
+        id: 2,
+        content:
+            <div className={styles.messageItemText}>
+                <Image
+                    height={40}
+                    width={40}
+                    className={styles.messageImageBig}
+                    src={`/icons/message/todamoon.svg`}
+                    alt="hat" />
+                To da moon
+            </div>
+    },
+    {
+        id: 3,
+        content:
+            <div className={styles.messageItemText}>
+                <Image
+                    height={40}
+                    width={40}
+                    className={styles.messageImageBig}
+                    src={`/icons/message/LFG.svg`}
+                    alt="hat" />
+                LFG
+            </div>
+    },
+    {
+        id: 4,
+        content:
+            <div className={styles.messageItemImage}>
+                <Image
+                    height={40}
+                    width={40}
 
-export default function Comments({ }) {
+                    src={`/icons/message/heart.svg`}
+                    alt="hat" />
+            </div>
+    },
+    {
+        id: 5,
+        content:
+            <div className={styles.messageItemImage}>
+                <Image
+                    height={40}
+                    width={40}
+                    src={`/icons/message/heart.svg`}
+                    alt="hat" />
+            </div>
+    },
+    {
+        id: 6,
+        content:
+            <div className={styles.messageItemImage}>
+                <Image
+                    height={40}
+                    width={40}
+                    src={`/icons/message/heart.svg`}
+                    alt="hat" />
+            </div>
+    },
+]
+export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCoin: Coin | undefined, setSelectedCoin?: Function }) {
+    const { address, isConnected, isConnecting } = useAccount();
+    const lottieContainerRef = useRef(null);
 
     const initialPrice = 100; // Initial price
-    const [price, setPrice] = useState(initialPrice);
+    useEffect(() => {
+     fetch('/lottie/buyitbig.json')
+          .then(response => response.json())
+          .then(animationData => {
+            lottie.loadAnimation({
+              container: lottieContainerRef.current!,
+              renderer: 'svg',
+              loop: true,
+              autoplay: true,
+              animationData: animationData,
+              assetsPath: '/lottie/images/' // 指定资源图片的路径
+            });
+          })
+          .catch(error => console.error('Error loading animation data:', error));
+      }, []);
 
-    const increasePrice = () => setPrice((prevPrice) => prevPrice + 10);
-    const decreasePrice = () => setPrice((prevPrice) => Math.max(prevPrice - 10, 0));
+    useEffect(() => {
+        if (selectedCoin)
+            fetchTokenComments(selectedCoin?.id).then(res => {
+                console.log(res, 'tokenComment')
+            })
+    }, [selectedCoin])
+
+    const sendEmoji = (id: number) => {
+        if (address && selectedCoin)
+            sendComment({
+                walletAddress: address,
+                tokenId: selectedCoin.id,
+                commentType: 'default',
+                text: id.toString()
+            }).then((res) => {
+                console.log(res, 'sendEmoji')
+            })
+    }
     return (
         <div className={styles.comments}>
             {/* <div className={styles.shadow}></div> */}
 
             <div className={styles.left}>
                 <div className={styles.pirce}>
-                    <button onClick={increasePrice}>Increase Price</button>
-                    <button onClick={decreasePrice}>Decrease Price</button>
-                    <CylinderCanvas price={price} initialPrice={initialPrice} />
+                <div ref={lottieContainerRef} style={{ width: 400, height: 400 }}></div>
                 </div>
-                <div className={styles.coinsInfo}>
+                {selectedCoin && <div className={styles.coinsInfo}>
                     <div className={styles.infoItem}>
                         <div className={styles.infoItemTitle}>{"Market Cap"}</div>
-                        <div className={styles.infoItemValue}>{"$29,334,213,674"}</div>
+                        <div className={styles.infoItemValue}>{"$" + Number(selectedCoin.marketCap).toLocaleString()}</div>
                     </div>
                     <div className={styles.infoItem}>
                         <div className={styles.infoItemTitle}>{"24h Vol."}</div>
-                        <div className={styles.infoItemValue}>{"$3,105,020,467"}</div>
+                        <div className={styles.infoItemValue}>{"$" + Number(selectedCoin.volume24).toLocaleString()}</div>
                     </div>
                     <div className={styles.infoItem}>
                         <div className={styles.infoItemTitle}>{"Holders"}</div>
-                        <div className={styles.infoItemValue}>{"24,123"}</div>
+                        <div className={styles.infoItemValue}>{Number(selectedCoin.holders).toLocaleString()}</div>
                     </div>
                     <div className={styles.infoItem}>
                         <div className={styles.infoItemTitle}>{"Circulating Supply"}</div>
@@ -43,7 +163,7 @@ export default function Comments({ }) {
                         <div className={styles.infoItemTitle}>{"Contract"}</div>
                         <div className={styles.infoItemValue}>{"0xfCd...4c43"}</div>
                     </div>
-                </div>
+                </div>}
                 <div className={styles.myInfo}>
                     <div className={styles.myInfoItem}>
 
@@ -71,18 +191,8 @@ export default function Comments({ }) {
                 <div className={styles.rightLine}></div>
                 <div className={styles.emoticons}>
                     <div className={styles.emoticonsscroll}>
-                        {emoticons.map(item =>
-                            <div className={styles.messageItem}>
-                                <>  <Image
-                                    height={24}
-                                    width={24}
-                                    src={`/icons/hat.svg`}
-                                    alt="hat" />
-                                    <Image
-                                        height={40}
-                                        width={40}
-                                        src={`/icons/moon.svg`}
-                                        alt="moon" />To da moon</>
+                        {emoticons.map((item, index) =>
+                            <div key={item.id} onClick={() => { sendEmoji(item.id) }}>{item.content}
                             </div>
                         )}
                     </div>

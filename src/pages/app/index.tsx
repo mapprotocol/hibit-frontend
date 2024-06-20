@@ -8,26 +8,39 @@ import Orders from "@/pages/app/Orders";
 import dynamic from "next/dynamic";
 import { useAccount } from "wagmi";
 import axios from "axios";
-import { fetchNonce, loginRequest } from "@/api";
+import { api, fetchNonce, loginRequest } from "@/api";
 import { signMessage } from "wagmi/actions";
+import { Coin } from "@/type";
 
 const Header = dynamic(() => import("./Header"), {
     ssr: false
 });
 export default function Hibit() {
-    const [selectedCoin, setSelectedCoin] = useState(1)
+    const [selectedCoin, setSelectedCoin] = useState<Coin>()
     const { address, isConnected, isConnecting } = useAccount();
-    
+
     useEffect(() => {
         const addressList = getLocalJWT();
         console.log(addressList)
         if (address && typeof addressList[address] == "string") {
-            axios.interceptors.request.use(config => {
+            api.interceptors.request.use(config => {
                 config.headers['Authorization'] = `${addressList[address]}`;
                 return config;
-              }, error => {
+            }, error => {
                 return Promise.reject(error);
-              });
+            });
+
+            api.interceptors.response.use(
+                response => {
+                    return response;
+                },
+                error => {
+                    if (error.response && error.response.status === 403) {
+                        requestJWT();
+                    }
+                    return Promise.reject(error);
+                }
+            );
         } else {
             requestJWT();
         }
@@ -52,7 +65,12 @@ export default function Hibit() {
                 const addressList = getLocalJWT();
                 addressList[address] = loginRes.data.token;
                 setLocalJWT(addressList);
-                axios.defaults.headers.common['Authorization'] = `${loginRes.data.token}`;
+                api.interceptors.request.use(config => {
+                    config.headers['Authorization'] = `${loginRes.data.token}`;
+                    return config;
+                }, error => {
+                    return Promise.reject(error);
+                });
             }
         } catch (error) {
             console.error('Error in requestJWT:', error);
@@ -60,11 +78,11 @@ export default function Hibit() {
     }
     return (
         <div className={styles.hibit}>
-            <LeftBar selectedCoin={selectedCoin} />
+            <LeftBar selectedCoin={selectedCoin} setSelectedCoin={setSelectedCoin} />
             <div className={styles.rightContent}>
-                <Header />
+                <Header selectedCoin={selectedCoin} />
                 <div className={styles.content}>
-                    <Comments />
+                    <Comments selectedCoin={selectedCoin} />
                     <div className={styles.buy_area}>
                         <Swap />
                         <Orders />
