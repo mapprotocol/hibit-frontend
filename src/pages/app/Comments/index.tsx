@@ -136,7 +136,7 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
     }
     return (
         <div className={styles.comments}>
-            {/* <div className={styles.shadow}></div> */}
+            <div className={styles.shadow}></div>
 
             <div className={styles.left}>
                 <div className={styles.pirce}>
