@@ -60,14 +60,22 @@ export default function LeftBar({ selectedCoin, setSelectedCoin }: { selectedCoi
                 </div>
             </div>
             {selectedCoin && <div className={styles.coinslist}>
-                {tokenList.map((item: Coin, index) =>
-                    <div key={index}
+                {tokenList.map((item: Coin, index) => {
+                    let type = 'rise'
+                    if (Number(item.priceChangePercent) > 20) {
+                        type = 'rise'
+                    } else if (Number(item.priceChangePercent) < 0) {
+                        type = 'drop'
+                    } else {
+                        type = 'mild'
+                    }
+                    return <div key={index}
                         onClick={() => { changeSelectToken(item) }}
                         className={styles.coinItem}
                         style={{
                             width: selectedCoin.id == item.id ? '103%' : '100%',
-                            marginTop:selectedCoin.id == item.id ? '14px' : '10px',
-                            marginBottom:selectedCoin.id == item.id ? '4px' : '0px',
+                            marginTop: selectedCoin.id == item.id ? '14px' : '10px',
+                            marginBottom: selectedCoin.id == item.id ? '4px' : '0px',
                         }}>
                         {selectedCoin.id == item.id && <div className={styles.selectedImage}>
                             <Image
@@ -83,7 +91,16 @@ export default function LeftBar({ selectedCoin, setSelectedCoin }: { selectedCoi
                                     style={{ objectFit: "contain" }}
                                     src={item.tokenLogoUrl}
                                     alt="avatar" /></div>
-                            <div className={selectedCoin.id == item.id ? styles.selectedcoinName : styles.coinName}>{item.tokenName}</div>
+                            <div className={selectedCoin.id == item.id ? styles.selectedcoinName : styles.coinName}>{item.tokenName}
+                                <Image
+                                className={styles.coinType}
+                                    
+                                    src={`/icons/menu-badge-${type}${selectedCoin.id == item.id ? '-selected' : ''}.svg`}
+                                    height={ 40}
+                                    width={ 40}
+                                    alt="arrow" />
+                                    </div>
+
                         </div>
                         <div className={styles.coinRight}>
                             {selectedCoin.id == item.id ?
@@ -116,7 +133,8 @@ export default function LeftBar({ selectedCoin, setSelectedCoin }: { selectedCoi
                                 {"$" + formatNumber(item.price)}
                             </div>
                         </div>
-                    </div>)}ƒ
+                    </div>
+                })}ƒ
             </div>}
         </div>
     );

@@ -41,7 +41,16 @@ export const fetchTokenList = async () => {
 };
 
 
-
+export const fetchMyTokenTrade = async (walletAddress: string, id: number) => {
+    try {
+        console.log()
+        const response = await api.get(`/trades/user?walletAddress=${walletAddress}&tokenId=${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching nonce:', error);
+        throw error;
+    }
+};
 
 export const fetchTokenComments = async (tokenid: number) => {
     try {

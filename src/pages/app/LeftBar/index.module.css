@@ -15,8 +15,8 @@
     width: 97px;
     padding: 8px 0;
     cursor: pointer;
-    overflow-x: visible; 
-    overflow-y: scroll;  
+    overflow-x: visible;
+    overflow-y: scroll;
 }
 
 
@@ -31,6 +31,8 @@
 }
 
 .selectedcoinName {
+    margin-left: 4px;
+    position: relative;
     color: #F3F3F3;
     text-align: center;
     text-shadow: 0px 1px 0px #000;
@@ -41,8 +43,20 @@
     font-weight: 700;
     line-height: 14px;
     z-index: 10;
-    letter-spacing: 1.12px;
+    height: 14px;
+    flex-shrink: 0;
 
+    letter-spacing: 1.12px;
+}
+
+.coinType {
+    z-index:  10;
+    flex-shrink: 0;
+    position: absolute;
+    min-width: 40px;
+    height: 40px;
+    right: -40px;
+    top: -12px;
 }
 
 .selectedprice {
@@ -67,7 +81,7 @@
 }
 
 .leftBar {
-    user-select: none; 
+    user-select: none;
     background-color: #1A191B;
     width: 240px;
     flex-shrink: 0;
@@ -82,7 +96,7 @@
 .coinslist {
     display: flex;
     flex-direction: column;
-  
+
     width: 100%;
     transition: all 1 linear;
 }
@@ -102,7 +116,6 @@
 .coinItemLeft {
     display: flex;
     align-items: center;
-    gap: 8px;
 }
 
 .coinAvatar {
@@ -116,9 +129,11 @@
 
 .coinName {
     color: #F5F5F5;
+    position: relative;
     text-align: center;
     opacity: 0.8;
     font-size: 14px;
+    margin-left: 4px;
     font-style: normal;
     font-weight: 700;
     line-height: 14px;

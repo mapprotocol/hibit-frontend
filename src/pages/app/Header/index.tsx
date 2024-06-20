@@ -100,10 +100,22 @@ export default function Header({ selectedCoin, setSelectedCoin }: { selectedCoin
 
                     </div>}
                 <div className={styles.share}>
-
+                    {
+                        <Image
+                            style={{ objectFit: "contain" }}
+                            src={`/icons/heart.svg`}
+                            height={26}
+                            width={26}
+                            alt="arrow" />
+                    }
                 </div>
                 <div className={styles.like}>
-
+                    <Image
+                        style={{ objectFit: "contain" }}
+                        src={`/icons/share.svg`}
+                        height={26}
+                        width={26}
+                        alt="arrow" />
                 </div>
             </div>
         </div>

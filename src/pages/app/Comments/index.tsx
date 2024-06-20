@@ -4,7 +4,7 @@ import lottie from 'lottie-web';
 import { useEffect, useRef, useState } from "react";
 import CylinderCanvas from "@/components/cylinder";
 import { Coin } from "@/type";
-import { fetchTokenComments, sendComment } from "@/api";
+import { fetchMyTokenTrade, fetchTokenComments, sendComment } from "@/api";
 import { useAccount } from "wagmi";
 
 const emoticons = [
@@ -65,8 +65,8 @@ const emoticons = [
         content:
             <div className={styles.messageItemImage}>
                 <Image
-                    height={40}
-                    width={40}
+                    height={22}
+                    width={22}
 
                     src={`/icons/message/heart.svg`}
                     alt="hat" />
@@ -77,9 +77,9 @@ const emoticons = [
         content:
             <div className={styles.messageItemImage}>
                 <Image
-                    height={40}
-                    width={40}
-                    src={`/icons/message/heart.svg`}
+                    height={22}
+                    width={22}
+                    src={`/icons/message/hot.svg`}
                     alt="hat" />
             </div>
     },
@@ -88,9 +88,9 @@ const emoticons = [
         content:
             <div className={styles.messageItemImage}>
                 <Image
-                    height={40}
-                    width={40}
-                    src={`/icons/message/heart.svg`}
+                    height={22}
+                    width={22}
+                    src={`/icons/message/tip.svg`}
                     alt="hat" />
             </div>
     },
@@ -101,26 +101,31 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
 
     const initialPrice = 100; // Initial price
     useEffect(() => {
-     fetch('/lottie/buyitbig.json')
-          .then(response => response.json())
-          .then(animationData => {
-            lottie.loadAnimation({
-              container: lottieContainerRef.current!,
-              renderer: 'svg',
-              loop: true,
-              autoplay: true,
-              animationData: animationData,
-              assetsPath: '/lottie/images/' // 指定资源图片的路径
-            });
-          })
-          .catch(error => console.error('Error loading animation data:', error));
-      }, []);
+        fetch('/lottie/buyitbig.json')
+            .then(response => response.json())
+            .then(animationData => {
+                lottie.loadAnimation({
+                    container: lottieContainerRef.current!,
+                    renderer: 'svg',
+                    loop: true,
+                    autoplay: true,
+                    animationData: animationData,
+                    assetsPath: '/lottie/images/' // 指定资源图片的路径
+                });
+            })
+            .catch(error => console.error('Error loading animation data:', error));
+    }, []);
 
     useEffect(() => {
-        if (selectedCoin)
+        if (selectedCoin && address) {
             fetchTokenComments(selectedCoin?.id).then(res => {
                 console.log(res, 'tokenComment')
             })
+            fetchMyTokenTrade(address, selectedCoin?.id).then(res => {
+                console.log(res, 'myTokenTrade')
+            })
+
+        }
     }, [selectedCoin])
 
     const sendEmoji = (id: number) => {
@@ -140,7 +145,7 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
 
             <div className={styles.left}>
                 <div className={styles.pirce}>
-                <div ref={lottieContainerRef} style={{ width: 400, height: 400 }}></div>
+                    <div ref={lottieContainerRef} style={{ width: 400, height: 400 }}></div>
                 </div>
                 {selectedCoin && <div className={styles.coinsInfo}>
                     <div className={styles.infoItem}>
