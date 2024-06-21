@@ -7,7 +7,7 @@ import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from "wagmi";
 import { ellipsis, formatNumber } from "@/utils";
-import { fetchNonce, loginRequest } from "@/api";
+import { fetchNonce, loginRequest, updateWatchList } from "@/api";
 import { signMessage } from "wagmi/actions";
 import axios from "axios";
 import { Coin } from "@/type";
@@ -21,6 +21,7 @@ export default function Header({ selectedCoin, setSelectedCoin }: { selectedCoin
     const { openAccountModal } = useAccountModal();
     const { address, isConnected, isConnecting } = useAccount();
 
+    const [like, setLike] = useState(false)
     const { openConnectModal } = useConnectModal();
 
 
@@ -47,6 +48,18 @@ export default function Header({ selectedCoin, setSelectedCoin }: { selectedCoin
             openConnectModal();
         }
     }
+    const addWatchListFunc = () => {
+        if (address && selectedCoin)
+            updateWatchList(
+                address,
+                selectedCoin?.id
+            ).then(res => {
+
+
+            })
+
+    }
+
     return (
         <div className={styles.header}>
             {selectedCoin && <div className={styles.selectedCoin}>
@@ -56,7 +69,7 @@ export default function Header({ selectedCoin, setSelectedCoin }: { selectedCoin
                         src={selectedCoin.tokenLogoUrl}
                         alt="avatar" /></div>
                 <div className={styles.coinName}>{selectedCoin.tokenName}</div>
-                <div className={styles.price}>{"$" + formatNumber(selectedCoin.price)}</div>
+                <div className={styles.price}>{"$" + (selectedCoin.price)}</div>
 
                 <div className={styles.change}
                     style={{ color: Number(selectedCoin.priceChangePercent) > 0 ? '#3BF873' : '#FF4B87' }}>
@@ -99,11 +112,13 @@ export default function Header({ selectedCoin, setSelectedCoin }: { selectedCoin
                         {"Connect Wallet"}
 
                     </div>}
-                <div className={styles.share}>
+                <div className={styles.share}
+
+                    onClick={addWatchListFunc}>
                     {
                         <Image
                             style={{ objectFit: "contain" }}
-                            src={`/icons/heart.svg`}
+                            src={`/icons/heart${like?"-green":""}.svg`}
                             height={26}
                             width={26}
                             alt="arrow" />

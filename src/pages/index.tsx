@@ -2,6 +2,9 @@ import Image from "next/image";
 import styles from './index.module.css'
 import { Router, useRouter } from "next/router";
 import Head from "next/head";
+import { useEffect, useState } from "react";
+import { fetchTokenList, getTopgainerList } from "@/api";
+import { Coin } from "@/type";
 
 const bannerList = [
   {
@@ -125,7 +128,7 @@ const messages = [
 
       height={24}
       width={24}
-      src={`https://s3-alpha-sig.figma.com/img/2a5a/72d0/22a2e0d21fab55de9af04226ec36c557?Expires=1718582400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=T77SWhCIj9i-aV5lap4Q2OO6voD3m~5F66f~aOWkfZk1UsIoq-d8P7mT004MiS0KOoUWM5Dtb-X0yE8aKUmIqqYWanssI4OfQ0SKyQ-kkxTK7lX8YvRALg0nNpD8iRXz~T5Ghry2o8PpxiPLbr6HDN4cGsRXZNbN4djScfEvnQyLjVgoZSx6ZjbOxwQIIa-BBo~4lQxDAkPzgti4Ck8MEFVeLNar388NVK64ETZfcvYYgOF7EMjf6XaidGaB5XlgfXGaeSJfmYUNXCfDXVKdK6G9pvJh1BVhb7~ysv2QiMxKhB1db2VKFlFex8rSWzONrjw8ylgG8-N6RYLRXQODJw__`}
+      src={`https://www.dextools.io/resources/tokens/logos/ether/0x80795a7bb55f003b1572411a271e31f73e03dd73.png`}
       alt="doge" />
       <Image
         height={40}
@@ -141,7 +144,7 @@ const messages = [
       className={styles.coin}
       height={24}
       width={24}
-      src={`https://s3-alpha-sig.figma.com/img/2a5a/72d0/22a2e0d21fab55de9af04226ec36c557?Expires=1718582400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=T77SWhCIj9i-aV5lap4Q2OO6voD3m~5F66f~aOWkfZk1UsIoq-d8P7mT004MiS0KOoUWM5Dtb-X0yE8aKUmIqqYWanssI4OfQ0SKyQ-kkxTK7lX8YvRALg0nNpD8iRXz~T5Ghry2o8PpxiPLbr6HDN4cGsRXZNbN4djScfEvnQyLjVgoZSx6ZjbOxwQIIa-BBo~4lQxDAkPzgti4Ck8MEFVeLNar388NVK64ETZfcvYYgOF7EMjf6XaidGaB5XlgfXGaeSJfmYUNXCfDXVKdK6G9pvJh1BVhb7~ysv2QiMxKhB1db2VKFlFex8rSWzONrjw8ylgG8-N6RYLRXQODJw__`}
+      src={`https://www.dextools.io/resources/tokens/logos/ether/0x80795a7bb55f003b1572411a271e31f73e03dd73.png`}
       alt="doge" />
       <Image
         height={40}
@@ -178,7 +181,7 @@ const messages = [
       className={styles.coin}
       height={24}
       width={24}
-      src={`https://s3-alpha-sig.figma.com/img/2a5a/72d0/22a2e0d21fab55de9af04226ec36c557?Expires=1718582400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=T77SWhCIj9i-aV5lap4Q2OO6voD3m~5F66f~aOWkfZk1UsIoq-d8P7mT004MiS0KOoUWM5Dtb-X0yE8aKUmIqqYWanssI4OfQ0SKyQ-kkxTK7lX8YvRALg0nNpD8iRXz~T5Ghry2o8PpxiPLbr6HDN4cGsRXZNbN4djScfEvnQyLjVgoZSx6ZjbOxwQIIa-BBo~4lQxDAkPzgti4Ck8MEFVeLNar388NVK64ETZfcvYYgOF7EMjf6XaidGaB5XlgfXGaeSJfmYUNXCfDXVKdK6G9pvJh1BVhb7~ysv2QiMxKhB1db2VKFlFex8rSWzONrjw8ylgG8-N6RYLRXQODJw__`}
+      src={`https://static.alchemyapi.io/images/assets/27659.png`}
       alt="doge" />
       <Image
         height={40}
@@ -194,7 +197,7 @@ const messages = [
 
       height={24}
       width={24}
-      src={`https://s3-alpha-sig.figma.com/img/2a5a/72d0/22a2e0d21fab55de9af04226ec36c557?Expires=1718582400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=T77SWhCIj9i-aV5lap4Q2OO6voD3m~5F66f~aOWkfZk1UsIoq-d8P7mT004MiS0KOoUWM5Dtb-X0yE8aKUmIqqYWanssI4OfQ0SKyQ-kkxTK7lX8YvRALg0nNpD8iRXz~T5Ghry2o8PpxiPLbr6HDN4cGsRXZNbN4djScfEvnQyLjVgoZSx6ZjbOxwQIIa-BBo~4lQxDAkPzgti4Ck8MEFVeLNar388NVK64ETZfcvYYgOF7EMjf6XaidGaB5XlgfXGaeSJfmYUNXCfDXVKdK6G9pvJh1BVhb7~ysv2QiMxKhB1db2VKFlFex8rSWzONrjw8ylgG8-N6RYLRXQODJw__`}
+      src={`https://static.alchemyapi.io/images/assets/27659.png`}
       alt="doge" />
       <Image
         height={40}
@@ -230,7 +233,7 @@ const messages = [
       className={styles.coin}
       height={24}
       width={24}
-      src={`https://s3-alpha-sig.figma.com/img/8448/cffc/d6562547b1b51aac348d2f9b1bb6e31f?Expires=1719187200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=KQb87RJ-OONrC2ldrAUspmYJx005Bd0yFw~nWXvy9TZlEEqMXGYYJ6aif~P798zDGZrOYQ05IUVFZJIHjdkSnDqS53~fY1fZhEoNL9PhV-8MkuoVEB0Ma4HOkR8qEoYeVLJPBUYaSdCeAo8I5QAzv4tkWi6GOlTh5JDGSXufGxUrrKZ1Lqzy9XtN3CDAIHwJJb0Xu02mBUV4lucogS4aLDLILsSuPbQBC32xbdvHl7MGfl89A-PNr5HYVA35weXnEnV3tZppfUtM1wZzjiiWM5y6GaEpGaUSIrd8Do7TS20~NYGCu-~IOBwIM7fagay7SuqvDshqM94TzonVaIvyWw__`}
+      src={`https://www.dextools.io/resources/tokens/logos/ether/0xdf82ad29f859e7c25d155d9e35d8533f46928ca9.png`}
       alt="doge" />
       <Image
         height={40}
@@ -245,7 +248,7 @@ const messages = [
       className={styles.coin}
       height={24}
       width={24}
-      src={`https://s3-alpha-sig.figma.com/img/d299/0674/461778852b067d53dfbef06684b53acc?Expires=1719187200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=fjhGbuWy1A6WqSz8sAGTXQP~-WOIJwmT84tDkje3vAPFY5mDOHYJbntrWMdP~FCG6J5LS7kPjmDaVEvtFR-S4qYkVfpako4eHLeD0QQ6JBbJ8vuw8JCkQ1yNkSWnswBvR3JqlrvacLrpX286-UEFSgBYUJjQmSkZadblR8dC7W679~j91AMaGKOdFBDsbVM9tcTMV7AgjamBfXiY-GHDVZd5ukh5i0mI~Xj1Dpvgk-dP11SUv0A1H-bbzwT6396On8fG6Xy8ThMym0SJQn-RmqQ~OcdhLtlyzcH6YRAbURGSpHJNfBZBo4vN4c0llySI~n4SJ3rbftDYVS0ikiqb5g__`}
+      src={`https://www.dextools.io/resources/tokens/logos/ether/0xdf82ad29f859e7c25d155d9e35d8533f46928ca9.png`}
       alt="doge" />
       <Image
         height={40}
@@ -260,7 +263,7 @@ const messages = [
       className={styles.coin}
       height={24}
       width={24}
-      src={`https://s3-alpha-sig.figma.com/img/0074/b231/1e7702afa54132a33ca4bd39397f4ac8?Expires=1718582400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ijWPmXSD7V4SwEETFrZL7nECfN1X6rtukHO6x6Ug~LhYh1ckbHqkn1bkQosCTleeoLEZMuWGXKVRbox0aJ2D6HuxrPHFl-uaNQUkJrUjNI5NMxxkv0PkZPHM2dY4s-L3gDjEA7IVsxpZONh9mocjzQ4Br~nFKmrfIWgiL-Vv~x9t9w3d67AsHnPhqwcM0xdqhSyT4q7gH5GiO6v9tco-av-HND56Np4aBIIlbBh408e5X7ZHNupfyJO63Vopjv5NB7e3Qk3qaUCkHEcpEvQZ~7ROjJ8dg5uhKcYdpER8jQPxKIrzNLV8ghjif0vTdjlDdr8Q6iyNi3CbGpQjXlJ9-w__`}
+      src={`https://www.dextools.io/resources/tokens/logos/ether/0xdf82ad29f859e7c25d155d9e35d8533f46928ca9.png`}
       alt="doge" />
       <Image
         height={40}
@@ -278,9 +281,21 @@ const messages = [
 
   }
 ]
+
 export default function Home() {
+  const [topGainers, setTopGainers] = useState()
+  const [hotCoinList, setHotCoinList] = useState<Coin[]>()
 
   const router = useRouter()
+  useEffect(() => {
+    getTopgainerList().then(res => {
+      // setTopGainers(res.)
+    })
+    fetchTokenList().then(res => {
+      setHotCoinList(res.data)
+    })
+
+  }, [])
   return (
     <>
       <Head>
@@ -399,30 +414,32 @@ export default function Home() {
                 height={28}
                 width={28}
                 alt="hotcoins" />{"Hot Coins"}</div>
-            <div className={styles.hotCoinsList}>
+            {hotCoinList && <div className={styles.hotCoinsList}>
               {
-                hotCoins.concat(hotCoins).map(item =>
-                  <div key={item.bg} className={styles.hotCoinItem}>
+                hotCoinList.slice(0,12).map(item =>
+                  <div key={item.id} className={styles.hotCoinItem}>
                     <div className={styles.coinAvatar}>
                       <img
                         style={{ objectFit: "contain" }}
-                        src={item.bg}
+                        src={item.tokenLogoUrl}
                         alt="avatar" /></div>
-                    <div className={styles.hotCoinName}>{item.name}</div>
-                    <div className={styles.changeLeft}>
+                    <div className={styles.hotCoinName}>{item.tokenName}</div>
+                    <div className={styles.changeLeft}
+                      style={{ color: Number(item.priceChangePercent) > 0 ? '#3BF873' : '#FF4B87' }}>
                       <Image
                         style={{ objectFit: "contain" }}
-                        src={`/icons/arrow-up.svg`}
+                        src={`/icons/arrow-${Number(item.priceChangePercent) > 0 ? "up" : "down"}.svg`}
                         height={10}
                         width={10}
-                        alt="arrow" />{item.change}
+                        alt="arrow" />
+                      {Math.abs(Number(item.priceChangePercent)).toFixed(1) + "%"}
                     </div>
 
                   </div>
 
                 )
               }
-            </div>
+            </div>}
           </div>
           <div className={styles.topGainers}>
             <div className={styles.title}>
@@ -432,31 +449,33 @@ export default function Home() {
                 height={28}
                 width={28}
                 alt="topgainers" />{"Top Gainers"}</div>
-            <div className={styles.topGainersList}>
+            {hotCoinList && <div className={styles.topGainersList}>
               {
-                topCoins.map(item =>
-                  <div key={item.bg} className={styles.topGainersItem}>
+                hotCoinList.slice(0,6).map(item =>
+                  <div key={item.id} className={styles.topGainersItem}>
                     <div className={styles.topGainersItemLeft}>
                       <div className={styles.coinAvatar}>
                         <img
                           style={{ objectFit: "contain" }}
-                          src={item.bg}
+                          src={item.tokenLogoUrl}
                           alt="avatar" /></div>
-                      <div className={styles.hotCoinName}>{item.name}</div>
-                      <div className={styles.changeLeft}>
+                      <div className={styles.hotCoinName}>{item.tokenName}</div>
+                      <div className={styles.changeLeft}
+                        style={{ color: Number(item.priceChangePercent) > 0 ? '#3BF873' : '#FF4B87' }}>
                         <Image
                           style={{ objectFit: "contain" }}
-                          src={`/icons/arrow-up.svg`}
+                          src={`/icons/arrow-${Number(item.priceChangePercent) > 0 ? "up" : "down"}.svg`}
                           height={10}
                           width={10}
-                          alt="arrow" />{item.change}
+                          alt="arrow" />
+                        {Math.abs(Number(item.priceChangePercent)).toFixed(1) + "%"}
                       </div>
                     </div>
                     <div className={styles.topGainersItemTime}>{'Apr 12'}</div>
                   </div>
                 )
               }
-            </div>
+            </div>}
 
           </div>
 

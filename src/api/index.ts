@@ -52,6 +52,31 @@ export const fetchMyTokenTrade = async (walletAddress: string, id: number) => {
     }
 };
 
+export const updateWatchList = async (walletAddress: string, id: number) => {
+    try {
+        const response = await api.post(`/user/watch_list`,{
+            walletAddress:walletAddress,
+            tokenId:id
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching nonce:', error);
+        throw error;
+    }
+};
+
+
+export const getTopgainerList = async () => {
+    try {
+        const response = await api.get(`/topgainer/list`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching nonce:', error);
+        throw error;
+    }
+};
+
+
 export const fetchTokenComments = async (tokenid: number) => {
     try {
         console.log()
