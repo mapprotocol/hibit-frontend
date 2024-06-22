@@ -1,9 +1,25 @@
 import Image from "next/image";
 import styles from './index.module.css'
 import { useState } from "react";
+import ChainBox from "@/components/swap/chain-box";
+import {useFrom} from "@/store/hooks";
+import TokenSelector from "@/components/token-selector/token-selector";
+import {ChainItem, TokenItem} from "@/utils/api/types";
 
 export default function Swap({ }) {
+    const [currentChainBox, setCurrentChainBox] = useState(0);
+    const [showTokenSelector, setShowTokenSelector] = useState(false);
+    const handleTapChainBox = (index: number) => {
+        console.log(333333)
+        setCurrentChainBox(index);
+        setShowTokenSelector(true);
+    };
 
+    const from = useFrom();
+
+    const handleSelectedToken = async (chain: ChainItem, token: TokenItem) => {
+
+    }
 
     return (
         <div className={styles.swap}>
@@ -18,6 +34,18 @@ export default function Swap({ }) {
             <div className={styles.percent_area}>
                 <div className={styles.percent_top}>
                     <div className={styles.number}>500</div>
+
+                    <ChainBox
+                        onClick={() => {
+                            handleTapChainBox(0);
+                        }}
+                        // disabled={currentChainBox !== 0 && showTokenSelector}
+                        disabled={ showTokenSelector}
+                        position={"From"}
+                        chain={from?.chain}
+                        token={from?.token}
+                    ></ChainBox>
+
                     <div className={styles.token}>
                         <img className={styles.token_img} src="/images/swap/usdt.png" alt=""/>
                         <div className={styles.token_symbol}>
@@ -59,6 +87,16 @@ export default function Swap({ }) {
                     </div>
                 </div>
             </div>
+
+            <TokenSelector
+                position={currentChainBox === 0 ? "from" : "to"}
+                onSelected={handleSelectedToken}
+                onClose={() => {
+                    setShowTokenSelector(false);
+                }}
+                show={showTokenSelector}
+            ></TokenSelector>
+
         </div>
     );
 }
