@@ -2,7 +2,7 @@ import {ChainItem, TokenItem} from "@/utils/api/types";
 import {HistoryEntity} from "@/utils/history-helper";
 
 export type ChainBoxProps = {
-    position: "From" | "To",
+    // position: "From" | "To",
     chain: ChainItem | null | undefined,
     token: TokenItem | null | undefined,
     onClick: () => void,

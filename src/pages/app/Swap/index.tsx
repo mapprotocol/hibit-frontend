@@ -1,24 +1,56 @@
 import Image from "next/image";
 import styles from './index.module.css'
-import { useState } from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import ChainBox from "@/components/swap/chain-box";
-import {useFrom} from "@/store/hooks";
+import {useAmount, useAppDispatch, useFrom} from "@/store/hooks";
 import TokenSelector from "@/components/token-selector/token-selector";
 import {ChainItem, TokenItem} from "@/utils/api/types";
+import {Chain} from "@ethereumjs/common";
+import {Button, TextInput} from "@mantine/core";
+import {updateAmount, updateFrom, updateTo} from "@/store/route/routes-slice";
 
-export default function Swap({ }) {
+export default function Swap({}) {
+    const dispatch = useAppDispatch();
     const [currentChainBox, setCurrentChainBox] = useState(0);
     const [showTokenSelector, setShowTokenSelector] = useState(false);
     const handleTapChainBox = (index: number) => {
-        console.log(333333)
         setCurrentChainBox(index);
         setShowTokenSelector(true);
     };
+    const amount = useAmount();
+
+    const [selectChain, setSelectChain] = useState<ChainItem>();
+    const [selectToken, setSelectToken] = useState<TokenItem>();
 
     const from = useFrom();
 
     const handleSelectedToken = async (chain: ChainItem, token: TokenItem) => {
+        setSelectChain(chain)
+        setSelectToken(token)
+        setShowTokenSelector(false)
+    }
 
+    useEffect(() => {
+        let chainTo: ChainItem = {
+            chainId: "1"
+        } as ChainItem;
+
+        let tokenTo: TokenItem = {
+            address: "0x9e976f211daea0d652912ab99b0dc21a7fd728e4"
+        } as TokenItem;
+
+        dispatch(updateTo(
+            {
+                chain: chainTo,
+                token: tokenTo,
+            }
+        ))
+    }, []);
+
+
+    const handleValueChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (Number(e.target.value) >= 0)
+            dispatch(updateAmount(e.target.value));
     }
 
     return (
@@ -33,25 +65,45 @@ export default function Swap({ }) {
             </div>
             <div className={styles.percent_area}>
                 <div className={styles.percent_top}>
-                    <div className={styles.number}>500</div>
+                    <TextInput
+                        type={"number"}
+                        value={amount}
+                        onChange={handleValueChange}
+                        placeholder={"0.0"}
+                        size={"xs"}
+                        variant={"filled"}
+                        sx={(theme) => ({
+                            ['input']: {
+                                background: "transparent",
+                                fontSize: "18px",
+                                fontWeight: 700,
+                                color: theme.colors.yellow[0],
+                                padding: 0,
+                                ["&:focus"]: {
+                                    border: "none"
+                                }
+                            }
+                        })}
+                        w={"100%"}
+                    >
+                    </TextInput>
 
                     <ChainBox
                         onClick={() => {
                             handleTapChainBox(0);
                         }}
                         // disabled={currentChainBox !== 0 && showTokenSelector}
-                        disabled={ showTokenSelector}
-                        position={"From"}
-                        chain={from?.chain}
-                        token={from?.token}
+                        disabled={showTokenSelector}
+                        chain={selectChain}
+                        token={selectToken}
                     ></ChainBox>
 
-                    <div className={styles.token}>
-                        <img className={styles.token_img} src="/images/swap/usdt.png" alt=""/>
-                        <div className={styles.token_symbol}>
-                            USDT
-                        </div>
-                    </div>
+                    {/*<div className={styles.token}>*/}
+                    {/*    <img className={styles.token_img} src="/images/swap/usdt.png" alt=""/>*/}
+                    {/*    <div className={styles.token_symbol}>*/}
+                    {/*        USDT*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                 </div>
                 <div className={styles.wallet}>
                     <div className={styles.total}>US$500</div>
@@ -71,7 +123,7 @@ export default function Swap({ }) {
 
             <div className={styles.confirm_area}>
                 <div className={styles.top}>12312</div>
-                <div className={ styles.confirm}>
+                <div className={styles.confirm}>
                     <div className={styles.left}>
                         <div className={styles.left_content}>
                             <img src="/images/swap/wallet.svg" alt=""/>
@@ -83,7 +135,7 @@ export default function Swap({ }) {
                         </div>
                     </div>
                     <div className={styles.confirm_btn}>
-                        <img className={styles.conform_btn_img}  src="/images/swap/confirm.png" alt=""/>
+                        <img className={styles.conform_btn_img} src="/images/swap/confirm.png" alt=""/>
                     </div>
                 </div>
             </div>

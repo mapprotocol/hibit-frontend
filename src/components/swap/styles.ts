@@ -116,19 +116,21 @@ export const useChainLogoStyles = createStyles((theme, { empty }: { empty: boole
 
 export const useChainBoxStyles = createStyles((theme) => ({
     root: {
-        flexGrow: 1,
-        borderRadius: "10px",
+        // minWidth:"90px",
+        // flexGrow: 1,
+        borderRadius: "16px",
         position: "relative",
     },
     content: {
         background: "#35393d",
-        borderRadius: "10px",
+        borderRadius: "16px",
         width: "100%",
         cursor: "pointer",
-        padding: "10px 12px",
-        [theme.fn.largerThan("md")]: {
-            padding: "10px 20px",
-        },
+        paddingRight:"10px",
+        // padding: "10px 12px",
+        // [theme.fn.largerThan("md")]: {
+        //     padding: "10px 20px",
+        // },
         ["&:hover"]: {
             opacity: '0.7'
         }
@@ -142,7 +144,7 @@ export const useChainBoxStyles = createStyles((theme) => ({
         cursor: "not-allowed",
         background: "#35393D",
         opacity: "0.8",
-        borderRadius: '10px',
+        borderRadius: '16px',
     }
 }))
 
