@@ -1,13 +1,15 @@
 import Image from "next/image";
 import styles from './index.module.css'
-import {ChangeEvent, useEffect, useState} from "react";
+import {ChangeEvent, useEffect, useMemo, useState} from "react";
 import ChainBox from "@/components/swap/chain-box";
 import {useAmount, useAppDispatch, useFrom, useTo} from "@/store/hooks";
 import TokenSelector from "@/components/token-selector/token-selector";
 import {ChainItem, TokenItem} from "@/utils/api/types";
 import {Chain} from "@ethereumjs/common";
-import {Button, TextInput} from "@mantine/core";
+import {Box, Button, Center, Loader, TextInput} from "@mantine/core";
 import {updateAmount, updateFrom, updateTo} from "@/store/route/routes-slice";
+import {useBestRoute, useFetchRouteError, useLoadingRoute} from "@/store/route/hooks";
+import Decimal from 'decimal.js'
 
 export default function Swap({}) {
     const dispatch = useAppDispatch();
@@ -21,6 +23,10 @@ export default function Swap({}) {
 
     const from = useFrom();
     const to = useTo();
+
+    const routeLoading = useLoadingRoute();
+    const routeError = useFetchRouteError();
+    const bestRoute = useBestRoute();
 
     const handleSelectedToken = async (chain: ChainItem, token: TokenItem) => {
         setShowTokenSelector(false)
@@ -51,11 +57,18 @@ export default function Swap({}) {
         ))
     }, []);
 
+    const empty = useMemo(() => {
+        return bestRoute === "empty" || !!routeError;
+    }, [bestRoute, routeError])
+
 
     const handleValueChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (Number(e.target.value) >= 0)
             dispatch(updateAmount(e.target.value));
     }
+
+
+    console.log(empty, 'empty22222', routeError)
 
     return (
         <div className={styles.swap}>
@@ -126,7 +139,47 @@ export default function Swap({}) {
             </div>
 
             <div className={styles.confirm_area}>
-                <div className={styles.top}>12312</div>
+
+                {
+                    routeLoading ?
+                        <Box>
+                            <Center w={"100%"} h={"50px"}>
+                                <Loader></Loader>
+                            </Center>
+                        </Box>
+                        :
+                        (!bestRoute ? null:
+                        <div>
+                            {
+                                bestRoute !== "empty" &&
+                                <div className={styles.buy_area}>
+                                    <div className={styles.buy_area_img_div}>
+                                        <img className={styles.buy_area_img} src="/images/swap/buy_bg.png" alt=""/>
+                                    </div>
+                                    <div className={styles.buy_area_amount}>
+                                        <div className={styles.token_area}>
+                                            <div className={styles.token_area_left}>
+                                                <div className={styles.token_img_div}>
+                                                    <img className={styles.token_img} src="/images/swap/doge.png"
+                                                         alt=""/>
+                                                </div>
+                                                <div className={styles.token_name}>
+                                                    <div className={styles.token_name_title}>
+                                                        DOGE
+                                                    </div>
+                                                    <div className={styles.token_name_bg}></div>
+                                                </div>
+                                            </div>
+                                            <div className={styles.token_amount}> +{ new Decimal( bestRoute?.minAmountOut.amount ).toFixed(4)}</div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            }
+                        </div>
+                        )
+                }
                 <div className={styles.confirm}>
                     <div className={styles.left}>
                         <div className={styles.left_content}>

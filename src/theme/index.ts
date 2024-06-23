@@ -76,7 +76,7 @@ const Theme: MantineThemeOverride = {
     },
     white: "#FFF",
     black: "#000",
-    primaryColor: "yellow",
+    primaryColor: "green",
     primaryShade: 6,
     defaultRadius: "md",
     breakpoints: {
