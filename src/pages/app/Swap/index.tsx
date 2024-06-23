@@ -2,7 +2,7 @@ import Image from "next/image";
 import styles from './index.module.css'
 import {ChangeEvent, useEffect, useState} from "react";
 import ChainBox from "@/components/swap/chain-box";
-import {useAmount, useAppDispatch, useFrom} from "@/store/hooks";
+import {useAmount, useAppDispatch, useFrom, useTo} from "@/store/hooks";
 import TokenSelector from "@/components/token-selector/token-selector";
 import {ChainItem, TokenItem} from "@/utils/api/types";
 import {Chain} from "@ethereumjs/common";
@@ -19,17 +19,21 @@ export default function Swap({}) {
     };
     const amount = useAmount();
 
-    const [selectChain, setSelectChain] = useState<ChainItem>();
-    const [selectToken, setSelectToken] = useState<TokenItem>();
-
     const from = useFrom();
+    const to = useTo();
 
     const handleSelectedToken = async (chain: ChainItem, token: TokenItem) => {
-        setSelectChain(chain)
-        setSelectToken(token)
         setShowTokenSelector(false)
+        dispatch(
+            updateFrom(
+                {
+                    chain: chain,
+                    token: token
+                }
+            ))
     }
 
+    //左边列表切换时候获取选中的token信息
     useEffect(() => {
         let chainTo: ChainItem = {
             chainId: "1"
@@ -94,8 +98,8 @@ export default function Swap({}) {
                         }}
                         // disabled={currentChainBox !== 0 && showTokenSelector}
                         disabled={showTokenSelector}
-                        chain={selectChain}
-                        token={selectToken}
+                        chain={from?.chain}
+                        token={from?.token}
                     ></ChainBox>
 
                     {/*<div className={styles.token}>*/}

@@ -11,6 +11,7 @@ import axios from "axios";
 import { api, fetchNonce, loginRequest } from "@/api";
 import { signMessage } from "wagmi/actions";
 import { Coin } from "@/type";
+import SwapSearchContainer from "@/components/swap/swap-search-container";
 
 const Header = dynamic(() => import("./Header"), {
     ssr: false
@@ -84,7 +85,9 @@ export default function Hibit() {
                 <div className={styles.content}>
                     <Comments selectedCoin={selectedCoin} />
                     <div className={styles.buy_area}>
+                        <SwapSearchContainer>
                         <Swap />
+                        </SwapSearchContainer>
                         <Orders />
                     </div>
                 </div>
