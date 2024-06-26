@@ -17,6 +17,8 @@ const Header = dynamic(() => import("./Header"), {
 });
 export default function Hibit() {
     const [selectedCoin, setSelectedCoin] = useState<Coin>()
+    const [like, setLike] = useState<boolean>(false)
+
     const { address, isConnected, isConnecting } = useAccount();
 
     useEffect(() => {
@@ -78,9 +80,9 @@ export default function Hibit() {
     }
     return (
         <div className={styles.hibit}>
-            <LeftBar selectedCoin={selectedCoin} setSelectedCoin={setSelectedCoin} />
+            <LeftBar selectedCoin={selectedCoin} setSelectedCoin={setSelectedCoin} like={like} setLike={setLike}/>
             <div className={styles.rightContent}>
-                <Header selectedCoin={selectedCoin} />
+                <Header selectedCoin={selectedCoin} like={like} setLike={setLike}/>
                 <div className={styles.content}>
                     <Comments selectedCoin={selectedCoin} />
                     <div className={styles.buy_area}>

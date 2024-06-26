@@ -111,6 +111,7 @@
     align-items: center;
     justify-content: center;
     background: #191919;
+    cursor: pointer;
 }
 
 .connect {

@@ -29,4 +29,25 @@ export interface Coin {
     updatedAt: string;
     volume: string;
     volume24: string;
-  }
+}
+
+interface User {
+    avatarUrl: string | null;
+    id: number;
+    username: string;
+}
+
+export interface Comment {
+    approved: boolean;
+    commentType: string;
+    createdAt: string;
+    id: number;
+    imageUrl: string | null;
+    text: string;
+    tokenId: number;
+    tradeAmount: number | null;
+    tradeType: string | null;
+    updatedAt: string;
+    user: User;
+    userId: number;
+}

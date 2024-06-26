@@ -127,7 +127,7 @@
 
 .rightLine {
     background-color: rgba(255, 255, 255, 0.15);
-    margin-top: 424px;
+    margin-top: 24px;
     height: 1px;
 }
 
@@ -146,10 +146,10 @@
 }
 
 .messageItemText {
+    display: inline-flex;
     width: auto;
     height: 32px;
     color: rgba(255, 255, 255, 0.95);
-    display: flex;
     flex-shrink: 0;
     gap: 4px;
     padding: 4px 12px;
@@ -195,4 +195,21 @@
     align-items: center;
     justify-content: space-between;
     padding: 5px 5px;
+
+}
+.inputText{
+    background-color: #252525;
+    color: #FFF;
+    margin-left: 12px;
+    width: 80%;
+}
+.inputText:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.commentContent{
+    display: flex;
+    flex-direction: column;
+    height: 400px;
 }

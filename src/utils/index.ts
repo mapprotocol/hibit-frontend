@@ -32,3 +32,4 @@ export function formatNumber(num: number | string): string {
         return Number(num).toFixed(4);
     }
 }
+

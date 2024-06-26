@@ -15,13 +15,18 @@ import { Coin } from "@/type";
 
 
 
-export default function Header({ selectedCoin, setSelectedCoin }: { selectedCoin: Coin | undefined, setSelectedCoin?: Function }) {
+export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
+    {
+        selectedCoin: Coin | undefined,
+        setSelectedCoin?: Function,
+        like: boolean,
+        setLike: Function
+    }) {
     const [showPanel, setShowPanel] = useState(false);
     const timeoutRef = useRef(null);
     const { openAccountModal } = useAccountModal();
     const { address, isConnected, isConnecting } = useAccount();
 
-    const [like, setLike] = useState(false)
     const { openConnectModal } = useConnectModal();
 
 
@@ -49,15 +54,16 @@ export default function Header({ selectedCoin, setSelectedCoin }: { selectedCoin
         }
     }
     const addWatchListFunc = () => {
+        setLike(!like)
         if (address && selectedCoin)
             updateWatchList(
                 address,
                 selectedCoin?.id
             ).then(res => {
-
-
+                if (res.msg !== "success"){
+                    setLike(!like)
+                }
             })
-
     }
 
     return (
@@ -69,7 +75,7 @@ export default function Header({ selectedCoin, setSelectedCoin }: { selectedCoin
                         src={selectedCoin.tokenLogoUrl}
                         alt="avatar" /></div>
                 <div className={styles.coinName}>{selectedCoin.tokenName}</div>
-                <div className={styles.price}>{"$" + (selectedCoin.price)}</div>
+                <div className={styles.price}>{"$" + formatNumber(selectedCoin.price)}</div>
 
                 <div className={styles.change}
                     style={{ color: Number(selectedCoin.priceChangePercent) > 0 ? '#3BF873' : '#FF4B87' }}>
@@ -118,7 +124,7 @@ export default function Header({ selectedCoin, setSelectedCoin }: { selectedCoin
                     {
                         <Image
                             style={{ objectFit: "contain" }}
-                            src={`/icons/heart${like?"-green":""}.svg`}
+                            src={`/icons/heart${like ? "-green" : ""}.svg`}
                             height={26}
                             width={26}
                             alt="arrow" />

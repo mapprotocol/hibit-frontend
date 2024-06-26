@@ -54,9 +54,9 @@ export const fetchMyTokenTrade = async (walletAddress: string, id: number) => {
 
 export const updateWatchList = async (walletAddress: string, id: number) => {
     try {
-        const response = await api.post(`/user/watch_list`,{
-            walletAddress:walletAddress,
-            tokenId:id
+        const response = await api.post(`/user/watch_list`, {
+            walletAddress: walletAddress,
+            tokenId: id
         });
         return response.data;
     } catch (error) {
@@ -126,6 +126,24 @@ export const loginRequest = async (nonce: string, signature: string, address: st
             nonce,
             signature,
             walletAddress: address
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching nonce:', error);
+        throw error;
+    }
+};
+
+export const trades = async (tokenId: number, address: string) => {
+    try {
+        const response = await api.post('/trades/user', {
+            tokenId: tokenId,
+            walletAddress: address,
+            tradeType: "buy",
+            tradePrice: "0.1",
+            tradeAmount: '100'
+
         });
 
         return response.data;

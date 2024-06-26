@@ -3,9 +3,10 @@ import styles from './index.module.css'
 import lottie from 'lottie-web';
 import { useEffect, useRef, useState } from "react";
 import CylinderCanvas from "@/components/cylinder";
-import { Coin } from "@/type";
-import { fetchMyTokenTrade, fetchTokenComments, sendComment } from "@/api";
+import { Coin, Comment } from "@/type";
+import { fetchMyTokenTrade, fetchTokenComments, sendComment, trades } from "@/api";
 import { useAccount } from "wagmi";
+import { ellipsis } from "@/utils";
 
 const emoticons = [
     {
@@ -95,36 +96,41 @@ const emoticons = [
             </div>
     },
 ]
+
+
 export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCoin: Coin | undefined, setSelectedCoin?: Function }) {
     const { address, isConnected, isConnecting } = useAccount();
     const lottieContainerRef = useRef(null);
-
-    const initialPrice = 100; // Initial price
+    const [commentList, setCommentList] = useState<Comment[]>([])
     useEffect(() => {
-        fetch('/lottie/buyitbig.json')
-            .then(response => response.json())
-            .then(animationData => {
-                lottie.loadAnimation({
-                    container: lottieContainerRef.current!,
-                    renderer: 'svg',
-                    loop: true,
-                    autoplay: true,
-                    animationData: animationData,
-                    assetsPath: '/lottie/images/' // 指定资源图片的路径
-                });
-            })
-            .catch(error => console.error('Error loading animation data:', error));
+        // fetch('/lottie/buyitbig.json')
+        //     .then(response => response.json())
+        //     .then(animationData => {
+        //         lottie.loadAnimation({
+        //             container: lottieContainerRef.current!,
+        //             renderer: 'svg',
+        //             loop: true,
+        //             autoplay: true,
+        //             animationData: animationData,
+        //             assetsPath: '/lottie/images/' // 指定资源图片的路径
+        //         });
+        //     })
+        //     .catch(error => console.error('Error loading animation data:', error));
     }, []);
-
+    const extractNumbers = (str:string) => {
+        const regex = /\d+/g;
+        const matches = str.match(regex); 
+        return matches ? matches.map(Number) : [];
+    }
     useEffect(() => {
         if (selectedCoin && address) {
             fetchTokenComments(selectedCoin?.id).then(res => {
                 console.log(res, 'tokenComment')
+                setCommentList(res.data)
             })
             fetchMyTokenTrade(address, selectedCoin?.id).then(res => {
                 console.log(res, 'myTokenTrade')
             })
-
         }
     }, [selectedCoin])
 
@@ -150,30 +156,30 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
                 {selectedCoin && <div className={styles.coinsInfo}>
                     <div className={styles.infoItem}>
                         <div className={styles.infoItemTitle}>{"Market Cap"}</div>
-                        <div className={styles.infoItemValue}>{"$" + Number(selectedCoin.marketCap).toLocaleString()}</div>
+                        <div className={styles.infoItemValue}>{"$" + Number(selectedCoin?.marketCap).toLocaleString()}</div>
                     </div>
                     <div className={styles.infoItem}>
                         <div className={styles.infoItemTitle}>{"24h Vol."}</div>
-                        <div className={styles.infoItemValue}>{"$" + Number(selectedCoin.volume24).toLocaleString()}</div>
+                        <div className={styles.infoItemValue}>{"$" + Number(selectedCoin?.volume24).toLocaleString()}</div>
                     </div>
                     <div className={styles.infoItem}>
                         <div className={styles.infoItemTitle}>{"Holders"}</div>
-                        <div className={styles.infoItemValue}>{Number(selectedCoin.holders).toLocaleString()}</div>
+                        <div className={styles.infoItemValue}>{Number(selectedCoin?.holders).toLocaleString()}</div>
                     </div>
                     <div className={styles.infoItem}>
-                        <div className={styles.infoItemTitle}>{"Circulating Supply"}</div>
-                        <div className={styles.infoItemValue}>{"143,703,876,384 DOGE"}</div>
+                        <div className={styles.infoItemTitle}>{"Total Supply"}</div>
+                        <div className={styles.infoItemValue}>{Number(selectedCoin?.totalSupply).toLocaleString()}</div>
                     </div>
                     <div className={styles.infoItem}>
                         <div className={styles.infoItemTitle}>{"Contract"}</div>
-                        <div className={styles.infoItemValue}>{"0xfCd...4c43"}</div>
+                        <div className={styles.infoItemValue}>{ellipsis(selectedCoin?.tokenAddress)}</div>
                     </div>
                 </div>}
-                <div className={styles.myInfo}>
+                {selectedCoin && <div className={styles.myInfo}>
                     <div className={styles.myInfoItem}>
 
                         <div className={styles.myInfoTitle}>{"My Position"}</div>
-                        <div className={styles.myInfoValue}>{"$2,031.00"}</div>
+                        <div className={styles.myInfoValue}>{"$0"}</div>
 
                     </div>
                     <div className={styles.myInfoItem}>
@@ -182,17 +188,33 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
                         <div className={styles.myInfoValue} style={{
                             color: "#3BF873", display: 'flex', gap: '8px',
                             alignItems: 'center'
-                        }}>{"$1,302.00"}
+                        }}>{"$0"}
 
-                            <div className={styles.profileRate}>{"+300%"}</div>
+                            <div className={styles.profileRate}>{"+0%"}</div>
                         </div>
 
                     </div>
 
-                </div>
+                </div>}
             </div>
 
             <div className={styles.right}>
+                <div className={styles.commentContent}>
+                    {[0, 1, 2, 3, 4].map(item =>
+                        <div className={styles.commentLine}>
+                            {
+                                commentList.slice(0, 10).map((item: Comment) => {
+                                    if (item.commentType == "default")
+                                        return emoticons[extractNumbers(item.text)%6].content
+
+                                        
+                                })
+                            }
+                        </div>)}
+
+
+
+                </div>
                 <div className={styles.rightLine}></div>
                 <div className={styles.emoticons}>
                     <div className={styles.emoticonsscroll}>
@@ -202,9 +224,8 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
                         )}
                     </div>
                 </div>
-
                 <div className={styles.input}>
-                    <div></div>
+                    <input className={styles.inputText} type="text" />
                     <Image
                         style={{ marginTop: '4px' }}
                         src={`/icons/send.svg`}

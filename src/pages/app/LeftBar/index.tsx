@@ -10,9 +10,17 @@ import { Coin } from "@/type";
 
 
 
-export default function LeftBar({ selectedCoin, setSelectedCoin }: { selectedCoin: Coin | undefined, setSelectedCoin: Function }) {
+export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }:
+    {
+        selectedCoin: Coin | undefined,
+        setSelectedCoin: Function,
+        like: boolean,
+        setLike: Function
+    }) {
     const { address } = useAccount();
     const [tokenList, setTokenList] = useState([])
+    const [watchlist, setWatchlist] = useState([])
+    const [list, setList] = useState([])
 
 
     useEffect(() => {
@@ -20,15 +28,56 @@ export default function LeftBar({ selectedCoin, setSelectedCoin }: { selectedCoi
             fetchTokenList().then(res => {
                 console.log(res, 'tokenlist')
                 setTokenList(res.data)
-                setSelectedCoin(res.data[0])
-                fetchWatchList(address).then(res => {
-                    console.log(res)
-                })
+                setSelectedCoin(res?.data?.[0] || undefined)
+                fetchWatchListFunc()
             })
         }
     }, [address])
 
+    useEffect(() => {
+        let like = false
+        watchlist.map((item: any) => {
+            if (item.tokenId == selectedCoin?.id) {
+                like = true
+            }
+        })
+
+        setLike(like)
+    }, [selectedCoin, watchlist])
+
+    const fetchWatchListFunc = () => {
+        if (address) {
+            fetchWatchList(address).then(watchres => {
+                setWatchlist(watchres.data)
+
+            })
+        }
+    }
+
+    useEffect(() => {
+        if (like) {
+            if (watchlist.findIndex((item: any) => item.tokenId == selectedCoin?.id) == -1) {
+                //@ts-ignore
+                setWatchlist([...watchlist, {
+                    tokenId: selectedCoin?.id,
+                    token: selectedCoin
+                }])
+            }
+        } else {
+            let index = watchlist.findIndex((item: any) => item.tokenId == selectedCoin?.id)
+            if (index !== -1) {
+                //@ts-ignore
+                setWatchlist(watchlist.filter((_, i) => i !== index))
+            }
+
+        }
+
+    }, [like])
+
+
     const [active, setActive] = useState(0)
+
+
 
     const changeSelectToken = (item: Coin) => {
         setSelectedCoin(item)
@@ -60,7 +109,10 @@ export default function LeftBar({ selectedCoin, setSelectedCoin }: { selectedCoi
                 </div>
             </div>
             {selectedCoin && <div className={styles.coinslist}>
-                {tokenList.map((item: Coin, index) => {
+                {(active == 0 ? tokenList : watchlist).map((coin: any, index) => {
+
+                    let item = active == 0 ? coin : coin.token
+
                     let type = 'rise'
                     if (Number(item.priceChangePercent) > 20) {
                         type = 'rise'
@@ -93,13 +145,13 @@ export default function LeftBar({ selectedCoin, setSelectedCoin }: { selectedCoi
                                     alt="avatar" /></div>
                             <div className={selectedCoin.id == item.id ? styles.selectedcoinName : styles.coinName}>{item.tokenName}
                                 <Image
-                                className={styles.coinType}
-                                    
+                                    className={styles.coinType}
+
                                     src={`/icons/menu-badge-${type}${selectedCoin.id == item.id ? '-selected' : ''}.svg`}
-                                    height={ 40}
-                                    width={ 40}
+                                    height={40}
+                                    width={40}
                                     alt="arrow" />
-                                    </div>
+                            </div>
 
                         </div>
                         <div className={styles.coinRight}>
