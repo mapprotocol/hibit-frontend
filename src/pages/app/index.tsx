@@ -86,7 +86,7 @@ export default function Hibit() {
                     <Comments selectedCoin={selectedCoin} />
                     <div className={styles.buy_area}>
                         <SwapSearchContainer>
-                        <Swap />
+                        <Swap selectedCoin={selectedCoin} />
                         </SwapSearchContainer>
                         <Orders />
                     </div>

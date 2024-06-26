@@ -98,6 +98,8 @@
 
             .token_img {
                 width: 26px;
+                height: 26px;
+                border-radius: 13px;
             }
 
             .token_symbol {
@@ -254,7 +256,9 @@
             background-color: #fff;
             padding: 4px 4px;
             .token_img {
-                width: 100%;
+                width: 44px;
+                height: 44px;
+                border-radius: 22px;
             }
         }
         .token_name{

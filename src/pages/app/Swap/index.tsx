@@ -12,11 +12,15 @@ import {useBestRoute, useFetchRouteError, useLoadingRoute} from "@/store/route/h
 import Decimal from 'decimal.js'
 import ConfirmCard from "@/components/swap/confirm-card";
 import ConfirmButton from "@/components/swap/confirm-button";
+import {Coin} from "@/type";
+import {fetchMyTokenTrade, fetchTokenComments} from "@/api";
 
-export default function Swap({}) {
+export default function Swap({ selectedCoin }: { selectedCoin: Coin | undefined }) {
     const dispatch = useAppDispatch();
     const [currentChainBox, setCurrentChainBox] = useState(0);
     const [showTokenSelector, setShowTokenSelector] = useState(false);
+
+    const [buyArea,setBuyArea] = useState<boolean>(true);
     const handleTapChainBox = (index: number) => {
         setCurrentChainBox(index);
         setShowTokenSelector(true);
@@ -41,7 +45,37 @@ export default function Swap({}) {
             ))
     }
 
+
+
+
     //左边列表切换时候获取选中的token信息
+
+
+    useEffect(() => {
+        if (selectedCoin) {
+                if(buyArea){
+                    let chainTo: ChainItem = {
+                        chainId: selectedCoin.chainId.toString()
+                    } as ChainItem;
+
+                    let tokenTo: TokenItem = {
+                        address: selectedCoin.tokenAddress,
+                        symbol:selectedCoin.tokenName
+                    } as TokenItem;
+
+                    dispatch(updateTo(
+                        {
+                            chain: chainTo,
+                            token: tokenTo,
+                        }
+                    ))
+                }else{
+
+                }
+        }
+    }, [selectedCoin])
+
+
     useEffect(() => {
         let chainTo: ChainItem = {
             chainId: "1"
@@ -163,12 +197,12 @@ export default function Swap({}) {
                                         <div className={styles.token_area}>
                                             <div className={styles.token_area_left}>
                                                 <div className={styles.token_img_div}>
-                                                    <img className={styles.token_img} src="/images/swap/doge.png"
+                                                    <img className={styles.token_img} src={selectedCoin?.tokenLogoUrl}
                                                          alt=""/>
                                                 </div>
                                                 <div className={styles.token_name}>
                                                     <div className={styles.token_name_title}>
-                                                        DOGE
+                                                        {selectedCoin?.tokenName}
                                                     </div>
                                                     <div className={styles.token_name_bg}></div>
                                                 </div>
