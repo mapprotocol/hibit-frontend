@@ -10,6 +10,8 @@ import {Box, Button, Center, Loader, TextInput} from "@mantine/core";
 import {updateAmount, updateFrom, updateTo} from "@/store/route/routes-slice";
 import {useBestRoute, useFetchRouteError, useLoadingRoute} from "@/store/route/hooks";
 import Decimal from 'decimal.js'
+import ConfirmCard from "@/components/swap/confirm-card";
+import ConfirmButton from "@/components/swap/confirm-button";
 
 export default function Swap({}) {
     const dispatch = useAppDispatch();
@@ -46,7 +48,8 @@ export default function Swap({}) {
         } as ChainItem;
 
         let tokenTo: TokenItem = {
-            address: "0x9e976f211daea0d652912ab99b0dc21a7fd728e4"
+            address: "0x9e976f211daea0d652912ab99b0dc21a7fd728e4",
+            symbol:"MAP"
         } as TokenItem;
 
         dispatch(updateTo(
@@ -192,10 +195,16 @@ export default function Swap({}) {
                         </div>
                     </div>
                     <div className={styles.confirm_btn}>
-                        <img className={styles.conform_btn_img} src="/images/swap/confirm.png" alt=""/>
+                        <ConfirmButton
+                            disabled={false}
+                        ></ConfirmButton>
+                        {/*<img className={styles.conform_btn_img} src="/images/swap/confirm.png" alt=""/>*/}
                     </div>
                 </div>
             </div>
+
+            <ConfirmCard
+            />
 
             <TokenSelector
                 position={currentChainBox === 0 ? "from" : "to"}
@@ -205,7 +214,6 @@ export default function Swap({}) {
                 }}
                 show={showTokenSelector}
             ></TokenSelector>
-
         </div>
     );
 }
