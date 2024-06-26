@@ -1,11 +1,11 @@
 .swap {
     width: 400px;
-    height: 408px;
     flex-shrink: 0;
     background-color: #1A191B;
     margin-top: 24px;
     border-radius: 8px;
     padding: 28px 28px;
+    position: relative;
 }
 
 .buy_sell {
@@ -98,6 +98,8 @@
 
             .token_img {
                 width: 26px;
+                height: 26px;
+                border-radius: 13px;
             }
 
             .token_symbol {
@@ -177,18 +179,19 @@
     }
 }
 
-.confirm_area{
+.confirm_area {
     margin-top: 12px;
     width: 100%;
     background-color: #252525;
     border-radius: 8px;
     padding: 10px 12px 20px 12px;
 
-    .confirm{
+    .confirm {
         display: flex;
         justify-content: space-between;
-        .left{
-            .left_content{
+
+        .left {
+            .left_content {
                 display: flex;
                 justify-content: flex-start;
                 gap: 4px;
@@ -201,11 +204,100 @@
                 opacity: 0.6;
             }
         }
-        .confirm_btn{
+
+        .confirm_btn {
             cursor: pointer;
-            .conform_btn_img{
+
+            .conform_btn_img {
                 width: 120px;
             }
         }
+    }
+}
+
+.buy_area {
+    margin-left: -30px;
+    width: 100%;
+    height: 110px;
+    position: relative;
+
+    .buy_area_img_div {
+        width: 400px;
+        height: 110px;
+        left: 10px;
+        top: -30px;
+        pointer-events: none;
+        position: absolute;
+    }
+
+    .buy_area_img {
+        width: 100%;
+    }
+
+    .buy_area_amount {
+        position: relative;
+        display: flex;
+        z-index: 10;
+    }
+}
+
+.token_area {
+    padding-left: 30px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+
+    .token_area_left {
+        .token_img_div {
+            width: 56px;
+            border: 2px solid #000;
+            border-radius: 28px;
+            background-color: #fff;
+            padding: 4px 4px;
+            .token_img {
+                width: 44px;
+                height: 44px;
+                border-radius: 22px;
+            }
+        }
+        .token_name{
+            position: relative;
+            .token_name_title{
+                position: relative;
+                color: #F4F4F4;
+                text-align: center;
+                text-shadow: 0px 1px 0px #000;
+                -webkit-text-stroke-color: #060606;
+                font-family: Hanson;
+                font-size: 18px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: 21.366px; /* 132.3% */
+                letter-spacing: 0.646px;
+                transform: rotate(-6deg);
+                z-index: 10;
+            }
+            .token_name_bg{
+                position: absolute;
+                left: 6px;
+                top: 8px;
+                width: 90%;
+                height: 12px;
+                transform: rotate(-6deg);
+                flex-shrink: 0;
+                background-color: #FFD500;
+            }
+        }
+    }
+    .token_amount{
+        height: 30px;
+        color: #E0BF5A;
+        font-family: Hanson;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 30px; /* 100% */
+        letter-spacing: 2.4px;
     }
 }
