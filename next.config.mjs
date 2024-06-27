@@ -22,15 +22,7 @@ const nextConfig = {
             },
         ]
     },
-    async redirects() {
-        return [
-            {
-                source: '/',
-                destination: '/swap',
-                permanent: true,
-            },
-        ]
-    },
+    
     reactStrictMode: true,
     eslint: {
         ignoreDuringBuilds: true,
