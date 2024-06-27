@@ -24,14 +24,12 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
 
 
     useEffect(() => {
-        if (address) {
-            fetchTokenList().then(res => {
-                console.log(res, 'tokenlist')
-                setTokenList(res.data)
-                setSelectedCoin(res?.data?.[0] || undefined)
-                fetchWatchListFunc()
-            })
-        }
+        fetchTokenList().then(res => {
+            console.log(res, 'tokenlist')
+            setTokenList(res.data)
+            setSelectedCoin(res?.data?.[0] || undefined)
+            fetchWatchListFunc()
+        })
     }, [address])
 
     useEffect(() => {
@@ -186,7 +184,7 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
                             </div>
                         </div>
                     </div>
-                })}ƒ
+                })}
             </div>}
         </div>
     );

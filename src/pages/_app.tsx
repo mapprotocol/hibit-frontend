@@ -38,6 +38,8 @@ import EvmProvider from '@/lib/providers/EvmProvider';
 import TronProvider from "@/lib/providers/TronProvider";
 import SolanaProvider from "@/lib/providers/SolanaProvider";
 import NearProvider from "@/lib/providers/NearProvider";
+import { Notifications } from '@mantine/notifications';
+import NotificationsProvider from '@/components/notifications-provider';
 
 
 const map: Chain = {
@@ -138,6 +140,8 @@ const MyApp = ({Component, pageProps}: AppProps) => {
 
                                     <WagmiConfig config={wagmiConfig}>
                                         <RainbowKitProvider appInfo={demoAppInfo} chains={chains}>
+                                        <NotificationsProvider />
+
                                             <Layout>
                                                 <Component {...pageProps} />
                                             </Layout>

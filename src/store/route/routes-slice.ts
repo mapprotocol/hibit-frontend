@@ -114,9 +114,6 @@ export const routesSlices = createSlice({
         },
         updateTo: (state, action) => {
 
-            if (action.payload?.chain?.chainId == "1") {
-                showTip('Please note that the current ethereum cross-chain verification will consume a great amount of gas.', 'High Gas Alert')
-            }
 
             state.to = action.payload;
         },

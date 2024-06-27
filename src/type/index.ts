@@ -48,6 +48,6 @@ export interface Comment {
     tradeAmount: number | null;
     tradeType: string | null;
     updatedAt: string;
-    user: User;
+    "user.walletAddress": string;
     userId: number;
 }

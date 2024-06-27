@@ -1,50 +1,61 @@
 import Image from "next/image";
 import styles from './index.module.css'
 import lottie from 'lottie-web';
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import CylinderCanvas from "@/components/cylinder";
 import { Coin, Comment } from "@/type";
 import { fetchMyTokenTrade, fetchTokenComments, sendComment, trades } from "@/api";
 import { useAccount } from "wagmi";
 import { ellipsis } from "@/utils";
+import { notifications } from "@mantine/notifications";
 
 const emoticons = [
     {
         id: 0,
         content:
             <div className={styles.messageItemText}>
-                <Image
-                    height={40}
-                    width={40}
-                    className={styles.messageImageBig}
-                    src={`/icons/message/rocket.svg`}
-                    alt="hat" />
-                Rocket High
+                <div className={styles.messageImageBig}>
+
+                    <Image
+                        fill
+                        style={{ objectFit: "contain" }}
+                        className={styles.messageImageBig}
+                        src={`/icons/message/rocket.svg`}
+                        alt="hat" />
+                </div>
+                <span>Rocket High</span>
             </div>
     },
     {
         id: 1,
         content:
             <div className={styles.messageItemText}>
-                <Image
-                    height={40}
-                    width={40}
-                    className={styles.messageImageBig}
-                    src={`/icons/message/etf.svg`}
-                    alt="hat" />
-                ETF
+                <div className={styles.messageImageBig}>
+
+                    <Image
+                        fill
+                        style={{ objectFit: "contain" }}
+                        src={`/icons/message/etf.svg`}
+                        alt="hat" />
+                </div>
+
+                <span>ETF</span>
+
+
             </div>
     },
     {
         id: 2,
         content:
             <div className={styles.messageItemText}>
-                <Image
-                    height={40}
-                    width={40}
-                    className={styles.messageImageBig}
-                    src={`/icons/message/todamoon.svg`}
-                    alt="hat" />
+                <div className={styles.messageImageBig}>
+                    <Image
+                        fill
+                        style={{ objectFit: "contain" }}
+                        src={`/icons/message/todamoon.svg`}
+                        alt="hat" />
+                </div>
+
                 To da moon
             </div>
     },
@@ -52,12 +63,12 @@ const emoticons = [
         id: 3,
         content:
             <div className={styles.messageItemText}>
-                <Image
-                    height={40}
-                    width={40}
-                    className={styles.messageImageBig}
-                    src={`/icons/message/LFG.svg`}
-                    alt="hat" />
+                <div className={styles.messageImageBig}>
+                    <img
+
+                        src={`/icons/message/LFG.svg`}
+                        alt="hat" />
+                </div>
                 LFG
             </div>
     },
@@ -77,6 +88,7 @@ const emoticons = [
         id: 5,
         content:
             <div className={styles.messageItemImage}>
+
                 <Image
                     height={22}
                     width={22}
@@ -102,6 +114,8 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
     const { address, isConnected, isConnecting } = useAccount();
     const lottieContainerRef = useRef(null);
     const [commentList, setCommentList] = useState<Comment[]>([])
+    const [allowSend, setAllowSend] = useState(0)
+    const [textValue, setTextValue] = useState("")
     useEffect(() => {
         // fetch('/lottie/buyitbig.json')
         //     .then(response => response.json())
@@ -112,46 +126,120 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
         //             loop: true,
         //             autoplay: true,
         //             animationData: animationData,
-        //             assetsPath: '/lottie/images/' // 指定资源图片的路径
+        //             assetsPath: '/lottie/images/' 
         //         });
         //     })
         //     .catch(error => console.error('Error loading animation data:', error));
+
     }, []);
-    const extractNumbers = (str:string) => {
+    const extractNumbers = (str: string) => {
         const regex = /\d+/g;
-        const matches = str.match(regex); 
+        const matches = str.match(regex);
         return matches ? matches.map(Number) : [];
     }
     useEffect(() => {
-        if (selectedCoin && address) {
+        if (selectedCoin) {
             fetchTokenComments(selectedCoin?.id).then(res => {
                 console.log(res, 'tokenComment')
                 setCommentList(res.data)
+
             })
-            fetchMyTokenTrade(address, selectedCoin?.id).then(res => {
-                console.log(res, 'myTokenTrade')
-            })
+            if (address)
+                fetchMyTokenTrade(address, selectedCoin?.id).then(res => {
+                    console.log(res, 'myTokenTrade')
+                })
         }
     }, [selectedCoin])
 
+    useEffect(() => {
+        let timer: any;
+        if (allowSend > 0) {
+            timer = setInterval(() => {
+                setAllowSend(prevAllowSend => {
+                    if (prevAllowSend > 1) {
+                        return prevAllowSend - 1;
+                    } else {
+                        clearInterval(timer);
+                        return 0;
+                    }
+                });
+            }, 1000);
+        }
+
+        return () => clearInterval(timer);
+    }, [allowSend]);
+
     const sendEmoji = (id: number) => {
-        if (address && selectedCoin)
-            sendComment({
-                walletAddress: address,
-                tokenId: selectedCoin.id,
-                commentType: 'default',
-                text: id.toString()
-            }).then((res) => {
-                console.log(res, 'sendEmoji')
+        if (allowSend > 0) {
+            notifications.show({
+                title: 'Sending messages frequently',
+                message: `You need to wait ${allowSend}s before sending`,
+                color: 'red'
             })
+        }
+        else {
+            setAllowSend(60)
+            //@ts-ignore
+
+            setCommentList([{
+                commentType: 'default', text: id.toString(), "user.walletAddress": address as string
+            }
+                , ...commentList])
+            if (address && selectedCoin)
+                sendComment({
+                    walletAddress: address,
+                    tokenId: selectedCoin.id,
+                    commentType: 'default',
+                    text: id.toString()
+                }).then((res) => {
+                    console.log(res, 'sendEmoji')
+                })
+        }
+
     }
+
+
+    const sendText = () => {
+        if (allowSend > 0) {
+            notifications.show({
+                title: 'Sending messages frequently',
+                message: `You need to wait ${allowSend}s before sending`,
+                color: 'red'
+            })
+        }
+        else {
+            setAllowSend(60)
+            setTextValue("")
+            //@ts-ignoreƒ
+            setCommentList([{
+                commentType: 'text', text: textValue.toString(), "user.walletAddress": address as string
+            }
+                , ...commentList])
+            if (address && selectedCoin)
+                sendComment({
+                    walletAddress: address,
+                    tokenId: selectedCoin.id,
+                    commentType: 'text',
+                    text: textValue.toString()
+                }).then((res) => {
+                    console.log(res, 'sendText')
+                })
+        }
+
+    }
+    const handleKeyDown = (event: any) => {
+        if (event.key === 'Enter') {
+            sendText();
+        }
+    };
+
     return (
         <div className={styles.comments}>
             <div className={styles.shadow}></div>
 
             <div className={styles.left}>
                 <div className={styles.pirce}>
-                    <div ref={lottieContainerRef} style={{ width: 400, height: 400 }}></div>
+
                 </div>
                 {selectedCoin && <div className={styles.coinsInfo}>
                     <div className={styles.infoItem}>
@@ -200,38 +288,54 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
 
             <div className={styles.right}>
                 <div className={styles.commentContent}>
-                    {[0, 1, 2, 3, 4].map(item =>
-                        <div className={styles.commentLine}>
-                            {
-                                commentList.slice(0, 10).map((item: Comment) => {
-                                    if (item.commentType == "default")
-                                        return emoticons[extractNumbers(item.text)%6].content
+                    {[0, 1, 2, 3, 4, 5].map((item) =>
+                        <div style={{ width: '100%', height: '60px' }}>
+                            <div className={styles["commentLine" + item % 3] + " " + styles.commentLine}>
+                                {
+                                    [...Array(2)].flatMap(() =>
+                                        commentList.slice(item * 16, (item + 1) * 16).map((itemComment: Comment) => {
+                                            if (itemComment.commentType == "default")
+                                                return emoticons[extractNumbers(itemComment.text)[0] % 6].content
+                                            if (itemComment.commentType == "text")
+                                                return <div className={styles.messageItem}>
+                                                    {itemComment.text}
+                                                </div>
 
-                                        
-                                })
-                            }
-                        </div>)}
-
-
-
-                </div>
-                <div className={styles.rightLine}></div>
-                <div className={styles.emoticons}>
-                    <div className={styles.emoticonsscroll}>
-                        {emoticons.map((item, index) =>
-                            <div key={item.id} onClick={() => { sendEmoji(item.id) }}>{item.content}
+                                        })
+                                    )
+                                }
                             </div>
-                        )}
+                        </div>
+                    )}
+                    <div className={styles.commentShadow}>
+                        <div ref={lottieContainerRef} style={{ width: 800, height: 800 }}></div>
                     </div>
                 </div>
-                <div className={styles.input}>
-                    <input className={styles.inputText} type="text" />
-                    <Image
-                        style={{ marginTop: '4px' }}
-                        src={`/icons/send.svg`}
-                        height={38}
-                        width={38}
-                        alt="send" />
+
+                <div className={styles.rightBottom}>
+                    <div className={styles.rightLine}></div>
+                    <div className={styles.emoticons}>
+                        <div className={styles.emoticonsscroll}>
+                            {emoticons.map((item, index) =>
+                                <div key={item.id} onClick={() => { sendEmoji(item.id) }}>{item.content}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    <div className={styles.input}>
+                        <input className={styles.inputText}
+                            value={textValue}
+                            onKeyDown={handleKeyDown}
+                            onChange={(event) => { setTextValue(event.target.value) }}
+                            type="text" />
+                        <Image
+                            onClick={sendText}
+                            style={{ marginTop: '4px', cursor: 'pointer' }}
+                            src={`/icons/send.svg`}
+                            height={38}
+                            width={38}
+                            alt="send" />
+                    </div>
                 </div>
             </div>
         </div>
