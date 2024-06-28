@@ -33,3 +33,23 @@ export function formatNumber(num: number | string): string {
     }
 }
 
+export const countCharacters = (str:string) => {
+    let len = 0;
+    let spaceCount = 0;
+
+    for (let i = 0; i < str.length; i++) {
+      const code = str.charCodeAt(i);
+      if (code === 32) { // 空格 ASCII 编码是 32
+        spaceCount++;
+      }
+      if (code === 8232 || code === 8233 || code === 12288 || code === 10 || code === 9) { // 特殊空白字符
+        spaceCount++;
+      }
+      if (code >= 0 && code <= 128) {
+        len += 0.5; // 英文和 ASCII 码个字符算0.5字
+      } else {
+        len += 1; // 中文字符算1字
+      }
+    }
+    return { len, spaceCount };
+  }

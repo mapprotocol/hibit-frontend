@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "env-cmd -f ./envs/.env.development next dev --port 3001",
+    "dev": "env-cmd -f ./envs/.env.development next dev",
     "build": "env-cmd -f ./envs/.env.production next build",
     "start": "next start",
     "lint": "next lint"

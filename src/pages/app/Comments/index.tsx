@@ -6,7 +6,7 @@ import CylinderCanvas from "@/components/cylinder";
 import { Coin, Comment } from "@/type";
 import { fetchMyTokenTrade, fetchTokenComments, sendComment, trades } from "@/api";
 import { useAccount } from "wagmi";
-import { ellipsis } from "@/utils";
+import { countCharacters, ellipsis } from "@/utils";
 import { notifications } from "@mantine/notifications";
 
 const emoticons = [
@@ -200,6 +200,27 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
 
 
     const sendText = () => {
+
+        if(Number(textValue) === 0){
+            notifications.show({
+                title: 'Failed to send',
+                message: `Message cannot be empty`,
+                color: 'red'
+            })
+            return;
+
+        }
+        const { len, spaceCount } = countCharacters(textValue);
+
+        if (len > 20 || textValue.length > 40) { 
+            notifications.show({
+                title: 'Failed to send',
+                message: `Message is too long`,
+                color: 'red'
+            })
+            return;
+        }
+
         if (allowSend > 0) {
             notifications.show({
                 title: 'Sending messages frequently',
