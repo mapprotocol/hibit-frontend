@@ -19,6 +19,7 @@ export const walletSlice = createSlice({
             if (!action.payload) {
                 return;
             }
+            console.log(`aaaaaaa`)
             state.tokenBalances = {
                 ...state.tokenBalances,
                 [action.payload.chainId]: {

@@ -178,6 +178,7 @@ const ConfirmCard = () => {
         if (!amount) {
             return false;
         }
+        console.log(1111111,balance,amount)
         return (Number(balance) < Number(amount));
     }, [balance, amount]);
 

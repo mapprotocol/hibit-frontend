@@ -53,6 +53,7 @@ const InputBox = () => {
         from,
         "fetchFromTokenBalance"
     ], ([wallet, from]) => {
+        console.log(55555)
         if (wallet && from?.token && from?.chain) {
             dispatch(getTokenBalance({
                 wallet: wallet,

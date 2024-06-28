@@ -92,7 +92,6 @@ export const getTokensForChain = createAsyncThunk<
                     balance: Number(0).toFixed(4),
                 }
             })
-
         }
         tokensRes = tokensRes.sort((a: any, b: any) => Number(a.balance) > Number(b.balance) ? -1 : 1);
         const state = getState().global;
