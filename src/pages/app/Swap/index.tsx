@@ -70,6 +70,9 @@ export default function Swap({ selectedCoin }: { selectedCoin: Coin | undefined 
         refreshInterval: 6000,
     })
 
+    const handleAmount = (percent:number) => {
+        dispatch(updateAmount(new Decimal(balance).mul(percent).toFixed()));
+    }
 
     //左边列表切换时候获取选中的token信息
 
@@ -168,14 +171,14 @@ export default function Swap({ selectedCoin }: { selectedCoin: Coin | undefined 
                     <div className={styles.balance}>
                         <img className={styles.balance_img} src="/images/swap/wallet.svg" alt=""/>
                         {from?.chain?.chainId ? balance : 0}
-                        <span className={styles.balance_all}>ALL</span>
+                        <span className={styles.balance_all} onClick={()=>{handleAmount(1)}}>ALL</span>
                     </div>
                 </div>
                 <div className={styles.percents}>
-                    <div className={styles.percent}>25%</div>
-                    <div className={styles.percent}>50%</div>
-                    <div className={styles.percent}>75%</div>
-                    <div className={styles.percent}>100%</div>
+                    <div className={styles.percent} onClick={()=>{handleAmount(0.25)}}>25%</div>
+                    <div className={styles.percent} onClick={()=>{handleAmount(0.5)}}>50%</div>
+                    <div className={styles.percent} onClick={()=>{handleAmount(0.75)}}>75%</div>
+                    <div className={styles.percent} onClick={()=>{handleAmount(1)}}>100%</div>
                 </div>
             </div>
 

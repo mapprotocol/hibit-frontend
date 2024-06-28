@@ -6,6 +6,7 @@
     border-radius: 8px;
     padding: 28px 28px;
     position: relative;
+    min-height: 470px;
 }
 
 .buy_sell {
