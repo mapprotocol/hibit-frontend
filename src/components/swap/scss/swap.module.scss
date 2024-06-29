@@ -2,7 +2,6 @@
   //background-image: url("/images/swap/btn_switch_network_bg.png");
   background-image: url("/images/swap/confirm.png");
   background-size: 100% 100%;
-  background-color: #3BF873;
   color: #F3F3F3;
 
   text-align: center;
@@ -15,3 +14,14 @@
   line-height: 14px; /* 100% */
   letter-spacing: 1.12px;
 }
+
+//
+//style={{
+//  backgroundColor: "transparent",
+//  backgroundImage:`url(/images/swap/confirm.png)`,
+//  backgroundSize: 'cover',
+//  backgroundRepeat: 'no-repeat',
+//  backgroundPosition: 'center',
+//  textShadow:"0px 1px 0px #000",
+//  color:"#fff"
+//}}
