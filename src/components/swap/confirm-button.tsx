@@ -41,30 +41,41 @@ const EvmConfirmButton = ({
     if (isConnected) {
         if (isEvmNetworkCorrect) {
             return (
+                //{"Confirm"}
                 <Button
                     variant="transparent"
-                    className={styles.confirm_btn}
+                    style={{
+                        backgroundColor: "transparent",
+                        backgroundImage:`url(/images/swap/confirm.png)`,
+                        backgroundSize: 'cover',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center'
+                    }}
                     onClick={onSubmit}
                     disabled={disabled || !selectedRoute || selectedRoute === "empty"
                         || (selectedRoute?.dstChain?.chainId == '56' && to?.token?.id == 12264)}
                     h={44}
                     fz={18}
-                    w={"100%"}
+                    w={120}
                 >
-                    {"Confirm"}
                 </Button>
             );
         } else {
             return (
+                //Switch Network
                 <Button
-                    variant="transparent"
-                    className={styles.confirm_btn}
+                    style={{
+                        backgroundColor: "transparent",
+                        backgroundImage:`url(/images/swap/confirm.png)`,
+                        backgroundSize: 'cover',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center'
+                    }}
                     disabled={disabled}
                     onClick={handleSwitchNetwork}
                     h={"44px"}
-                    w={"100%"}
+                    w={"120px"}
                 >
-                    {'Switch Network'}
                 </Button>
             );
         }
@@ -78,7 +89,7 @@ const EvmConfirmButton = ({
                 h={44}
                 fz={18}
                 c={"black"}
-                w={"100%"}
+                w={120}
             >
                 {"Connect Network"}
             </Button>
@@ -116,9 +127,8 @@ const ConfirmButton = ({
         return (
             <Button
                 variant="transparent"
-                className={styles.confirm_btn}
                 disabled={disabled || !selectedRoute || selectedRoute === "empty" || (selectedRoute?.dstChain?.chainId == '56' && to?.token?.id == 12264)}
-                onClick={onSubmit} h={44} fz={18}  w={"100%"}>
+                onClick={onSubmit} h={44} fz={18}  w={120}>
                 {"Confirm"}
             </Button>
         )
@@ -126,13 +136,12 @@ const ConfirmButton = ({
     return (
         <Button
             variant="transparent"
-            className={styles.confirm_btn}
             onClick={async () => {
                 connectWallet(fromWalletName);
             }}
             h={44}
             fz={18}
-            w={"100%"}
+            w={120}
         >{
            "Connect Network"
         }

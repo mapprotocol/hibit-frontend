@@ -94,3 +94,29 @@ export function truncateAndTrimDecimals(value: number | string, decimalPlaces: n
 
   return `${integerPart}.${decimalPart}`;
 }
+
+
+export function fixAmountStr(num: string| number | null):string {
+  if(!num){return '0'}
+  let numStr = num.toString();
+  if(numStr.indexOf('.') === -1) {
+    //1000000
+    if(numStr.length >  6){
+       return numStr.substring(0,numStr.length - 6) + 'm'
+    }else if(numStr.length >  3){
+      return numStr.substring(0,numStr.length - 3) + 'k'
+    }else{
+      return numStr
+    }
+  }else{
+    let numStrShort = numStr.split('.')[0];
+    if(numStrShort.length >  6){
+      return numStrShort.substring(0,numStrShort.length - 6) + 'm'
+    }else if(numStrShort.length >  3){
+      return numStrShort.substring(0,numStrShort.length - 3) + 'k'
+    }else{
+      return numStr
+    }
+  }
+  return ""
+}

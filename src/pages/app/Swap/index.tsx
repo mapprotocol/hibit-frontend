@@ -18,16 +18,16 @@ import useFromTokenBalance from "@/hooks/useFromTokenBalance";
 import useSWR from "swr";
 import useFromWallet from "@/hooks/useFromWallet";
 import getTokenBalance from "@/store/wallet/thunks/getTokenBalance";
+import {fixAmountStr} from "@/utils/numbers";
 
-export default function Swap({ selectedCoin }: { selectedCoin: Coin | undefined }) {
+export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined }) {
     const dispatch = useAppDispatch();
     const wallet = useFromWallet();
     const [currentChainBox, setCurrentChainBox] = useState(0);
     const [showTokenSelector, setShowTokenSelector] = useState(false);
 
-    const [buyArea,setBuyArea] = useState<boolean>(true);
-    const handleTapChainBox = (index: number) => {
-        setCurrentChainBox(index);
+    const handleTapChainBox = () => {
+        // setCurrentChainBox(index);
         setShowTokenSelector(true);
     };
     const amount = useAmount();
@@ -42,14 +42,28 @@ export default function Swap({ selectedCoin }: { selectedCoin: Coin | undefined 
 
     const handleSelectedToken = async (chain: ChainItem, token: TokenItem) => {
         setShowTokenSelector(false)
-        console.log(2222222,chain,token)
-        dispatch(
-            updateFrom(
-                {
-                    chain: chain,
-                    token: token
-                }
-            ))
+        console.log(2222222, chain, token)
+        if (currentChainBox === 0) {
+            //买入
+            dispatch(
+                updateFrom(
+                    {
+                        chain: chain,
+                        token: token
+                    }
+                ))
+        } else {
+            //卖出
+            dispatch(
+                updateTo(
+                    {
+                        chain: chain,
+                        token: token
+                    }
+                ))
+
+        }
+
     }
 
 
@@ -70,7 +84,7 @@ export default function Swap({ selectedCoin }: { selectedCoin: Coin | undefined 
         refreshInterval: 6000,
     })
 
-    const handleAmount = (percent:number) => {
+    const handleAmount = (percent: number) => {
         dispatch(updateAmount(new Decimal(balance).mul(percent).toFixed()));
     }
 
@@ -79,27 +93,52 @@ export default function Swap({ selectedCoin }: { selectedCoin: Coin | undefined 
 
     useEffect(() => {
         if (selectedCoin) {
-                if(buyArea){
-                    let chainTo: ChainItem = {
-                        chainId: selectedCoin.chainId.toString()
-                    } as ChainItem;
+            //买入
+            if (currentChainBox === 0) {
+                let chainTo: ChainItem = {
+                    chainId: selectedCoin.chainId.toString(),
+                    key: "base"
+                } as ChainItem;
 
-                    let tokenTo: TokenItem = {
-                        address: selectedCoin.tokenAddress,
-                        symbol:selectedCoin.tokenName
-                    } as TokenItem;
+                let tokenTo: TokenItem = {
+                    address: selectedCoin.tokenAddress,
+                    symbol: selectedCoin.tokenName,
+                    image: selectedCoin.tokenLogoUrl,
+                    decimals:selectedCoin.tokenDecimal
 
-                    dispatch(updateTo(
-                        {
-                            chain: chainTo,
-                            token: tokenTo,
-                        }
-                    ))
-                }else{
+                } as TokenItem;
 
-                }
+                dispatch(updateTo(
+                    {
+                        chain: chainTo,
+                        token: tokenTo,
+                    }
+                ))
+                dispatch(updateFrom(null))
+            } else {
+                //卖出
+                let chainFrom: ChainItem = {
+                    chainId: selectedCoin.chainId.toString(),
+                    key: "base",
+                } as ChainItem;
+
+                let tokenFrom: TokenItem = {
+                    address: selectedCoin.tokenAddress,
+                    symbol: selectedCoin.tokenName,
+                    image: selectedCoin.tokenLogoUrl,
+                    decimals:selectedCoin.tokenDecimal
+                } as TokenItem;
+
+                dispatch(updateFrom(
+                    {
+                        chain: chainFrom,
+                        token: tokenFrom,
+                    }
+                ))
+                dispatch(updateTo(null))
+            }
         }
-    }, [selectedCoin])
+    }, [selectedCoin, currentChainBox])
 
     const empty = useMemo(() => {
         return bestRoute === "empty" || !!routeError;
@@ -112,19 +151,24 @@ export default function Swap({ selectedCoin }: { selectedCoin: Coin | undefined 
     }
 
 
-    console.log(empty, 'empty22222', routeError)
 
     return (
         <div className={styles.swap}>
             {
-                buyArea ?
+                currentChainBox === 0 ?
                     <div className={styles.buy_buy}>
                         <img className={styles.buy_btn} src="/images/swap/buy.png" alt=""/>
-                        <div onClick={()=>{setBuyArea(true)}}>Sell</div>
+                        <div className={styles.buy_text} onClick={() => {
+                            setCurrentChainBox(1)
+                        }}>Sell
+                        </div>
                     </div>
                     :
                     <div className={styles.buy_sell}>
-                        <div  onClick={()=>{setBuyArea(false)}}>Buy</div>
+                        <div className={styles.buy_text} onClick={() => {
+                            setCurrentChainBox(0)
+                        }}>Buy
+                        </div>
                         <img className={styles.buy_btn} src="/images/swap/sell.png" alt=""/>
                     </div>
             }
@@ -160,12 +204,12 @@ export default function Swap({ selectedCoin }: { selectedCoin: Coin | undefined 
 
                     <ChainBox
                         onClick={() => {
-                            handleTapChainBox(0);
+                            handleTapChainBox();
                         }}
                         // disabled={currentChainBox !== 0 && showTokenSelector}
                         disabled={showTokenSelector}
-                        chain={from?.chain}
-                        token={from?.token}
+                        chain={currentChainBox === 0 ? from?.chain : to?.chain}
+                        token={currentChainBox === 0 ? from?.token : to?.token}
                     ></ChainBox>
 
                     {/*<div className={styles.token}>*/}
@@ -220,26 +264,34 @@ export default function Swap({ selectedCoin }: { selectedCoin: Coin | undefined 
                                         bestRoute !== "empty" &&
                                         <div className={styles.buy_area}>
                                             <div className={styles.buy_area_img_div}>
-                                                <img className={styles.buy_area_img} src="/images/swap/buy_bg.png"
-                                                     alt=""/>
+                                                {
+                                                    currentChainBox === 0 ? <img className={styles.buy_area_img}
+                                                                                 src="/images/swap/buy_bg.png"
+                                                                                 alt=""/>
+                                                        :
+                                                        <img className={styles.buy_area_img}
+                                                             src="/images/swap/sell_bg.png"
+                                                             alt=""/>
+                                                }
+
                                             </div>
                                             <div className={styles.buy_area_amount}>
                                                 <div className={styles.token_area}>
                                                     <div className={styles.token_area_left}>
                                                         <div className={styles.token_img_div}>
                                                             <img className={styles.token_img}
-                                                                 src={selectedCoin?.tokenLogoUrl}
+                                                                 src={to?.token?.image}
                                                                  alt=""/>
                                                         </div>
                                                         <div className={styles.token_name}>
                                                             <div className={styles.token_name_title}>
-                                                                {selectedCoin?.tokenName}
+                                                                {to?.token?.symbol}
                                                             </div>
                                                             <div className={styles.token_name_bg}></div>
                                                         </div>
                                                     </div>
                                                     <div
-                                                        className={styles.token_amount}> +{new Decimal(bestRoute?.minAmountOut.amount).toFixed(4)}</div>
+                                                        className={styles.token_amount}> +{fixAmountStr(bestRoute?.minAmountOut.amount)}</div>
                                                 </div>
 
                                             </div>
@@ -262,7 +314,7 @@ export default function Swap({ selectedCoin }: { selectedCoin: Coin | undefined 
                     </div>
                     <div className={styles.confirm_btn}>
                         <ConfirmButton
-                            disabled={false}
+                            disabled={from && to ?false:true}
                         ></ConfirmButton>
                         {/*<img className={styles.conform_btn_img} src="/images/swap/confirm.png" alt=""/>*/}
                     </div>

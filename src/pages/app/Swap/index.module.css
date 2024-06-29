@@ -10,7 +10,6 @@
 }
 
 .buy_buy {
-    text-align: right;
     width: 100%;
     height: 40px;
     position: relative;
@@ -29,6 +28,10 @@
     text-align: right;
     cursor: pointer;
 
+
+    .buy_text{
+        text-align: right;
+    }
     .buy_btn {
         width: 270px;
         height: 80px;
@@ -39,7 +42,6 @@
     }
 }
 .buy_sell {
-    text-align: left;
     width: 100%;
     height: 40px;
     position: relative;
@@ -57,6 +59,10 @@
     letter-spacing: 0.28px;
     text-align: right;
     cursor: pointer;
+
+    .buy_text{
+        text-align: left;
+    }
 
     .buy_btn {
         width: 270px;

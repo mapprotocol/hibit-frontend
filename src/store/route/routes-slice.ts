@@ -109,7 +109,7 @@ export const routesSlices = createSlice({
     reducers: {
         updateFrom: (state, action) => {
 
-            state.amount = toFixedN(state.amount, action.payload.token?.decimals as number).toString();
+            // state.amount = toFixedN(state.amount, action.payload.token?.decimals as number).toString();
             state.from = action.payload;
         },
         updateTo: (state, action) => {
