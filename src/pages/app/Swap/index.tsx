@@ -116,10 +116,19 @@ export default function Swap({ selectedCoin }: { selectedCoin: Coin | undefined 
 
     return (
         <div className={styles.swap}>
-            <div className={styles.buy_sell}>
-                <img className={styles.buy_btn} src="/images/swap/buy.png" alt=""/>
-                <div>Sell</div>
-            </div>
+            {
+                buyArea ?
+                    <div className={styles.buy_buy}>
+                        <img className={styles.buy_btn} src="/images/swap/buy.png" alt=""/>
+                        <div onClick={()=>{setBuyArea(true)}}>Sell</div>
+                    </div>
+                    :
+                    <div className={styles.buy_sell}>
+                        <div  onClick={()=>{setBuyArea(false)}}>Buy</div>
+                        <img className={styles.buy_btn} src="/images/swap/sell.png" alt=""/>
+                    </div>
+            }
+
             {/*<div className={styles.market}>*/}
             {/*    Market*/}
             {/*    <img src="/images/swap/down.svg" className={styles.market_img} alt=""/>*/}
@@ -167,23 +176,36 @@ export default function Swap({ selectedCoin }: { selectedCoin: Coin | undefined 
                     {/*</div>*/}
                 </div>
                 <div className={styles.wallet}>
-                    <div className={styles.total}>US$500</div>
+                    <div className={styles.total}></div>
                     <div className={styles.balance}>
                         <img className={styles.balance_img} src="/images/swap/wallet.svg" alt=""/>
                         {from?.chain?.chainId ? balance : 0}
-                        <span className={styles.balance_all} onClick={()=>{handleAmount(1)}}>ALL</span>
+                        <span className={styles.balance_all} onClick={() => {
+                            handleAmount(1)
+                        }}>ALL</span>
                     </div>
                 </div>
                 <div className={styles.percents}>
-                    <div className={styles.percent} onClick={()=>{handleAmount(0.25)}}>25%</div>
-                    <div className={styles.percent} onClick={()=>{handleAmount(0.5)}}>50%</div>
-                    <div className={styles.percent} onClick={()=>{handleAmount(0.75)}}>75%</div>
-                    <div className={styles.percent} onClick={()=>{handleAmount(1)}}>100%</div>
+                    <div className={styles.percent} onClick={() => {
+                        handleAmount(0.25)
+                    }}>25%
+                    </div>
+                    <div className={styles.percent} onClick={() => {
+                        handleAmount(0.5)
+                    }}>50%
+                    </div>
+                    <div className={styles.percent} onClick={() => {
+                        handleAmount(0.75)
+                    }}>75%
+                    </div>
+                    <div className={styles.percent} onClick={() => {
+                        handleAmount(1)
+                    }}>100%
+                    </div>
                 </div>
             </div>
 
             <div className={styles.confirm_area}>
-
                 {
                     routeLoading ?
                         <Box>
@@ -192,36 +214,39 @@ export default function Swap({ selectedCoin }: { selectedCoin: Coin | undefined 
                             </Center>
                         </Box>
                         :
-                        (!bestRoute ? null:
-                        <div>
-                            {
-                                bestRoute !== "empty" &&
-                                <div className={styles.buy_area}>
-                                    <div className={styles.buy_area_img_div}>
-                                        <img className={styles.buy_area_img} src="/images/swap/buy_bg.png" alt=""/>
-                                    </div>
-                                    <div className={styles.buy_area_amount}>
-                                        <div className={styles.token_area}>
-                                            <div className={styles.token_area_left}>
-                                                <div className={styles.token_img_div}>
-                                                    <img className={styles.token_img} src={selectedCoin?.tokenLogoUrl}
-                                                         alt=""/>
-                                                </div>
-                                                <div className={styles.token_name}>
-                                                    <div className={styles.token_name_title}>
-                                                        {selectedCoin?.tokenName}
-                                                    </div>
-                                                    <div className={styles.token_name_bg}></div>
-                                                </div>
+                        (!bestRoute ? null :
+                                <div>
+                                    {
+                                        bestRoute !== "empty" &&
+                                        <div className={styles.buy_area}>
+                                            <div className={styles.buy_area_img_div}>
+                                                <img className={styles.buy_area_img} src="/images/swap/buy_bg.png"
+                                                     alt=""/>
                                             </div>
-                                            <div className={styles.token_amount}> +{ new Decimal( bestRoute?.minAmountOut.amount ).toFixed(4)}</div>
+                                            <div className={styles.buy_area_amount}>
+                                                <div className={styles.token_area}>
+                                                    <div className={styles.token_area_left}>
+                                                        <div className={styles.token_img_div}>
+                                                            <img className={styles.token_img}
+                                                                 src={selectedCoin?.tokenLogoUrl}
+                                                                 alt=""/>
+                                                        </div>
+                                                        <div className={styles.token_name}>
+                                                            <div className={styles.token_name_title}>
+                                                                {selectedCoin?.tokenName}
+                                                            </div>
+                                                            <div className={styles.token_name_bg}></div>
+                                                        </div>
+                                                    </div>
+                                                    <div
+                                                        className={styles.token_amount}> +{new Decimal(bestRoute?.minAmountOut.amount).toFixed(4)}</div>
+                                                </div>
+
+                                            </div>
+
                                         </div>
-
-                                    </div>
-
+                                    }
                                 </div>
-                            }
-                        </div>
                         )
                 }
                 <div className={styles.confirm}>

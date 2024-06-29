@@ -9,7 +9,8 @@
     min-height: 470px;
 }
 
-.buy_sell {
+.buy_buy {
+    text-align: right;
     width: 100%;
     height: 40px;
     position: relative;
@@ -37,6 +38,36 @@
 
     }
 }
+.buy_sell {
+    text-align: left;
+    width: 100%;
+    height: 40px;
+    position: relative;
+    border-radius: 8px;
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.05) 100%), #191919;
+
+    padding-left: 26px;
+
+    color: #FFF;
+    font-family: Hanson;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px; /* 100% */
+    letter-spacing: 0.28px;
+    text-align: right;
+    cursor: pointer;
+
+    .buy_btn {
+        width: 270px;
+        height: 60px;
+        position: absolute;
+        right: -18px;
+        bottom: -12px;
+
+    }
+}
+
 
 .market {
     cursor: pointer;
