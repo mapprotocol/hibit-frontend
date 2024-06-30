@@ -5,24 +5,106 @@
     border-radius: 8px;
 }
 
-.evaluate{
+.evaluate {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    .evaluate_img{
-        width: 100%;
+    height: 100px;
+    background: url("/images/evaluate/evaluate-bg.png") no-repeat;
+    background-size: 100% 100%;
+    padding: 20px 26px;
+
+    .bullish_btn {
+        background: url("/images/evaluate/bullish.png") no-repeat;
+        background-size: 100% 100%;
+    }
+
+    .trash_btn {
+        background: url("/images/evaluate/trash.png") no-repeat;
+        background-size: 100% 100%;
+
     }
 }
 
-.orders{
+.percent_area {
+    width: 80%;
+    padding-left: 24px;
+    padding-right: 24px;
+
+    .percent {
+        display: flex;
+        justify-content: space-between;
+
+        .percent_num {
+            color: #F5F5F5;
+            font-family: Hanson;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 18px; /* 100% */
+            letter-spacing: 0.72px;
+        }
+    }
+}
+
+.progress {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .progress_left {
+        position: relative;
+        height: 8px;
+        background: linear-gradient(90deg, #E4FF0A 27.74%, #39ED6F 67.16%);
+        border-radius: 4px 0 0 4px;
+    }
+
+    .progress_right {
+        height: 8px;
+        border-radius: 0 4px 4px 0;
+        background: linear-gradient(270deg, #F00 42.14%, #F37 110.68%);
+        /*background: url("/images/evaluate/right.png") no-repeat;*/
+        /*background-size: 100% 100%;*/
+        flex: 1;
+    }
+
+    .progress_icon {
+        width: 20px;
+        height: 40px;
+        position: absolute;
+        right: -10px;
+        top: -14px;
+        z-index: 10;
+    }
+}
+
+.tips{
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    color: #F5F5F5;
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 12px; /* 100% */
+}
+.orders {
     flex-shrink: 0;
     background-color: #1A191B;
     margin-top: 24px;
     border-radius: 8px;
     padding: 28px 28px;
-    .orders_title{
+
+    .orders_title {
         display: grid;
         grid-template-columns: 2fr 2fr 2fr 2fr 4fr;
         margin-bottom: 20px;
-        .orders_title_content{
+
+        .orders_title_content {
             color: #F5F5F5;
             text-align: center;
             font-family: Poppins;
@@ -34,7 +116,7 @@
         }
     }
 
-    .order{
+    .order {
         border-top: 1px solid #333;
         line-height: 42px;
         display: grid;
@@ -42,7 +124,8 @@
         color: #fff;
         opacity: 0.95;
         font-size: 12px;
-        .order_user{
+
+        .order_user {
             display: flex;
             align-items: center;
             gap: 4px;
@@ -53,18 +136,20 @@
             font-weight: 400;
             opacity: .95;
 
-            .order_user_img{
+            .order_user_img {
                 width: 22px;
                 border-radius: 11px;
             }
         }
-        .buy{
+
+        .buy {
             color: #39EE6F;
             font-family: Poppins;
             font-size: 12px;
             font-weight: 400;
         }
-        .sell{
+
+        .sell {
             color: #F64982;
             font-family: Poppins;
             font-style: normal;

@@ -29,6 +29,7 @@ export interface Coin {
     updatedAt: string;
     volume: string;
     volume24: string;
+    coingeckoId:string;
 }
 
 interface User {
