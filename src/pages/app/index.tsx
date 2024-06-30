@@ -90,7 +90,7 @@ export default function Hibit() {
                         <SwapSearchContainer>
                         <Swap selectedCoin={selectedCoin} />
                         </SwapSearchContainer>
-                        <Orders />
+                        <Orders selectedCoin={selectedCoin} />
                     </div>
                 </div>
             </div>
