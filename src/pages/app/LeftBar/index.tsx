@@ -34,11 +34,12 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
 
     useEffect(() => {
         let like = false
-        watchlist.map((item: any) => {
-            if (item.tokenId == selectedCoin?.id) {
-                like = true
-            }
-        })
+        if (watchlist.length > 0)
+            watchlist?.map((item: any) => {
+                if (item.tokenId == selectedCoin?.id) {
+                    like = true
+                }
+            })
 
         setLike(like)
     }, [selectedCoin, watchlist])
@@ -46,8 +47,8 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
     const fetchWatchListFunc = () => {
         if (address) {
             fetchWatchList(address).then(watchres => {
-                setWatchlist(watchres.data)
-
+                setWatchlist(watchres.data.tokens)
+                console.log(watchres.data,'watchlist')
             })
         }
     }
