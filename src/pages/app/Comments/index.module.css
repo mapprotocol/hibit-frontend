@@ -143,8 +143,12 @@
     overflow-x: scroll;
     width: 100%;
     padding-left: 24px;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 }
-
+.emoticons  :-webkit-scrollbar {
+    display: none;
+  }
 .emoticonsscroll {
     display: flex;
     align-items: center;
