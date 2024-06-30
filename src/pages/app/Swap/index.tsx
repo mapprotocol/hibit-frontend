@@ -19,6 +19,7 @@ import useSWR from "swr";
 import useFromWallet from "@/hooks/useFromWallet";
 import getTokenBalance from "@/store/wallet/thunks/getTokenBalance";
 import {fixAmountStr} from "@/utils/numbers";
+import CHAINS from "@/configs/chains";
 
 export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined }) {
     const dispatch = useAppDispatch();
@@ -89,15 +90,13 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
     }
 
     //左边列表切换时候获取选中的token信息
-
-
     useEffect(() => {
         if (selectedCoin) {
             //买入
             if (currentChainBox === 0) {
                 let chainTo: ChainItem = {
                     chainId: selectedCoin.chainId.toString(),
-                    key: "base"
+                    key: CHAINS[selectedCoin.chainId.toString()].key
                 } as ChainItem;
 
                 let tokenTo: TokenItem = {
@@ -119,7 +118,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                 //卖出
                 let chainFrom: ChainItem = {
                     chainId: selectedCoin.chainId.toString(),
-                    key: "base",
+                    key: CHAINS[selectedCoin.chainId.toString()].key
                 } as ChainItem;
 
                 let tokenFrom: TokenItem = {

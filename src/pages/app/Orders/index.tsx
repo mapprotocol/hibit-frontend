@@ -1,9 +1,21 @@
 import Image from "next/image";
 import styles from './index.module.css'
-import { useState } from "react";
+import {useEffect, useState} from "react";
+import {Coin} from "@/type";
+import {fetchOrderList} from "@/api";
+import {ellipsisThree} from "@/utils/addresses";
+import {fixAmountStr} from "@/utils/numbers";
 
-export default function Orders({ }) {
 
+export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined }) {
+        const [orderLists,setOrderLists] = useState<[]>([]);
+
+    useEffect(() => {
+        fetchOrderList("sandwich-cat").then(res => {
+            console.log(res, 'orderList')
+            setOrderLists(res.data.tickers)
+        })
+    }, [selectedCoin])
 
     return (
         <div className={styles.order_area}>
@@ -18,101 +30,36 @@ export default function Orders({ }) {
                     <div className={styles.orders_title_content}>Price(USDT)</div>
                     <div className={styles.orders_title_content}>Message</div>
                 </div>
-                <div className={styles.order}>
-                    <div className={styles.order_user}>
-                        <img className={styles.order_user_img} src="/images/evaluate/order.png" alt=""/>
-                        0x5f..05FC
-                    </div>
-                    <div className={styles.buy}>
-                        Buy
-                    </div>
-                    <div>
-                        20,000
-                    </div>
-                    <div>
-                        26,385
-                    </div>
-                    <div>
-                        好币看10U，All in入仓，快来跟！
-                    </div>
 
-                </div>
-                <div className={styles.order}>
-                    <div className={styles.order_user}>
-                        <img className={styles.order_user_img} src="/images/evaluate/order.png" alt=""/>
-                        0x5f..05FC
-                    </div>
-                    <div className={styles.sell}>
-                        Buy
-                    </div>
-                    <div>
-                        20,000
-                    </div>
-                    <div>
-                        26,385
-                    </div>
-                    <div>
-                        好币看10U，All in入仓，快来跟！
-                    </div>
-
-                </div>
-                <div className={styles.order}>
-                    <div className={styles.order_user}>
-                        <img className={styles.order_user_img} src="/images/evaluate/order.png" alt=""/>
-                        0x5f..05FC
-                    </div>
-                    <div className={styles.buy}>
-                        Buy
-                    </div>
-                    <div>
-                        20,000
-                    </div>
-                    <div>
-                        26,385
-                    </div>
-                    <div>
-                        好币看10U，All in入仓，快来跟！
-                    </div>
-
-                </div>
-                <div className={styles.order}>
-                    <div className={styles.order_user}>
-                        <img className={styles.order_user_img} src="/images/evaluate/order.png" alt=""/>
-                        0x5f..05FC
-                    </div>
-                    <div className={styles.buy}>
-                        Buy
-                    </div>
-                    <div>
-                        20,000
-                    </div>
-                    <div>
-                        26,385
-                    </div>
-                    <div>
-                        好币看10U，All in入仓，快来跟！
-                    </div>
-
-                </div>
-                <div className={styles.order}>
-                    <div className={styles.order_user}>
-                        <img className={styles.order_user_img} src="/images/evaluate/order.png" alt=""/>
-                        0x5f..05FC
-                    </div>
-                    <div className={styles.buy}>
-                        Buy
-                    </div>
-                    <div>
-                        20,000
-                    </div>
-                    <div>
-                        26,385
-                    </div>
-                    <div>
-                        好币看10U，All in入仓，快来跟！
-                    </div>
-
-                </div>
+                {
+                    orderLists.map((order:any) => (
+                        <div className={styles.order}>
+                            <div className={styles.order_user}>
+                                <img className={styles.order_user_img} src="/images/evaluate/order.png" alt=""/>
+                                {ellipsisThree(order.base)}
+                            </div>
+                            {
+                                order.type == "sell" ?
+                                    <div className={styles.sell}>
+                                        Sell
+                                    </div>
+                                    :
+                                    <div className={styles.buy}>
+                                        Buy
+                                    </div>
+                            }
+                            <div>
+                                { fixAmountStr( order.volume)}
+                            </div>
+                            <div>
+                                {order.converted_last.usd}
+                            </div>
+                            <div>
+                                {/*好币看10U，All in入仓，快来跟！*/}
+                            </div>
+                        </div>
+                    ))
+                }
             </div>
         </div>
     );
