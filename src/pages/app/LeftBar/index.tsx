@@ -1,11 +1,12 @@
 import Image from "next/image";
 import styles from './index.module.css'
 import { useEffect, useState } from "react";
-import { fetchTokenList, fetchWatchList } from "@/api";
+import { fetchTokenInfo, fetchTokenList, fetchWatchList } from "@/api";
 import { useAccount } from "wagmi";
 import axios from "axios";
 import { formatNumber } from "@/utils";
 import { Coin } from "@/type";
+import { useRouter } from "next/router";
 
 
 
@@ -21,13 +22,20 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
     const [tokenList, setTokenList] = useState([])
     const [watchlist, setWatchlist] = useState([])
     const [list, setList] = useState([])
+    const router = useRouter();
 
 
     useEffect(() => {
         fetchTokenList().then(res => {
             console.log(res, 'tokenlist')
             setTokenList(res.data)
-            setSelectedCoin(res?.data?.[0] || undefined)
+            // if (router?.query?.coingeckoId)
+            //     fetchTokenInfo(router?.query?.coingeckoId as string).then(res => {
+
+
+            //     })
+            // else
+                setSelectedCoin(res?.data?.[0] || undefined)
             fetchWatchListFunc()
         })
     }, [address])
@@ -36,7 +44,7 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
         let like = false
         if (watchlist.length > 0)
             watchlist?.map((item: any) => {
-                if (item.tokenId == selectedCoin?.id) {
+                if (item.coingeckoId == selectedCoin?.coingeckoId) {
                     like = true
                 }
             })
@@ -48,22 +56,22 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
         if (address) {
             fetchWatchList(address).then(watchres => {
                 setWatchlist(watchres.data.tokens)
-                console.log(watchres.data,'watchlist')
+                console.log(watchres.data, 'watchlist')
             })
         }
     }
 
     useEffect(() => {
         if (like) {
-            if (watchlist.findIndex((item: any) => item.tokenId == selectedCoin?.id) == -1) {
+            if (watchlist.findIndex((item: any) => item.coingeckoId == selectedCoin?.coingeckoId) == -1) {
                 //@ts-ignore
                 setWatchlist([...watchlist, {
-                    tokenId: selectedCoin?.id,
-                    token: selectedCoin
+                  
+                    ...selectedCoin
                 }])
             }
         } else {
-            let index = watchlist.findIndex((item: any) => item.tokenId == selectedCoin?.id)
+            let index = watchlist.findIndex((item: any) => item.coingeckoId == selectedCoin?.coingeckoId)
             if (index !== -1) {
                 //@ts-ignore
                 setWatchlist(watchlist.filter((_, i) => i !== index))
@@ -73,9 +81,7 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
 
     }, [like])
 
-
     const [active, setActive] = useState(0)
-
 
 
     const changeSelectToken = (item: Coin) => {
@@ -109,13 +115,11 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
             </div>
             {selectedCoin && <div className={styles.coinslist}>
                 {(active == 0 ? tokenList : watchlist).map((coin: any, index) => {
-
-                    let item = active == 0 ? coin : coin.token
-
+                    let item =  coin 
                     let type = 'rise'
-                    if (Number(item.priceChangePercent) > 20) {
+                    if (Number(item?.priceChangePercent) > 20) {
                         type = 'rise'
-                    } else if (Number(item.priceChangePercent) < 0) {
+                    } else if (Number(item?.priceChangePercent) < 0) {
                         type = 'drop'
                     } else {
                         type = 'mild'
@@ -124,11 +128,11 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
                         onClick={() => { changeSelectToken(item) }}
                         className={styles.coinItem}
                         style={{
-                            width: selectedCoin.id == item.id ? '103%' : '100%',
-                            marginTop: selectedCoin.id == item.id ? '14px' : '10px',
-                            marginBottom: selectedCoin.id == item.id ? '4px' : '0px',
+                            width: selectedCoin.coingeckoId == item.coingeckoId ? '103%' : '100%',
+                            marginTop: selectedCoin.coingeckoId == item.coingeckoId ? '14px' : '10px',
+                            marginBottom: selectedCoin.coingeckoId == item.coingeckoId ? '4px' : '0px',
                         }}>
-                        {selectedCoin.id == item.id && <div className={styles.selectedImage}>
+                        {selectedCoin.coingeckoId == item.coingeckoId && <div className={styles.selectedImage}>
                             <Image
                                 style={{ objectFit: "contain" }}
                                 src={`/images/menu-selected-${Number(item.priceChangePercent) > 0 ? "rise" : "drop"}.png`}
@@ -142,11 +146,11 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
                                     style={{ objectFit: "contain" }}
                                     src={item.tokenLogoUrl}
                                     alt="avatar" /></div>
-                            <div className={selectedCoin.id == item.id ? styles.selectedcoinName : styles.coinName}>{item.tokenName}
+                            <div className={selectedCoin.coingeckoId == item.coingeckoId ? styles.selectedcoinName : styles.coinName}>{item.tokenName}
                                 <Image
                                     className={styles.coinType}
 
-                                    src={`/icons/menu-badge-${type}${selectedCoin.id == item.id ? '-selected' : ''}.svg`}
+                                    src={`/icons/menu-badge-${type}${selectedCoin.coingeckoId == item.coingeckoId ? '-selected' : ''}.svg`}
                                     height={40}
                                     width={40}
                                     alt="arrow" />
@@ -154,7 +158,7 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
 
                         </div>
                         <div className={styles.coinRight}>
-                            {selectedCoin.id == item.id ?
+                            {selectedCoin.coingeckoId == item.coingeckoId ?
                                 <div className={styles.selectedchange}
                                 >
                                     {
@@ -180,7 +184,7 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
 
                                     {Math.abs(Number(item.priceChangePercent)).toFixed(1) + "%"}
                                 </div>}
-                            <div className={selectedCoin.id == item.id ? styles.selectedprice : styles.price}>
+                            <div className={selectedCoin.coingeckoId == item.coingeckoId ? styles.selectedprice : styles.price}>
                                 {"$" + formatNumber(item.price)}
                             </div>
                         </div>

@@ -9,6 +9,8 @@ import dynamic from "next/dynamic";
 import { useAccount } from "wagmi";
 import axios from "axios";
 import { api, fetchNonce, loginRequest } from "@/api";
+import { useRouter } from "next/router";
+
 import { signMessage } from "wagmi/actions";
 import { Coin } from "@/type";
 import SwapSearchContainer from "@/components/swap/swap-search-container";
@@ -16,11 +18,26 @@ import SwapSearchContainer from "@/components/swap/swap-search-container";
 const Header = dynamic(() => import("./Header"), {
     ssr: false
 });
+
+let requesting = false
 export default function Hibit() {
     const [selectedCoin, setSelectedCoin] = useState<Coin>()
     const [like, setLike] = useState<boolean>(false)
-
     const { address, isConnected, isConnecting } = useAccount();
+
+    const router = useRouter();
+
+    useEffect(() => {
+        if (selectedCoin?.coingeckoId)
+            router.push({
+                pathname: router.pathname,
+                query: {
+                    coingeckoId: `${selectedCoin?.coingeckoId}`
+                }
+            }, undefined,
+                { shallow: true })
+    }, [selectedCoin?.coingeckoId])
+
 
     useEffect(() => {
         const addressList = getLocalJWT();
@@ -41,6 +58,9 @@ export default function Hibit() {
                     if (error.response && error.response.status === 403) {
                         requestJWT();
                     }
+                    if (error.response && error.response.status === 401) {
+
+                    }
                     return Promise.reject(error);
                 }
             );
@@ -60,8 +80,12 @@ export default function Hibit() {
     };
 
     const requestJWT = async () => {
+        if (requesting)
+            return;
         try {
+
             if (address) {
+                requesting = true
                 const res = await fetchNonce(address);
                 const signedMessage = await signMessage({ message: res.data });
                 const loginRes = await loginRequest(res.data, signedMessage, address);
@@ -69,6 +93,8 @@ export default function Hibit() {
                 addressList[address] = loginRes.data.token;
                 setLocalJWT(addressList);
                 api.interceptors.request.use(config => {
+                    requesting = false
+
                     config.headers['Authorization'] = `${loginRes.data.token}`;
                     return config;
                 }, error => {
@@ -81,14 +107,14 @@ export default function Hibit() {
     }
     return (
         <div className={styles.hibit}>
-            <LeftBar selectedCoin={selectedCoin} setSelectedCoin={setSelectedCoin} like={like} setLike={setLike}/>
+            <LeftBar selectedCoin={selectedCoin} setSelectedCoin={setSelectedCoin} like={like} setLike={setLike} />
             <div className={styles.rightContent}>
-                <Header selectedCoin={selectedCoin} like={like} setLike={setLike}/>
+                <Header selectedCoin={selectedCoin} setSelectedCoin={setSelectedCoin} like={like} setLike={setLike} />
                 <div className={styles.content}>
                     <Comments selectedCoin={selectedCoin} />
                     <div className={styles.buy_area}>
                         <SwapSearchContainer>
-                        <Swap selectedCoin={selectedCoin} />
+                            <Swap selectedCoin={selectedCoin} />
                         </SwapSearchContainer>
                         <Orders selectedCoin={selectedCoin} />
                     </div>

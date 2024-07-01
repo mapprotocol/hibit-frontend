@@ -52,6 +52,19 @@ export const fetchOrderList = async (tokenId:string) => {
     }
 };
 
+export const fetchTokenInfo = async (tokenId:string) => {
+    try {
+        console.log()
+        const response = await api.get(`/token/info?tokenId=${tokenId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching nonce:', error);
+        throw error;
+    }
+};
+
+
+
 export const fetchMyTokenTrade = async (walletAddress: string, id: number) => {
     try {
         console.log()
@@ -62,6 +75,26 @@ export const fetchMyTokenTrade = async (walletAddress: string, id: number) => {
         throw error;
     }
 };
+
+export const searchToken = async (content: string) => {
+    try {
+        const response = await api.get(`/token/search?search=${content}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching nonce:', error);
+        throw error;
+    }
+};
+export const searchTokenTrending = async () => {
+    try {
+        const response = await api.get(`/token/trending`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching nonce:', error);
+        throw error;
+    }
+};
+
 
 export const updateWatchList = async (walletAddress: string, id: number) => {
     try {

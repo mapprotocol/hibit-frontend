@@ -139,13 +139,13 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
     }
     useEffect(() => {
         if (selectedCoin) {
-            fetchTokenComments(selectedCoin?.id).then(res => {
+            fetchTokenComments(selectedCoin?.coingeckoId).then(res => {
                 console.log(res, 'tokenComment')
                 setCommentList(res.data)
 
             })
             if (address)
-                fetchMyTokenTrade(address, selectedCoin?.id).then(res => {
+                fetchMyTokenTrade(address, selectedCoin?.coingeckoId).then(res => {
                     console.log(res, 'myTokenTrade')
                 })
         }
@@ -188,7 +188,7 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
             if (address && selectedCoin)
                 sendComment({
                     walletAddress: address,
-                    tokenId: selectedCoin.id,
+                    tokenId: selectedCoin.coingeckoId,
                     commentType: 'default',
                     text: id.toString()
                 }).then((res) => {
@@ -239,7 +239,7 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
             if (address && selectedCoin)
                 sendComment({
                     walletAddress: address,
-                    tokenId: selectedCoin.id,
+                    tokenId: selectedCoin.coingeckoId,
                     commentType: 'text',
                     text: textValue.toString()
                 }).then((res) => {
@@ -317,7 +317,7 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
                                         commentList.slice(item * 16, (item + 1) * 16).map((itemComment: Comment) => {
                                             if (itemComment.commentType == "default")
                                                 return emoticons[extractNumbers(itemComment.text)[0] % 6].content
-                                            if (itemComment.commentType == "text")
+                                            if (itemComment.commentType == "mock")
                                                 return <div className={styles.messageItem}>
                                                     {itemComment.text}
                                                 </div>

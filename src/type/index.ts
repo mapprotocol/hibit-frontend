@@ -1,4 +1,5 @@
 export interface Coin {
+    coingeckoId: number;
     chainId: number;
     createdAt: string;
     fee: number;

@@ -96,7 +96,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
             if (currentChainBox === 0) {
                 let chainTo: ChainItem = {
                     chainId: selectedCoin.chainId.toString(),
-                    key: CHAINS[selectedCoin.chainId.toString()].key
+                    key: CHAINS[selectedCoin.chainId.toString()]?.key
                 } as ChainItem;
 
                 let tokenTo: TokenItem = {
@@ -118,7 +118,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                 //卖出
                 let chainFrom: ChainItem = {
                     chainId: selectedCoin.chainId.toString(),
-                    key: CHAINS[selectedCoin.chainId.toString()].key
+                    key: CHAINS[selectedCoin.chainId.toString()]?.key
                 } as ChainItem;
 
                 let tokenFrom: TokenItem = {
