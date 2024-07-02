@@ -150,7 +150,6 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
     }
 
 
-
     return (
         <div className={styles.swap}>
             {
