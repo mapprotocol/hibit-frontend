@@ -201,7 +201,7 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
 
     const sendText = () => {
 
-        if(Number(textValue) === 0){
+        if (Number(textValue) === 0) {
             notifications.show({
                 title: 'Failed to send',
                 message: `Message cannot be empty`,
@@ -212,7 +212,7 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
         }
         const { len, spaceCount } = countCharacters(textValue);
 
-        if (len > 20 || textValue.length > 40) { 
+        if (len > 20 || textValue.length > 40) {
             notifications.show({
                 title: 'Failed to send',
                 message: `Message is too long`,
@@ -317,7 +317,11 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
                                         commentList.slice(item * 16, (item + 1) * 16).map((itemComment: Comment) => {
                                             if (itemComment.commentType == "default")
                                                 return emoticons[extractNumbers(itemComment.text)[0] % 6].content
-                                            if (itemComment.commentType == "mock")
+                                            else if (itemComment.commentType == "mock")
+                                                return <div className={styles.messageItem}>
+                                                    {itemComment.text}
+                                                </div>
+                                            else if (itemComment.commentType == "text")
                                                 return <div className={styles.messageItem}>
                                                     {itemComment.text}
                                                 </div>

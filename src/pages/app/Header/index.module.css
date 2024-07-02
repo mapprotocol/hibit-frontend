@@ -89,6 +89,9 @@
     display: flex;
     gap: 12px;
 }
+.like {
+    cursor: pointer;
+}
 
 .searchPanel {
     position: absolute;

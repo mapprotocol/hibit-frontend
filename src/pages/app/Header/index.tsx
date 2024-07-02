@@ -12,6 +12,8 @@ import { signMessage } from "wagmi/actions";
 import axios from "axios";
 import { Coin } from "@/type";
 import { Center, Flex, Loader } from "@mantine/core";
+import { useClipboard } from "@mantine/hooks";
+import { showSuccess } from "@/utils/notifications";
 
 
 
@@ -23,7 +25,7 @@ export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
         like: boolean,
         setLike: Function
     }) {
-    const [showPanel, setShowPanel] = useState(true);
+    const [showPanel, setShowPanel] = useState(false);
     const timeoutRef = useRef(null);
     const { openAccountModal } = useAccountModal();
     const { address, isConnected, isConnecting } = useAccount();
@@ -34,6 +36,14 @@ export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
     const [timeoutId, setTimeoutId] = useState(null);
     const [loading, setLoading] = useState(false)
     const [searchList, setSearchList] = useState<Coin[]>([])
+
+    const {copy, copied} = useClipboard();
+    useEffect(() => {
+        if (copied) {
+            showSuccess("Copied!");
+        }
+    }, [copied])
+    
     useEffect(() => {
         searchTokenTrending().then(res => {
             setHotTokens(res.data)
@@ -241,7 +251,11 @@ export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
                             alt="arrow" />
                     }
                 </div>
-                <div className={styles.like}>
+                <div className={styles.like}
+                 onClick={()=>{
+
+                    copy(location.href)
+                 }}>
                     <Image
                         style={{ objectFit: "contain" }}
                         src={`/icons/share.svg`}

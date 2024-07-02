@@ -29,12 +29,12 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
         fetchTokenList().then(res => {
             console.log(res, 'tokenlist')
             setTokenList(res.data)
-            // if (router?.query?.coingeckoId)
-            //     fetchTokenInfo(router?.query?.coingeckoId as string).then(res => {
+            if (router?.query?.coingeckoId)
+                fetchTokenInfo(router?.query?.coingeckoId as string).then(res => {
+                    setSelectedCoin(res.data)
 
-
-            //     })
-            // else
+                })
+            else
                 setSelectedCoin(res?.data?.[0] || undefined)
             fetchWatchListFunc()
         })
