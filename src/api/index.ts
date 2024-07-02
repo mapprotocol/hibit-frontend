@@ -41,7 +41,7 @@ export const fetchTokenList = async () => {
 };
 
 
-export const fetchOrderList = async (tokenId:string) => {
+export const fetchOrderList = async (tokenId:string|number) => {
     try {
         console.log()
         const response = await api.get(`/trades/history?tokenId=${tokenId}`);
@@ -62,7 +62,8 @@ export const fetchTokenInfo = async (tokenId:string) => {
         throw error;
     }
 };
-export const fetchVoteList = async (tokenId:string) => {
+
+export const fetchVoteList = async (tokenId:string|number) => {
     try {
         console.log()
         const response = await api.get(`/token/votes?tokenId=${tokenId}`);
@@ -74,7 +75,7 @@ export const fetchVoteList = async (tokenId:string) => {
 };
 
 
-export const updateVote = async (tokenId:string,walletAddress: string, voteType: string) => {
+export const updateVote = async (tokenId:string|number,walletAddress: string, voteType: string) => {
     try {
         const response = await api.post(`/token/votes`, {
             tokenId:tokenId,
@@ -88,7 +89,7 @@ export const updateVote = async (tokenId:string,walletAddress: string, voteType:
     }
 };
 
-export const fetchMyTokenTrade = async (walletAddress: string, id: number) => {
+export const fetchMyTokenTrade = async (walletAddress: string, id: string) => {
     try {
         console.log()
         const response = await api.get(`/trades/user?walletAddress=${walletAddress}&tokenId=${id}`);
@@ -119,7 +120,7 @@ export const searchTokenTrending = async () => {
 };
 
 
-export const updateWatchList = async (walletAddress: string, id: number) => {
+export const updateWatchList = async (walletAddress: string, id: string) => {
     try {
         const response = await api.post(`/user/watch_list`, {
             walletAddress: walletAddress,
@@ -144,7 +145,7 @@ export const getTopgainerList = async () => {
 };
 
 
-export const fetchTokenComments = async (tokenid: number) => {
+export const fetchTokenComments = async (tokenid: string) => {
     try {
         console.log()
         const response = await api.get(`/comments/token?tokenId=${tokenid}`);
@@ -164,7 +165,7 @@ export const sendComment = async ({
 }: {
 
     walletAddress: string
-    tokenId: number
+    tokenId: string
     text?: string
     commentType: string
     tradeType?: string
@@ -202,7 +203,7 @@ export const loginRequest = async (nonce: string, signature: string, address: st
     }
 };
 
-export const trades = async (tokenId: number, address: string) => {
+export const trades = async (tokenId: string, address: string) => {
     try {
         const response = await api.post('/trades/user', {
             tokenId: tokenId,
