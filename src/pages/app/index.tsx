@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { signMessage } from "wagmi/actions";
 import { Coin } from "@/type";
 import SwapSearchContainer from "@/components/swap/swap-search-container";
+import Head from "next/head";
 
 const Header = dynamic(() => import("./Header"), {
     ssr: false
@@ -105,7 +106,14 @@ export default function Hibit() {
             console.error('Error in requestJWT:', error);
         }
     }
-    return (
+    return (<>
+        <Head>
+
+            <title>{"bibobibo"}</title>
+            <meta name="description" content={""} />
+            <link rel="icon" href="/images/logo.jpg" />
+            <meta property="og:image" content="/icons/logo.svg" />
+        </Head>
         <div className={styles.hibit}>
             <LeftBar selectedCoin={selectedCoin} setSelectedCoin={setSelectedCoin} like={like} setLike={setLike} />
             <div className={styles.rightContent}>
@@ -121,5 +129,6 @@ export default function Hibit() {
                 </div>
             </div>
         </div>
+    </>
     );
 }
