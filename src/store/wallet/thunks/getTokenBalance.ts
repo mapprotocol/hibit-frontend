@@ -15,9 +15,11 @@ const getTokenBalance = createAsyncThunk<
         if (!wallet || !tokenAddress || !decimals) {
             return null;
         }
+        console.log(55555,tokenAddress,decimals,chainId)
         const balance = await wallet.getBalances([{ address: tokenAddress, decimals }],
             !isIsomericChain(chainId) ? Number(chainId) : undefined
             );
+        console.log(66666,balance)
         return {
             address: tokenAddress,
             balance: balance[0],

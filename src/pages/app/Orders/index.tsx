@@ -7,6 +7,7 @@ import {ellipsisThree} from "@/utils/addresses";
 import {fixAmountStr} from "@/utils/numbers";
 import {Button} from "@mantine/core";
 import { useAccount } from "wagmi";
+import Decimal from "decimal.js";
 
 export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined }) {
         const [orderLists,setOrderLists] = useState<[]>([]);
@@ -74,8 +75,8 @@ export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined 
                 </Button>
                 <div className={styles.percent_area}>
                     <div className={styles.percent}>
-                        <div className={styles.percent_num}>{votes.bullishPercent}%</div>
-                        <div className={styles.percent_num}>{votes.trashPercent}%</div>
+                        <div className={styles.percent_num}>{  new Decimal( votes.bullishPercent).toFixed(2)}%</div>
+                        <div className={styles.percent_num}>{ new Decimal( votes.trashPercent).toFixed(2)}%</div>
                     </div>
                     <div className={styles.progress}>
                         <div style={{

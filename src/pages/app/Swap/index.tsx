@@ -2,31 +2,37 @@ import Image from "next/image";
 import styles from './index.module.css'
 import {ChangeEvent, useEffect, useMemo, useState} from "react";
 import ChainBox from "@/components/swap/chain-box";
-import {useAmount, useAppDispatch, useFrom, useTo} from "@/store/hooks";
+import {useAmount, useAppDispatch, useFrom, useNewOrder, useShowSwapPop, useTo} from "@/store/hooks";
 import TokenSelector from "@/components/token-selector/token-selector";
 import {ChainItem, TokenItem} from "@/utils/api/types";
 import {Chain} from "@ethereumjs/common";
 import {Box, Button, Center, Loader, TextInput} from "@mantine/core";
-import {updateAmount, updateFrom, updateTo} from "@/store/route/routes-slice";
+import {updateAmount, updateBuyOrSell, updateFrom, updateShowSwapPop, updateTo} from "@/store/route/routes-slice";
 import {useBestRoute, useFetchRouteError, useLoadingRoute} from "@/store/route/hooks";
 import Decimal from 'decimal.js'
 import ConfirmCard from "@/components/swap/confirm-card";
 import ConfirmButton from "@/components/swap/confirm-button";
 import {Coin} from "@/type";
-import {fetchMyTokenTrade, fetchTokenComments} from "@/api";
+import {fetchMyTokenTrade, fetchTokenComments, sendComment} from "@/api";
 import useFromTokenBalance from "@/hooks/useFromTokenBalance";
 import useSWR from "swr";
 import useFromWallet from "@/hooks/useFromWallet";
 import getTokenBalance from "@/store/wallet/thunks/getTokenBalance";
 import {fixAmountStr} from "@/utils/numbers";
 import CHAINS from "@/configs/chains";
+import SwapPop from "@/components/swap/swap-pop";
+import {notifications} from "@mantine/notifications";
+import {countCharacters} from "@/utils";
+import {useAccount} from "wagmi";
 
 export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined }) {
     const dispatch = useAppDispatch();
     const wallet = useFromWallet();
+    const {address, isConnected, isConnecting} = useAccount();
     const [currentChainBox, setCurrentChainBox] = useState(0);
     const [showTokenSelector, setShowTokenSelector] = useState(false);
-
+    const [textValue, setTextValue] = useState<string>('');
+    const [showBarragePop, setShowBarragePop] = useState<boolean>(false);
     const handleTapChainBox = () => {
         // setCurrentChainBox(index);
         setShowTokenSelector(true);
@@ -40,6 +46,8 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
     const routeError = useFetchRouteError();
     const bestRoute = useBestRoute();
     const balance = useFromTokenBalance();
+    const showSwapPop = useShowSwapPop();
+    const newOrder = useNewOrder()
 
     const handleSelectedToken = async (chain: ChainItem, token: TokenItem) => {
         setShowTokenSelector(false)
@@ -62,11 +70,9 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                         token: token
                     }
                 ))
-
         }
 
     }
-
 
     useSWR([
         wallet,
@@ -89,6 +95,13 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
         dispatch(updateAmount(new Decimal(balance).mul(percent).toFixed()));
     }
 
+
+    useEffect(() => {
+        if(showSwapPop == true){
+            setTextValue('')
+        }
+    }, [showSwapPop]);
+
     //左边列表切换时候获取选中的token信息
     useEffect(() => {
         if (selectedCoin) {
@@ -103,7 +116,9 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                     address: selectedCoin.tokenAddress,
                     symbol: selectedCoin.tokenName,
                     image: selectedCoin.tokenLogoUrl,
-                    decimals:selectedCoin.tokenDecimal
+                    decimals: selectedCoin.tokenDecimal,
+                    price: selectedCoin.price,
+                    tokenId: selectedCoin.coingeckoId
 
                 } as TokenItem;
 
@@ -121,11 +136,14 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                     key: CHAINS[selectedCoin.chainId.toString()]?.key
                 } as ChainItem;
 
+                console.log(`sell sell sell `, selectedCoin)
                 let tokenFrom: TokenItem = {
                     address: selectedCoin.tokenAddress,
                     symbol: selectedCoin.tokenName,
                     image: selectedCoin.tokenLogoUrl,
-                    decimals:selectedCoin.tokenDecimal
+                    decimals: selectedCoin.tokenDecimal,
+                    price: selectedCoin.price,
+                    tokenId: selectedCoin.coingeckoId
                 } as TokenItem;
 
                 dispatch(updateFrom(
@@ -137,6 +155,8 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                 dispatch(updateTo(null))
             }
         }
+        dispatch(updateBuyOrSell(currentChainBox == 0 ? "buy" : "sell"));
+
     }, [selectedCoin, currentChainBox])
 
     const empty = useMemo(() => {
@@ -147,6 +167,49 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
     const handleValueChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (Number(e.target.value) >= 0)
             dispatch(updateAmount(e.target.value));
+    }
+
+    const handleSubmitBarrage = (showShare: boolean) => {
+
+
+        if (Number(textValue) === 0) {
+            notifications.show({
+                title: 'Failed to send',
+                message: `Message cannot be empty`,
+                color: 'red'
+            })
+            return;
+
+        }
+        const {len, spaceCount} = countCharacters(textValue);
+
+        if (len > 20 || textValue.length > 40) {
+            notifications.show({
+                title: 'Failed to send',
+                message: `Message is too long`,
+                color: 'red'
+            })
+            return;
+        }
+        if (address && selectedCoin)
+            sendComment({
+                walletAddress: address,
+                tokenId: selectedCoin.coingeckoId,
+                commentType: 'text',
+                text: textValue.toString()
+            }).then((res) => {
+                console.log(res, 'sendText')
+            })
+
+
+        //弹窗输出
+        dispatch(updateShowSwapPop(false))
+        if (showShare) {
+            setShowBarragePop(true)
+        }
+        //同步弹幕内容
+
+
     }
 
 
@@ -312,8 +375,46 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                     </div>
                     <div className={styles.confirm_btn}>
                         <ConfirmButton
-                            disabled={from && to ?false:true}
+                            disabled={from && to ? false : true}
                         ></ConfirmButton>
+                        {
+                            showSwapPop && <div className={styles.swap_popover}>
+                                <input
+                                    onChange={(event) => {
+                                        setTextValue(event.target.value)
+                                    }}
+                                    className={styles.swap_popover_input} placeholder={'Broadcast a message...'}
+                                    type="text"/>
+                                <div className={styles.bottom_btns}>
+                                    <div className={styles.bottom_btns_left}>
+                                        <div
+                                            onClick={() => {
+                                                dispatch(updateShowSwapPop(false))
+                                            }}
+                                            className={styles.bottom_btn}>
+                                            Skip & Confirm
+                                        </div>
+                                    </div>
+                                    <div className={styles.bottom_btns_right}>
+                                        <div
+                                            onClick={() => {
+                                                handleSubmitBarrage(true)
+                                            }}
+                                            className={styles.bottom_btn}>
+                                            Submit & Share
+                                        </div>
+                                        <div
+                                            onClick={() => {
+                                                handleSubmitBarrage(false)
+                                            }}
+                                            className={styles.bottom_btn}>
+                                            <span className={styles.bottom_btn_green}>Submit</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={styles.swap_popover_icon}></div>
+                            </div>
+                        }
                         {/*<img className={styles.conform_btn_img} src="/images/swap/confirm.png" alt=""/>*/}
                     </div>
                 </div>
@@ -330,6 +431,15 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                 }}
                 show={showTokenSelector}
             ></TokenSelector>
+            {
+                showBarragePop &&
+                <SwapPop onClose={setShowBarragePop} newOrder={newOrder} textValue={textValue}></SwapPop>
+            }
+            {/*{*/}
+            {/*    showBarragePop && newOrder ?*/}
+            {/*        <SwapPop onClose={handleCloseSwapPop()} newOrder={newOrder} textValue={textValue}></SwapPop>*/}
+            {/*        :null*/}
+            {/*}*/}
         </div>
     );
 }

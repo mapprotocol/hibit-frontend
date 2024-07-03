@@ -4,6 +4,7 @@ export type TokenItem = {
     address: string,
     blockchainNetwork: string,
     coingeckoId: string,
+    price:string,
     decimals: number,
     image: string,
     name: string,
@@ -12,7 +13,8 @@ export type TokenItem = {
     tokenSecurity: null,
     usdprice: number,
     usedIniframe: number,
-    balance?: string
+    balance?: string,
+    tokenId:string
 }
 
 export interface MetamaskData {
@@ -58,6 +60,19 @@ export interface ChainTokenSelectedItem {
     chain: ChainItem | null,
     token: TokenItem | null,
 }
+
+
+export interface NewOrderObj {
+    tokenId: string,
+    walletAddress: string,
+    tradeType: string,
+    tradeAmount: string,
+    tradePrice: string,
+    hash: string,
+    symbol: string,
+    image: string,
+}
+
 
 export interface RouteTokenItem {
     address: string,

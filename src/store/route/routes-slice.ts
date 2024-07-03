@@ -1,4 +1,11 @@
-import {ChainTokenSelectedItem, RouteObj, RouteTxData, TokenItem, UserSwapHistoryResponseItem} from "@/utils/api/types";
+import {
+    ChainTokenSelectedItem,
+    NewOrderObj,
+    RouteObj,
+    RouteTxData,
+    TokenItem,
+    UserSwapHistoryResponseItem
+} from "@/utils/api/types";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchUserHistory } from "@/utils/api/nomal-fetches";
 import { showTip } from "@/utils/notifications";
@@ -12,6 +19,9 @@ interface RoutesState {
     to: ChainTokenSelectedItem | null,
     slippage: string,
     amount: string,
+    newOrder:NewOrderObj|null,
+    buyOrSell:string,
+    showSwapPop:boolean,
     loadingRoutes: boolean,
     routes: RouteObj[],
     inputAddress: string,
@@ -48,6 +58,9 @@ const initialState: RoutesState = {
     to: null,
     slippage: "2",
     amount: "",
+    newOrder:null,
+    buyOrSell:"buy",
+    showSwapPop:false,
     loadingRoutes: false,
     routes: [],
     inputAddress: "",
@@ -124,6 +137,19 @@ export const routesSlices = createSlice({
 
             state.amount = action.payload;
 
+        },
+        updateBuyOrSell: (state, action) => {
+
+            state.buyOrSell = action.payload;
+
+        },
+
+        updateShowSwapPop: (state, action) => {
+            state.showSwapPop = action.payload;
+        },
+
+        updateNewOrder: (state, action) => {
+            state.newOrder = action.payload;
         },
         updateLoading: (state, action) => {
             state.loadingRoutes = action.payload;
@@ -293,6 +319,9 @@ export const {
     updateTo,
     updateSlippage,
     updateAmount,
+    updateBuyOrSell,
+    updateNewOrder,
+    updateShowSwapPop,
     updateLoading,
     updateRoutes,
     updateInputAddress,

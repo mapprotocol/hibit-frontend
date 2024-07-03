@@ -4,8 +4,11 @@ import {memoize} from "proxy-memoize";
 
 export const selectFrom = memoize((state: RootState) => state.routes.from);
 export const selectTo = memoize((state: RootState) => state.routes.to);
+export const selectNewOrder = memoize((state: RootState) => state.routes.newOrder);
+export const selectShowSwapPop = memoize((state: RootState) => state.routes.showSwapPop);
 export const selectSlippage = memoize((state: RootState) => state.routes.slippage);
 export const selectAmount = memoize((state: RootState) => state.routes.amount);
+export const selectBuyOrSell = memoize((state: RootState) => state.routes.buyOrSell);
 export const selectInputAddress = memoize((state: RootState) => state.routes.inputAddress);
 
 export const selectShowAddressEditor = memoize((state: RootState) => state.routes.showAddressEditor);

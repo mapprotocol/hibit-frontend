@@ -1,8 +1,8 @@
 import {AppDispatch, RootState} from "@/store/index";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {
-    selectAmount,
-    selectFrom, selectInputAddress,
+    selectAmount, selectBuyOrSell,
+    selectFrom, selectInputAddress,selectNewOrder,selectShowSwapPop,
     selectIsSwap, selectShowAddressEditor, selectShowSetting, selectSlippage, selectTo,
     selectUserHistory,
     selectUserHistoryForPage
@@ -26,6 +26,24 @@ export const useSlippage = () => {
 export const useAmount = () => {
     return useAppSelector(selectAmount);
 }
+
+
+export const useNewOrder = () => {
+    return useAppSelector(selectNewOrder);
+}
+
+
+export const useBuyOrSell = () => {
+    return useAppSelector(selectBuyOrSell);
+}
+
+
+export const useShowSwapPop = () => {
+    return useAppSelector(selectShowSwapPop);
+}
+
+
+
 
 export const useInputAddress = () => {
     return useAppSelector(selectInputAddress);

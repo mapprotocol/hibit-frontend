@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import Decimal from "decimal.js";
 
 export function fixedFormatBigNumber({
   value = "0",
@@ -96,7 +97,7 @@ export function truncateAndTrimDecimals(value: number | string, decimalPlaces: n
 }
 
 
-export function fixAmountStr(num: string| number | null):string {
+export function fixAmountStr(num: string| number | null | undefined):string {
   if(!num){return '0'}
   let numStr = num.toString();
   if(numStr.indexOf('.') === -1) {
@@ -115,7 +116,7 @@ export function fixAmountStr(num: string| number | null):string {
     }else if(numStrShort.length >  3){
       return numStrShort.substring(0,numStrShort.length - 3) + 'k'
     }else{
-      return numStr
+      return new Decimal(numStr).toFixed(4)
     }
   }
   return ""

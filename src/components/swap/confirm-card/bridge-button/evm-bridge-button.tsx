@@ -1,37 +1,40 @@
 import useEvmAllowance from "@/hooks/allowance/useEvmAllowance";
-import {useRouteTxData} from "@/store/route/hooks";
+import {useBestRoute, useRouteTxData} from "@/store/route/hooks";
 import {Button} from "@mantine/core";
 import {useTranslation} from "next-i18next";
-import {useCallback, useState} from "react";
+import {useCallback, useMemo, useState} from "react";
 import {ethers} from "ethers";
 import {useNetwork, usePublicClient, useWalletClient} from "wagmi";
 import {prepareSendTransaction} from "@wagmi/core";
 import {sleep} from "@/utils/timeout";
 import {showError, showSuccess} from "@/utils/notifications";
-import {RouteObj} from "@/utils/api/types";
-import {useAmount, useAppDispatch, useAppSelector, useFrom} from "@/store/hooks";
+import {NewOrderObj, RouteObj, TokenItem} from "@/utils/api/types";
+import {useAmount, useAppDispatch, useAppSelector, useBuyOrSell, useFrom, useTo} from "@/store/hooks";
 import useFromWallet from "@/hooks/useFromWallet";
 import {setShowConfirmCard} from "@/store/global/global-slice";
-import {setCurrentHistoryData} from "@/store/route/routes-slice";
+import {setCurrentHistoryData, updateNewOrder, updateShowSwapPop} from "@/store/route/routes-slice";
 import useToAddress from "@/hooks/useToAddress";
+import {fetchNewOrder} from "@/api";
 
 const EvmBridgeButton = () => {
     const {t} = useTranslation("common");
     const dispatch = useAppDispatch();
     const routeRxData = useRouteTxData();
     const selectedRoute = useAppSelector((state) => state.routes.selectedRoute);
-    const { chain } = useNetwork();
+    const {chain} = useNetwork();
     const fromWallet = useFromWallet();
     const toAddress = useToAddress();
     const {
         needApprove,
         approve,
     } = useEvmAllowance({data: routeRxData || []})
-    const { data: signer } = useWalletClient();
+    const {data: signer} = useWalletClient();
     const [loading, setLoading] = useState(false);
     const [approving, setApproving] = useState(false);
     const amount = useAmount();
     const from = useFrom();
+    const to = useTo();
+    const buyOrSell = useBuyOrSell();
     const handleTapApprove = async () => {
         try {
             setApproving(true);
@@ -39,7 +42,7 @@ const EvmBridgeButton = () => {
             //     const res = await tronConnector.approve(from?.token?.address as string, ethers.utils.parseUnits(amount, from?.token?.decimals).toString())
             //
             // } else {
-                const res = await approve(ethers.utils.parseUnits(amount, from?.token?.decimals).toString());
+            const res = await approve(ethers.utils.parseUnits(amount, from?.token?.decimals).toString());
             // }
             setApproving(false);
             // onClose();
@@ -48,9 +51,16 @@ const EvmBridgeButton = () => {
             setApproving(false);
         }
     }
+    const route = useMemo(() => {
+        if (selectedRoute && selectedRoute !== "empty") {
+            return selectedRoute as RouteObj;
+        }
+        return null;
+    }, [selectedRoute]);
 
     console.log(routeRxData, "data")
-    const publicClient = usePublicClient({ chainId: Number(from?.chain?.chainId) || 0 });
+    console.log(selectedRoute, 'selectedRoute')
+    const publicClient = usePublicClient({chainId: Number(from?.chain?.chainId) || 0});
     const handleTapConfirm = useCallback(async () => {
         // if (isNear(Number(from?.chain?.chainId))) {
         //     handleBridgeNear();
@@ -87,6 +97,58 @@ const EvmBridgeButton = () => {
             }
             showSuccess("Success!")
             dispatch(setShowConfirmCard(false));
+
+
+            //订单入库
+            let tokenId: string | undefined = ''
+            let tradePrice: string | undefined = ''
+            let tokenSymbol: string | undefined = ''
+            let tokenImage: string | undefined = ''
+            let tradeAmount: string | undefined = ''
+
+            if (buyOrSell == 'buy') {
+                tokenId = to?.token?.tokenId
+                tradePrice = to?.token?.price
+                tokenSymbol = to?.token?.symbol
+                tokenImage = to?.token?.image
+                tradeAmount = route?.minAmountOut?.amount
+            } else {
+                tokenId = from?.token?.tokenId
+                tradePrice = from?.token?.price
+                tokenSymbol = from?.token?.symbol
+                tokenImage = from?.token?.image
+                if (selectedRoute != null && selectedRoute !== "empty") {
+                    tradeAmount = selectedRoute.srcChain?.totalAmountIn
+                }
+            }
+
+            //订单入库
+            await fetchNewOrder(
+                tokenId,
+                fromWallet?.address,
+                buyOrSell,
+                route?.minAmountOut?.amount,
+                tradePrice,
+                hash
+            )
+
+
+            //更新store 同步到动画展示
+            let newOrder: NewOrderObj = {
+                tokenId: tokenId,
+                walletAddress: fromWallet?.address,
+                tradeType: buyOrSell,
+                tradeAmount: tradeAmount,
+                tradePrice: tradePrice,
+                hash: hash,
+                symbol: tokenSymbol,
+                image: tokenImage
+            } as NewOrderObj;
+
+            dispatch(updateNewOrder(newOrder));
+
+            dispatch(updateShowSwapPop(true));
+
             dispatch(setCurrentHistoryData(
                 {
                     txHash: hash as string,
@@ -114,13 +176,13 @@ const EvmBridgeButton = () => {
     }
 
     return (
-            <Button
-                loading={loading}
-                onClick={handleTapConfirm}
-                fz={18}
-                c={"black"}
-                h={42}
-            >{"Confirm"}</Button>
+        <Button
+            loading={loading}
+            onClick={handleTapConfirm}
+            fz={18}
+            c={"black"}
+            h={42}
+        >{"Confirm"}</Button>
     )
 }
 

@@ -89,6 +89,25 @@ export const updateVote = async (tokenId:string|number,walletAddress: string, vo
     }
 };
 
+
+
+export const fetchNewOrder = async (tokenId:string|undefined,walletAddress: string,tradeType:string,tradeAmount:string|undefined,tradePrice:string|undefined,hash:string|undefined) => {
+    try {
+        const response = await api.post(`/trades/user`, {
+            tokenId:tokenId,
+            walletAddress: walletAddress,
+            tradeType:tradeType,
+            tradeAmount:tradeAmount,
+            tradePrice:tradePrice,
+            hash:hash
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching nonce:', error);
+        throw error;
+    }
+};
+
 export const fetchMyTokenTrade = async (walletAddress: string, id: string) => {
     try {
         console.log()
@@ -141,6 +160,17 @@ export const getTopgainerList = async () => {
     } catch (error) {
         console.error('Error fetching nonce:', error);
         throw error;
+    }
+};
+
+
+export const fetchUserInfo = async (walletAddress: string) => {
+    try {
+        const response = await api.get(`/user/info?walletAddress=${walletAddress}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching nonce:', error);
+        // throw error;
     }
 };
 

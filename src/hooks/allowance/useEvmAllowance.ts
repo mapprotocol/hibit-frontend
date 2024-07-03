@@ -65,6 +65,7 @@ const useEvmAllowance = ({data}: {data: RouteTxData[]}) => {
             })
             await publicClient.waitForTransactionReceipt({ hash: res.hash });
         }
+        console.log(888888,data![0].to,value)
         const result = await writeAsync({
             args: [
                 data![0].to,

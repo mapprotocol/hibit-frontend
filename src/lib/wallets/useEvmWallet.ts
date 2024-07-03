@@ -31,6 +31,8 @@ const useEvmWallet = (): WalletProvider => {
     )
 
     const getBalances = useCallback( async (tokens: TokenBalanceProps[], chainId?: number) => {
+
+        console.log(`get balance`)
         if (!account.address) {
             return [];
         }
@@ -63,6 +65,7 @@ const useEvmWallet = (): WalletProvider => {
             })
         }))
         return zipWith(tokens, res, (token, balance) => {
+            console.log(7777777,balance,token.decimals )
             return formatUnits(balance, token.decimals || 18)
         })
     }, [account.address, chains])

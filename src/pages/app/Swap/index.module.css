@@ -244,6 +244,7 @@
         }
 
         .confirm_btn {
+            position: relative;
             cursor: pointer;
 
             .conform_btn_img {
@@ -251,6 +252,78 @@
             }
         }
     }
+}
+
+.swap_popover{
+    position: absolute;
+    width: 500px;
+    height: 120px;
+    z-index: 99;
+    bottom: 60px;
+    left: -200px;
+    background-color: #262626;
+    border-radius: 8px;
+    border: 1px solid #515151;
+    padding: 20px 20px;
+
+    .bottom_btns{
+        padding-top: 30px;
+        display: flex;
+        justify-content: space-between;
+
+        .bottom_btns_right{
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .bottom_btn{
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 20px; /* 125% */
+        }
+        .bottom_btn_green{
+            color: #3AED6F;
+        }
+    }
+
+
+
+    .swap_popover_input{
+        width: 100%;
+        height: 30px;
+        display: flex;
+        color: rgba(255, 255, 255, 0.60);
+        font-size: 16px;
+        color: #FFF;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 30px; /* 125% */
+        background-color: #262626;
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+    }
+
+    .swap_popover_icon{
+        width: 20px;
+        height: 20px;
+        transform: rotate(45deg);
+        position: absolute;
+        right: 45%;
+        border-bottom-right-radius: 0px;
+        bottom: -10px;
+
+        background-color: inherit;
+        border: 1px solid #515151;
+        border-top-color: transparent;
+        border-left-color: transparent;
+        z-index: 1;
+    }
+
 }
 
 .buy_area {
