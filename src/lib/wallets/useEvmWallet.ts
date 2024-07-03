@@ -16,6 +16,7 @@ const useEvmWallet = (): WalletProvider => {
     const {disconnectAsync} = useDisconnect();
     const account = useAccount();
     const chains = useChainsMap();
+
     const connectWallet = useCallback(
         () => {
             openConnectModal && openConnectModal();

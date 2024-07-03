@@ -175,6 +175,17 @@ export const fetchUserInfo = async (walletAddress: string) => {
 };
 
 
+export const fetchUserPosition = async (walletAddress: string) => {
+    try {
+        const response = await api.get(`/user/position?walletAddress=${walletAddress}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching nonce:', error);
+        // throw error;
+    }
+};
+
+
 export const fetchTokenComments = async (tokenid: string) => {
     try {
         console.log()

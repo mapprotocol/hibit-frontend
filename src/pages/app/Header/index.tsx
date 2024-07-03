@@ -11,9 +11,10 @@ import { fetchNonce, loginRequest, searchToken, searchTokenTrending, updateWatch
 import { signMessage } from "wagmi/actions";
 import axios from "axios";
 import { Coin } from "@/type";
-import { Center, Flex, Loader } from "@mantine/core";
+import { Center, Flex, Loader,Popover } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import { showSuccess } from "@/utils/notifications";
+import MyWallet from "@/components/my-wallet/my-wallet";
 
 
 
@@ -43,7 +44,7 @@ export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
             showSuccess("Copied!");
         }
     }, [copied])
-    
+
     useEffect(() => {
         searchTokenTrending().then(res => {
             setHotTokens(res.data)
@@ -233,9 +234,20 @@ export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
                     )}
                 </div>
                 {(isConnected && address) ?
-                    <div className={styles.connect}>
-                        {ellipsis(address)}
-                    </div> : <div className={styles.connect} onClick={conncet}>
+
+                    <Popover width={500} position="bottom-end"  shadow="md">
+                        <Popover.Target>
+                            <div className={styles.connect}>
+                                {ellipsis(address)}
+                            </div>
+                        </Popover.Target>
+                        <Popover.Dropdown>
+                            <MyWallet></MyWallet>
+                        </Popover.Dropdown>
+                    </Popover>
+
+
+                    : <div className={styles.connect} onClick={conncet}>
                         {"Connect Wallet"}
 
                     </div>}
