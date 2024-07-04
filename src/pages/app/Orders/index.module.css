@@ -115,6 +115,10 @@
             text-align: left;
         }
     }
+    .orders_area{
+        max-height: 400px;
+        overflow-y: auto;
+    }
 
     .order {
         border-top: 1px solid #333;

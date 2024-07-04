@@ -392,7 +392,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                                                 dispatch(updateShowSwapPop(false))
                                             }}
                                             className={styles.bottom_btn}>
-                                            Skip & Confirm
+                                            Skip
                                         </div>
                                     </div>
                                     <div className={styles.bottom_btns_right}>

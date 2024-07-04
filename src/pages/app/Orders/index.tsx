@@ -6,16 +6,17 @@ import {fetchOrderList, fetchVoteList, updateVote, updateWatchList} from "@/api"
 import {ellipsisThree} from "@/utils/addresses";
 import {fixAmountStr} from "@/utils/numbers";
 import {Button} from "@mantine/core";
-import { useAccount } from "wagmi";
+import {useAccount} from "wagmi";
 import Decimal from "decimal.js";
+import {formatNumber} from "@/utils";
 
 export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined }) {
-        const [orderLists,setOrderLists] = useState<[]>([]);
-        const [votes,setVotes] = useState<any>({bullishPercent:0,trashPercent:0});
-        const [voteLoading,setVoteLoading] = useState<boolean>(false);
-    const { address, isConnected, isConnecting } = useAccount();
+    const [orderLists, setOrderLists] = useState<[]>([]);
+    const [votes, setVotes] = useState<any>({bullishPercent: 0, trashPercent: 0});
+    const [voteLoading, setVoteLoading] = useState<boolean>(false);
+    const {address, isConnected, isConnecting} = useAccount();
     useEffect(() => {
-        if(selectedCoin){
+        if (selectedCoin) {
             fetchOrderList(selectedCoin?.coingeckoId).then(res => {
                 console.log(res, 'orderList')
                 setOrderLists(res.data.tickers)
@@ -25,7 +26,7 @@ export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined 
         }
     }, [selectedCoin])
 
-    const getVoteList = ()=> {
+    const getVoteList = () => {
         if (selectedCoin) {
             fetchVoteList(selectedCoin?.coingeckoId).then(res => {
                 console.log(res, 'votesList')
@@ -44,7 +45,7 @@ export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined 
     }
 
 
-    const addVotes = (voteType:string) => {
+    const addVotes = (voteType: string) => {
         setVoteLoading(true)
         if (address && selectedCoin)
             updateVote(
@@ -64,7 +65,7 @@ export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined 
                 <Button
                     variant="transparent"
                     className={styles.bullish_btn}
-                    onClick={()=>{
+                    onClick={() => {
                         addVotes('bullish')
                     }}
                     h={44}
@@ -75,12 +76,12 @@ export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined 
                 </Button>
                 <div className={styles.percent_area}>
                     <div className={styles.percent}>
-                        <div className={styles.percent_num}>{  new Decimal( votes.bullishPercent).toFixed(2)}%</div>
-                        <div className={styles.percent_num}>{ new Decimal( votes.trashPercent).toFixed(2)}%</div>
+                        <div className={styles.percent_num}>{new Decimal(votes.bullishPercent).toFixed(2)}%</div>
+                        <div className={styles.percent_num}>{new Decimal(votes.trashPercent).toFixed(2)}%</div>
                     </div>
                     <div className={styles.progress}>
                         <div style={{
-                            width:`${votes.bullishPercent}%`
+                            width: `${votes.bullishPercent}%`
                         }} className={styles.progress_left}>
                             <img className={styles.progress_icon} src="/images/evaluate/icon.svg" alt=""/>
                         </div>
@@ -93,7 +94,7 @@ export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined 
                 <Button
                     variant="transparent"
                     className={styles.trash_btn}
-                    onClick={()=>{
+                    onClick={() => {
                         addVotes('trash')
                     }}
                     h={44}
@@ -113,9 +114,9 @@ export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined 
                     <div className={styles.orders_title_content}>Price(USDT)</div>
                     <div className={styles.orders_title_content}>Message</div>
                 </div>
-
+                <div className={styles.orders_area}>
                 {
-                    orderLists.map((order:any) => (
+                    orderLists.map((order: any) => (
                         <div className={styles.order}>
                             <div className={styles.order_user}>
                                 <img className={styles.order_user_img} src="/images/evaluate/order.png" alt=""/>
@@ -132,10 +133,10 @@ export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined 
                                     </div>
                             }
                             <div>
-                                { fixAmountStr( order.volume)}
+                                {fixAmountStr(order.volume)}
                             </div>
                             <div>
-                                {order.converted_last.usd}
+                                { formatNumber(order.converted_last.usd)}
                             </div>
                             <div>
                                 {/*好币看10U，All in入仓，快来跟！*/}
@@ -143,6 +144,7 @@ export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined 
                         </div>
                     ))
                 }
+                </div>
             </div>
         </div>
     );
