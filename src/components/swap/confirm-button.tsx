@@ -36,8 +36,6 @@ const EvmConfirmButton = ({
         }
     };
 
-    const wallets = useWallets();
-
     if (isConnected) {
         if (isEvmNetworkCorrect) {
             return (
@@ -48,7 +46,6 @@ const EvmConfirmButton = ({
                     disabled={disabled || !selectedRoute || selectedRoute === "empty"
                         || (selectedRoute?.dstChain?.chainId == '56' && to?.token?.id == 12264)}
                     h={44}
-                    fz={18}
                     w={120}
                 >
                     {"Confirm"}
@@ -58,12 +55,12 @@ const EvmConfirmButton = ({
             return (
                 //Switch Network
                 <Button
-                    className={styles.confirm_btn}
                     variant="transparent"
+                    className={styles.switch_network_btn}
                     disabled={disabled}
                     onClick={handleSwitchNetwork}
-                    h={"44px"}
-                    w={"160px"}
+                    h={49}
+                    w={235}
                 >
                     {"Switch Network"}
                 </Button>
@@ -71,15 +68,16 @@ const EvmConfirmButton = ({
         }
     } else {
         return (
+            //Connect Network
             <Button
+                variant="transparent"
+                className={styles.connect_btn}
                 // loading={isConnecting}
                 onClick={() => {
                     connectWallet(WalletName.EVM);
                 }}
-                h={44}
-                fz={18}
-                c={"black"}
-                w={120}
+                h={49}
+                w={235}
             >
                 {"Connect Network"}
             </Button>
@@ -115,23 +113,26 @@ const ConfirmButton = ({
 
     if (!!fromWallet) {
         return (
+            //Confirm
             <Button
                 variant="transparent"
+                className={styles.confirm_btn}
                 disabled={disabled || !selectedRoute || selectedRoute === "empty" || (selectedRoute?.dstChain?.chainId == '56' && to?.token?.id == 12264)}
-                onClick={onSubmit} h={44} fz={18}  w={120}>
+                onClick={onSubmit} h={44}   w={120}>
                 {"Confirm"}
             </Button>
         )
     }
     return (
+        // "Connect Network"
         <Button
             variant="transparent"
+            className={styles.connect_btn}
             onClick={async () => {
                 connectWallet(fromWalletName);
             }}
-            h={44}
-            fz={18}
-            w={120}
+            h={49}
+            w={235}
         >{
            "Connect Network"
         }

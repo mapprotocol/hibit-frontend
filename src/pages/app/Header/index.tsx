@@ -1,42 +1,44 @@
 'use client';
 import Image from "next/image";
 import styles from './index.module.css'
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 
-import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount } from "wagmi";
-import { ellipsis, formatNumber } from "@/utils";
-import { fetchNonce, loginRequest, searchToken, searchTokenTrending, updateWatchList } from "@/api";
-import { signMessage } from "wagmi/actions";
+import {useAccountModal, useConnectModal} from "@rainbow-me/rainbowkit";
+import {ConnectButton} from '@rainbow-me/rainbowkit';
+import {useAccount, useChainId} from "wagmi";
+import {ellipsis, formatNumber} from "@/utils";
+import {fetchNonce, loginRequest, searchToken, searchTokenTrending, updateWatchList} from "@/api";
+import {signMessage} from "wagmi/actions";
 import axios from "axios";
-import { Coin } from "@/type";
-import { Center, Flex, Loader,Popover } from "@mantine/core";
-import { useClipboard } from "@mantine/hooks";
-import { showSuccess } from "@/utils/notifications";
+import {Coin} from "@/type";
+import {Center, Flex, Loader, Popover} from "@mantine/core";
+import {useClipboard} from "@mantine/hooks";
+import {showSuccess} from "@/utils/notifications";
 import MyWallet from "@/components/my-wallet/my-wallet";
+import CHAINS from "@/configs/chains";
+import SelectNetwork from "@/components/network/select-network";
 
 
-
-
-export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
-    {
-        selectedCoin: Coin | undefined,
-        setSelectedCoin: Function,
-        like: boolean,
-        setLike: Function
-    }) {
+export default function Header({selectedCoin, setSelectedCoin, like, setLike}:
+                                   {
+                                       selectedCoin: Coin | undefined,
+                                       setSelectedCoin: Function,
+                                       like: boolean,
+                                       setLike: Function
+                                   }) {
     const [showPanel, setShowPanel] = useState(false);
     const timeoutRef = useRef(null);
-    const { openAccountModal } = useAccountModal();
-    const { address, isConnected, isConnecting } = useAccount();
+    const {openAccountModal} = useAccountModal();
+    const {address, isConnected, isConnecting} = useAccount();
     const [hotTokens, setHotTokens] = useState<Coin[]>([]);
-    const { openConnectModal } = useConnectModal();
+    const {openConnectModal} = useConnectModal();
     const [recent, setRecent] = useState<Coin[]>([])
     const [query, setQuery] = useState('');
     const [timeoutId, setTimeoutId] = useState(null);
     const [loading, setLoading] = useState(false)
     const [searchList, setSearchList] = useState<Coin[]>([])
+    const [opened, setOpened] = useState(false);
+    const chainId = useChainId();
 
     const {copy, copied} = useClipboard();
     useEffect(() => {
@@ -156,18 +158,18 @@ export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
                             height: '100%'
                         }}
                         src={selectedCoin.tokenLogoUrl}
-                        alt="avatar" /></div>
+                        alt="avatar"/></div>
                 <div className={styles.coinName}>{selectedCoin.tokenName}</div>
                 <div className={styles.price}>{"$" + formatNumber(selectedCoin.price)}</div>
 
                 <div className={styles.change}
-                    style={{ color: Number(selectedCoin.priceChangePercent) > 0 ? '#3BF873' : '#FF4B87' }}>
+                     style={{color: Number(selectedCoin.priceChangePercent) > 0 ? '#3BF873' : '#FF4B87'}}>
                     {<Image
-                        style={{ objectFit: "contain" }}
+                        style={{objectFit: "contain"}}
                         src={`/icons/arrow-${Number(selectedCoin.priceChangePercent) > 0 ? "up" : "down"}.svg`}
                         height={10}
                         width={10}
-                        alt="arrow" />}
+                        alt="arrow"/>}
                     {Math.abs(Number(selectedCoin.priceChangePercent)).toFixed(1) + "%"}
                 </div>
             </div>}
@@ -175,24 +177,24 @@ export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
                 <div className={styles.search}>
                     <div className={styles.searchInput}>
                         <Image
-                            style={{ objectFit: "contain" }}
+                            style={{objectFit: "contain"}}
                             src={`/icons/search.svg`}
                             height={26}
                             width={26}
-                            alt="arrow" />
+                            alt="arrow"/>
                         <input
                             className={styles.input}
                             type="text"
                             onFocus={handleFocus}
                             onBlur={handleBlur}
                             onChange={handleInputChange}
-                            placeholder={"Search tokens"} />
+                            placeholder={"Search tokens"}/>
                     </div>
 
                     {showPanel && (
                         <div className={styles.searchPanel} onMouseDown={handlePanelMouseDown}>
 
-                            {loading && <Center w={"100%"} my={14} >
+                            {loading && <Center w={"100%"} my={14}>
                                 <Loader size={25}></Loader>
                             </Center>}
 
@@ -203,7 +205,7 @@ export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
                                     </div>
                                     <div className={styles.hotTokens}>
                                         {searchList.map(item =>
-                                            <CoinItem item={item} changeSelectToken={changeSelectToken} />
+                                            <CoinItem item={item} changeSelectToken={changeSelectToken}/>
                                         )}
 
                                     </div>
@@ -215,109 +217,133 @@ export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
                                     </div>
                                     <div className={styles.hotTokens}>
                                         {recent.map(item =>
-                                            <CoinItem item={item} changeSelectToken={changeSelectToken} />
+                                            <CoinItem item={item} changeSelectToken={changeSelectToken}/>
                                         )}
 
                                     </div>
                                 </>}
 
-                            {hotTokens.length > 0 && <><div className={styles.searchTitle}>
-                                {"Hot Tokens"}
-                            </div>
+                            {hotTokens.length > 0 && <>
+                                <div className={styles.searchTitle}>
+                                    {"Hot Tokens"}
+                                </div>
                                 <div className={styles.hotTokens}>
                                     {hotTokens.map(item =>
-                                        <CoinItem item={item} changeSelectToken={changeSelectToken} />
+                                        <CoinItem item={item} changeSelectToken={changeSelectToken}/>
                                     )}
 
-                                </div></>}
+                                </div>
+                            </>}
                         </div>
                     )}
                 </div>
                 {(isConnected && address) ?
+                    <div className={styles.connected}>
+                        <Popover opened={opened} onChange={setOpened} position="bottom-end" shadow="md">
+                            <Popover.Target>
+                                <div onClick={() => setOpened((o) => !o)} className={styles.select_network}>
+                                    <img className={styles.selected_chain_img} src={CHAINS[chainId.toString()]?.chainImage} alt=""/>
+                                    {
+                                        opened ?
+                                            <img className={styles.selected_chain_icon} src="/images/swap/up_icon.svg"
+                                                 alt=""/>
+                                            :
+                                            <img className={styles.selected_chain_icon} src="/images/swap/down_icon.svg"
+                                                 alt=""/>
+                                    }
+                                </div>
+                            </Popover.Target>
+                            <Popover.Dropdown>
+                                <SelectNetwork onClose={setOpened}></SelectNetwork>
+                            </Popover.Dropdown>
+                        </Popover>
 
-                    <Popover width={500} position="bottom-end"  shadow="md">
-                        <Popover.Target>
-                            <div className={styles.connect}>
-                                {ellipsis(address)}
-                            </div>
-                        </Popover.Target>
-                        <Popover.Dropdown>
-                            <MyWallet></MyWallet>
-                        </Popover.Dropdown>
-                    </Popover>
-
-
+                        <Popover width={500} position="bottom-end" shadow="md">
+                            <Popover.Target>
+                                <div className={styles.connect}>
+                                    {ellipsis(address)}
+                                </div>
+                            </Popover.Target>
+                            <Popover.Dropdown>
+                                <MyWallet></MyWallet>
+                            </Popover.Dropdown>
+                        </Popover>
+                    </div>
                     : <div className={styles.connect} onClick={conncet}>
                         {"Connect Wallet"}
 
                     </div>}
                 <div className={styles.share}
 
-                    onClick={addWatchListFunc}>
+                     onClick={addWatchListFunc}>
                     {
                         <Image
-                            style={{ objectFit: "contain" }}
+                            style={{objectFit: "contain"}}
                             src={`/icons/heart${like ? "-green" : ""}.svg`}
                             height={26}
                             width={26}
-                            alt="arrow" />
+                            alt="arrow"/>
                     }
                 </div>
                 <div className={styles.like}
-                 onClick={()=>{
+                     onClick={() => {
 
-                    copy(location.href)
-                 }}>
+                         copy(location.href)
+                     }}>
                     <Image
-                        style={{ objectFit: "contain" }}
+                        style={{objectFit: "contain"}}
                         src={`/icons/share.svg`}
                         height={26}
                         width={26}
-                        alt="arrow" />
+                        alt="arrow"/>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
 
-const CoinItem = ({ item, changeSelectToken }: { item: Coin, changeSelectToken: Function }) => {
+const CoinItem = ({item, changeSelectToken}: { item: Coin, changeSelectToken: Function }) => {
 
-    return <> <div className={styles.coinItem}
-        onClick={() => { changeSelectToken(item) }}
-        key={item.coingeckoId}>
-        <div className={styles.topGainersItemLeft}>
-            <div className={styles.coinAvatar}>
-                <img
-                    style={{
-                        width: '100%',
-                        height: '100%'
-                    }}
-                    src={item.tokenLogoUrl}
-                    alt="avatar" /></div>
-            <div className={styles.hotCoinName}>
-                {item.tokenName}
-                <div className={styles.address}>
-                    {ellipsis(item.tokenAddress)}</div>
+    return <>
+        <div className={styles.coinItem}
+             onClick={() => {
+                 changeSelectToken(item)
+             }}
+             key={item.coingeckoId}>
+            <div className={styles.topGainersItemLeft}>
+                <div className={styles.coinAvatar}>
+                    <img
+                        style={{
+                            width: '100%',
+                            height: '100%'
+                        }}
+                        src={item.tokenLogoUrl}
+                        alt="avatar"/></div>
+                <div className={styles.hotCoinName}>
+                    {item.tokenName}
+                    <div className={styles.address}>
+                        {ellipsis(item.tokenAddress)}</div>
+                </div>
+
             </div>
+            <div className={styles.topGainersItemTime}>
 
+                <div className={styles.changeLeft}
+                     style={{color: Number(item.priceChangePercent) > 0 ? '#3BF873' : '#FF4B87'}}>
+                    <Image
+                        style={{objectFit: "contain"}}
+                        src={`/icons/arrow-${Number(item.priceChangePercent) > 0 ? "up" : "down"}.svg`}
+                        height={10}
+                        width={10}
+                        alt="arrow"/>
+                    {Math.abs(Number(item.priceChangePercent)).toFixed(1) + "%"}
+
+
+                </div>
+                <div className={styles.priceItem}>
+                    {"$" + formatNumber(item.price)}
+                </div>
+            </div>
         </div>
-        <div className={styles.topGainersItemTime}>
-
-            <div className={styles.changeLeft}
-                style={{ color: Number(item.priceChangePercent) > 0 ? '#3BF873' : '#FF4B87' }}>
-                <Image
-                    style={{ objectFit: "contain" }}
-                    src={`/icons/arrow-${Number(item.priceChangePercent) > 0 ? "up" : "down"}.svg`}
-                    height={10}
-                    width={10}
-                    alt="arrow" />
-                {Math.abs(Number(item.priceChangePercent)).toFixed(1) + "%"}
-
-
-            </div>
-            <div className={styles.priceItem}>
-                {"$" + formatNumber(item.price)}
-            </div>
-        </div>
-    </div></>
+    </>
 }

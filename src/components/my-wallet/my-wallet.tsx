@@ -54,6 +54,9 @@ const MyWallet = () => {
         setTokensLoading(true)
         if (address) {
             let myTokensResult = await fetchUserPosition(address)
+            if(!myTokensResult || !myTokensResult.data){
+                return
+            }
             let myTokens = myTokensResult.data
             console.log(`11111`, myTokens)
 

@@ -27,7 +27,7 @@ import {Chain, configureChains, createConfig, WagmiConfig} from 'wagmi';
 import {publicProvider} from 'wagmi/providers/public';
 import {
     arbitrum,
-    base,
+    base, linea,
     mainnet,
     optimism,
     polygon,
@@ -88,6 +88,8 @@ const {chains, publicClient, webSocketPublicClient} = configureChains(
     [
         mainnet,
         polygon,
+        base,
+        linea,
         map,
 
     ],

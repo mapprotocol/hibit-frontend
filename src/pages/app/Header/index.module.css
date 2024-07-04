@@ -156,6 +156,34 @@
 
 }
 
+.connected{
+    display: flex;
+    gap: 10px;
+}
+
+.select_network{
+    border-radius: 12px;
+    background: #191919;
+    padding: 0 12px;
+    color: rgba(255, 255, 255, 0.80);
+
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    gap: 6px;
+}
+.selected_chain_img{
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+}
+
+.selected_chain_icon{
+    width: 12px;
+    height: 6px;
+}
+
 .like {
     width: 40px;
     height: 40px;

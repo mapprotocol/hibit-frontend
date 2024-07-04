@@ -1,18 +1,29 @@
 .confirm_btn{
-  //background-image: url("/images/swap/btn_switch_network_bg.png");
-  background-image: url("/images/swap/confirm.png");
+  background: url("/images/swap/confirm.png") no-repeat;
   background-size: 100% 100%;
+
   color: #F3F3F3;
 
   text-align: center;
   text-shadow: 0px 1px 0px #000;
   -webkit-text-stroke-width: 1.5;
   -webkit-text-stroke-color: #060606;
+  font-family: Hanson;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
-  line-height: 14px; /* 100% */
   letter-spacing: 1.12px;
+
+}
+
+.connect_btn{
+  background: url("/images/swap/connect_network.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.switch_network_btn{
+  background: url("/images/swap/switch_network.png") no-repeat;
+  background-size: 100% 100%;
 }
 
 //
