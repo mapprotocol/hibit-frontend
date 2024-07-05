@@ -110,7 +110,7 @@ const emoticons = [
     },
 ]
 
-let anim = null
+let anim: any = null
 export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCoin: Coin | undefined, setSelectedCoin?: Function }) {
     const { address, isConnected, isConnecting } = useAccount();
     const lottieContainerRef = useRef(null);
@@ -132,7 +132,7 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
     }
     useEffect(() => {
         if (selectedCoin) {
-           
+
             fetchTokenComments(selectedCoin?.coingeckoId).then(res => {
                 console.log(res, 'tokenComment')
                 setCommentList(res.data)

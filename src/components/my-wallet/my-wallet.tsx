@@ -23,7 +23,7 @@ const MyWallet = () => {
     const currentWallet = useCurrentWallet();
     const {switchNetworkAsync} = useSwitchNetwork();
     const [totalAmount, setTotalAmount] = useState<string>('0');
-    const [tokensLoading,setTokensLoading] = useState<boolean>(false);
+    const [tokensLoading, setTokensLoading] = useState<boolean>(false);
     useEffect(() => {
         getInfos()
     }, [chainId]);
@@ -54,7 +54,7 @@ const MyWallet = () => {
         setTokensLoading(true)
         if (address) {
             let myTokensResult = await fetchUserPosition(address)
-            if(!myTokensResult || !myTokensResult.data){
+            if (!myTokensResult || !myTokensResult.data) {
                 return
             }
             let myTokens = myTokensResult.data
@@ -79,14 +79,20 @@ const MyWallet = () => {
                 })
 
                 let totalAmountResult = '0'
+
+                let myTokensResult = []
+
                 for (const myToken of myTokens) {
-                    console.log(`myToken`,myToken)
-                    let amount = new Decimal(myToken.balance).mul(myToken.price).toFixed(4)
-                    myToken.amount = amount
-                    totalAmountResult = new Decimal(totalAmountResult).add(amount).toFixed(4)
+                    console.log(`myToken`, myToken)
+                    if (myToken.balance > 0) {
+                        let amount = new Decimal(myToken.balance).mul(myToken.price).toFixed(4)
+                        myToken.amount = amount
+                        totalAmountResult = new Decimal(totalAmountResult).add(amount).toFixed(4)
+                        myTokensResult.push(myToken)
+                    }
                 }
                 setTotalAmount(totalAmountResult)
-                setTokens(myTokens)
+                setTokens(myTokensResult)
                 setTokensLoading(false)
             }
         }
@@ -109,11 +115,13 @@ const MyWallet = () => {
         </div>
         <div className={styles.balance_area}>
             <div className={styles.balance}>${totalAmount}</div>
-            <div className={styles.reward}>
-                <img className={styles.gift_icon} src="/images/wallet/gift.svg" alt=""/>
-                <span className={styles.gift_title}>My Rewards</span>
-                <span className={styles.gift_amount}>$122.00</span>
-            </div>
+
+            {/*<div className={styles.reward}>*/}
+            {/*    <img className={styles.gift_icon} src="/images/wallet/gift.svg" alt=""/>*/}
+            {/*    <span className={styles.gift_title}>My Rewards</span>*/}
+            {/*    <span className={styles.gift_amount}>$122.00</span>*/}
+            {/*</div>*/}
+            
         </div>
         <div className={styles.balance_title}>Wallet Balance</div>
         <div className={styles.insigne_area}>
@@ -125,32 +133,37 @@ const MyWallet = () => {
         </div>
         <Space h={20}></Space>
         <div className={styles.wallet_line}></div>
-        <div className={styles.invitation_area}>
-            <div className={styles.invitation_left}>
-                <img className={styles.invitation_icon} src="/images/wallet/invite.svg" alt=""/>
-                My Invitation Link
-                <img className={styles.invitation_help} src="/images/wallet/help.svg" alt=""/>
-                <div className={styles.invitation_num}>
-                    3<span className={styles.invitation_num_gray}>/3</span>
-                </div>
-            </div>
-            <div className={styles.invitation_link}>
-                www.bibobibo.xyz/quwwss
-                <img className={styles.invitation_copy_icon} src="/images/wallet/copy.svg" alt=""/>
-            </div>
-        </div>
-        <div className={styles.invitation_area}>
-            <div className={styles.invitation_left}>
-                <img className={styles.invitation_icon} src="/images/wallet/point.svg" alt=""/>
-                My Points
-                <img className={styles.invitation_help} src="/images/wallet/help.svg" alt=""/>
-                <div className={styles.invitation_num}>
-                    15
-                </div>
-            </div>
-        </div>
-        <Space h={20}></Space>
-        <div className={styles.wallet_line}></div>
+
+
+
+        {/*<div className={styles.invitation_area}>*/}
+        {/*    <div className={styles.invitation_left}>*/}
+        {/*        <img className={styles.invitation_icon} src="/images/wallet/invite.svg" alt=""/>*/}
+        {/*        My Invitation Link*/}
+        {/*        <img className={styles.invitation_help} src="/images/wallet/help.svg" alt=""/>*/}
+        {/*        <div className={styles.invitation_num}>*/}
+        {/*            3<span className={styles.invitation_num_gray}>/3</span>*/}
+        {/*        </div>*/}
+        {/*    </div>*/}
+        {/*    <div className={styles.invitation_link}>*/}
+        {/*        www.bibobibo.xyz/quwwss*/}
+        {/*        <img className={styles.invitation_copy_icon} src="/images/wallet/copy.svg" alt=""/>*/}
+        {/*    </div>*/}
+        {/*</div>*/}
+        {/*<div className={styles.invitation_area}>*/}
+        {/*    <div className={styles.invitation_left}>*/}
+        {/*        <img className={styles.invitation_icon} src="/images/wallet/point.svg" alt=""/>*/}
+        {/*        My Points*/}
+        {/*        <img className={styles.invitation_help} src="/images/wallet/help.svg" alt=""/>*/}
+        {/*        <div className={styles.invitation_num}>*/}
+        {/*            15*/}
+        {/*        </div>*/}
+        {/*    </div>*/}
+        {/*</div>*/}
+        {/*<Space h={20}></Space>*/}
+        {/*<div className={styles.wallet_line}></div>*/}
+
+
 
         <div className={styles.property_area}>
             <div className={styles.property_title}>My Portfolio</div>
@@ -161,20 +174,20 @@ const MyWallet = () => {
                             <Center w={"100%"} h={"50px"}>
                                 <Loader></Loader>
                             </Center>
-                        </Box>:
+                        </Box> :
 
-                    tokens.map((item, index) => (
-                    <div key={item.coingeckoId} className={styles.property}>
-                        <div className={styles.property_left}>
-                            <img className={styles.token_img} src={item.tokenLogoUrl} alt=""/>
-                            {item.tokenName}
-                        </div>
-                        <div className={styles.property_right}>
-                            <div className={styles.balance}>{fixAmountStr(item.balance)}</div>
-                            <div className={styles.amount}>${item.amount}</div>
-                        </div>
-                    </div>
-                ))}
+                        tokens.map((item, index) => (
+                            <div key={item.coingeckoId} className={styles.property}>
+                                <div className={styles.property_left}>
+                                    <img className={styles.token_img} src={item.tokenLogoUrl} alt=""/>
+                                    {item.tokenName}
+                                </div>
+                                <div className={styles.property_right}>
+                                    <div className={styles.balance}>{fixAmountStr(item.balance)}</div>
+                                    <div className={styles.amount}>${item.amount}</div>
+                                </div>
+                            </div>
+                        ))}
             </div>
         </div>
 

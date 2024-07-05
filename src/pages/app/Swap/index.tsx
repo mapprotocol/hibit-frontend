@@ -23,12 +23,13 @@ import CHAINS from "@/configs/chains";
 import SwapPop from "@/components/swap/swap-pop";
 import {notifications} from "@mantine/notifications";
 import {countCharacters} from "@/utils";
-import {useAccount} from "wagmi";
+import {useAccount, useChainId} from "wagmi";
 
 export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined }) {
     const dispatch = useAppDispatch();
     const wallet = useFromWallet();
     const {address, isConnected, isConnecting} = useAccount();
+    const chainId = useChainId();
     const [currentChainBox, setCurrentChainBox] = useState(0);
     const [showTokenSelector, setShowTokenSelector] = useState(false);
     const [textValue, setTextValue] = useState<string>('');
@@ -92,7 +93,20 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
     })
 
     const handleAmount = (percent: number) => {
-        dispatch(updateAmount(new Decimal(balance).mul(percent).toFixed()));
+
+        let inputValue = new Decimal(balance).mul(percent).toFixed();
+        // 允许输入的正则表达式：整数部分最多可以有任意位数，小数部分最多4位
+        const regex = /^\d*\.?\d{0,4}$/;
+
+        if (regex.test(inputValue)) {
+            dispatch(updateAmount(inputValue))
+        } else {
+            // 如果输入值不符合正则表达式，自动截取4位小数
+            const match = inputValue.match(/^\d*\.?\d{0,4}/);
+            if (match) {
+                dispatch(updateAmount(match[0]))
+            }
+        }
     }
 
 
@@ -152,12 +166,44 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                         token: tokenFrom,
                     }
                 ))
-                dispatch(updateTo(null))
+                // dispatch(updateTo(null))
             }
         }
         dispatch(updateBuyOrSell(currentChainBox == 0 ? "buy" : "sell"));
 
     }, [selectedCoin, currentChainBox])
+
+
+    //切换时候给个默认主网币
+    useEffect(() => {
+        if (currentChainBox !== 0 && chainId) {
+            console.log(`change to sell`)
+            let chainDefault = CHAINS[chainId];
+
+            let chainTo: ChainItem = {
+                chainId: chainId.toString(),
+                key: chainDefault?.key
+            } as ChainItem;
+
+            let defaultToken = JSON.parse(chainDefault.nativeToken)
+            let tokenTo: TokenItem = {
+                address: defaultToken.address,
+                symbol: defaultToken.name,
+                image: defaultToken.logoURI,
+                decimals: defaultToken.decimals,
+            } as TokenItem;
+
+            dispatch(updateTo(
+                {
+                    chain: chainTo,
+                    token: tokenTo,
+                }
+            ))
+        }
+
+    }, [currentChainBox,chainId]);
+
+
 
     const empty = useMemo(() => {
         return bestRoute === "empty" || !!routeError;
@@ -165,8 +211,25 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
 
 
     const handleValueChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (Number(e.target.value) >= 0)
-            dispatch(updateAmount(e.target.value));
+
+
+        let inputValue = e.target.value;
+        // 允许输入的正则表达式：整数部分最多可以有任意位数，小数部分最多4位
+        const regex = /^\d*\.?\d{0,4}$/;
+
+        if (regex.test(inputValue)) {
+            dispatch(updateAmount(inputValue))
+        } else {
+            // 如果输入值不符合正则表达式，自动截取4位小数
+            const match = inputValue.match(/^\d*\.?\d{0,4}/);
+            if (match) {
+                dispatch(updateAmount(match[0]))
+            }
+        }
+
+        // if (Number(e.target.value) >= 0){
+        //     dispatch(updateAmount(e.target.value));
+        // }
     }
 
     const handleSubmitBarrage = (showShare: boolean) => {
@@ -263,15 +326,22 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                     >
                     </TextInput>
 
-                    <ChainBox
-                        onClick={() => {
-                            handleTapChainBox();
-                        }}
-                        // disabled={currentChainBox !== 0 && showTokenSelector}
-                        disabled={showTokenSelector}
-                        chain={currentChainBox === 0 ? from?.chain : to?.chain}
-                        token={currentChainBox === 0 ? from?.token : to?.token}
-                    ></ChainBox>
+                    {
+                        currentChainBox == 0 ?<ChainBox
+                            onClick={() => {
+                                handleTapChainBox();
+                            }}
+                            // disabled={currentChainBox !== 0 && showTokenSelector}
+                            disabled={showTokenSelector}
+                            chain={from?.chain}
+                            token={from?.token}
+                        ></ChainBox>
+                            :
+                           <div className={styles.sell_token_info}>
+                               <img className={styles.sell_token_info_img} src={from?.token?.image} alt=""/>
+                               <span className={styles.sell_token_info_symbol}>{from?.token?.symbol}</span>
+                           </div>
+                    }
 
                     {/*<div className={styles.token}>*/}
                     {/*    <img className={styles.token_img} src="/images/swap/usdt.png" alt=""/>*/}
@@ -311,66 +381,87 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
             </div>
 
             <div className={styles.confirm_area}>
-                {
-                    routeLoading ?
-                        <Box>
-                            <Center w={"100%"} h={"50px"}>
-                                <Loader></Loader>
-                            </Center>
-                        </Box>
-                        :
-                        (!bestRoute ? null :
-                                <div>
-                                    {
-                                        bestRoute !== "empty" &&
-                                        <div className={styles.buy_area}>
-                                            <div className={styles.buy_area_img_div}>
-                                                {
-                                                    currentChainBox === 0 ? <img className={styles.buy_area_img}
-                                                                                 src="/images/swap/buy_bg.png"
-                                                                                 alt=""/>
-                                                        :
-                                                        <img className={styles.buy_area_img}
-                                                             src="/images/swap/sell_bg.png"
-                                                             alt=""/>
-                                                }
-
-                                            </div>
-                                            <div className={styles.buy_area_amount}>
-                                                <div className={styles.token_area}>
-                                                    <div className={styles.token_area_left}>
-                                                        <div className={styles.token_img_div}>
-                                                            <img className={styles.token_img}
-                                                                 src={to?.token?.image}
+                <div>
+                    {
+                        bestRoute !== "empty" &&
+                        <div className={styles.buy_area}>
+                            <div className={styles.buy_area_img_div}>
+                                {
+                                    currentChainBox === 0 ? <img className={styles.buy_area_img}
+                                                                 src="/images/swap/buy_bg.png"
                                                                  alt=""/>
-                                                        </div>
-                                                        <div className={styles.token_name}>
-                                                            <div className={styles.token_name_title}>
-                                                                {to?.token?.symbol}
-                                                            </div>
-                                                            <div className={styles.token_name_bg}></div>
-                                                        </div>
+                                        :
+                                        <img className={`${styles.sell_area_img}`}
+                                             src="/images/swap/sell_bg.png"
+                                             alt=""/>
+                                }
+
+                            </div>
+                            <div className={styles.buy_area_amount}>
+                                <div className={styles.token_area}>
+                                    {
+                                        currentChainBox == 0 ?
+                                            <div className={styles.token_area_left}>
+                                                <div className={styles.token_img_div}>
+                                                    <img className={styles.token_img}
+                                                         src={to?.token?.image}
+                                                         alt=""/>
+                                                </div>
+                                                <div className={styles.token_name}>
+                                                    <div className={styles.token_name_title}>
+                                                        {to?.token?.symbol}
                                                     </div>
+                                                    <div className={styles.token_name_bg}>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            :
+                                            <div
+                                                onClick={()=>{handleTapChainBox()}}
+                                                className={`${styles.token_area_left} ${styles.btn_pointer}`}>
+                                                <div className={styles.token_img_div}>
+                                                    <img className={styles.token_img}
+                                                         src={to?.token?.image}
+                                                         alt=""/>
+                                                </div>
+                                                <div className={styles.token_name}>
+                                                    <div className={styles.token_name_title}>
+                                                        {to?.token?.symbol}
+                                                    </div>
+                                                    <div className={styles.token_name_bg}>
+                                                        <img className={styles.select_to_token_icon}
+                                                             src="/images/swap/select_to_token.svg" alt=""/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    }
+
+                                    {
+                                        routeLoading ?
+                                            <Box>
+                                                <Center w={"100%"} h={"50px"}>
+                                                    <Loader></Loader>
+                                                </Center>
+                                            </Box>
+                                            :
+                                            (!bestRoute ? null :
                                                     <div
                                                         className={styles.token_amount}> +{fixAmountStr(bestRoute?.minAmountOut.amount)}</div>
-                                                </div>
-
-                                            </div>
-
-                                        </div>
+                                            )
                                     }
                                 </div>
-                        )
-                }
+
+                            </div>
+
+                        </div>
+                    }
+                </div>
+
                 <div className={styles.confirm}>
                     <div className={styles.left}>
                         <div className={styles.left_content}>
                             <img src="/images/swap/wallet.svg" alt=""/>
                             213,413
-                        </div>
-                        <div className={styles.left_content}>
-                            <img src="/images/swap/gas.svg" alt=""/>
-                            ≈ $5.21
                         </div>
                     </div>
                     <div className={styles.confirm_btn}>
