@@ -11,6 +11,8 @@ import Decimal from "decimal.js";
 import moment from 'moment';
 import useFromWallet from "@/hooks/useFromWallet";
 import useCurrentWallet from "@/hooks/useCurrentWallet";
+import CHAINS from "@/configs/chains";
+import {toNumber} from "lodash";
 
 const MyWallet = () => {
 
@@ -58,7 +60,20 @@ const MyWallet = () => {
                 return
             }
             let myTokens = myTokensResult.data
-            console.log(`11111`, myTokens)
+            //tokenName  tokenLogoUrl   tokenAddress  tokenDecimal
+            if (myTokens && myTokens.length > 0 && chainId) {
+                //插入主币
+                let defaultToken = JSON.parse(CHAINS[chainId.toString()].nativeToken)
+                if (defaultToken) {
+                    // myTokens.unshift({
+                    //     tokenName:defaultToken.name,
+                    //     tokenLogoUrl:defaultToken.logoURI,
+                    //     tokenAddress:defaultToken.address,
+                    //     tokenDecimal:defaultToken.decimals,
+                    // })
+                }
+            }
+            console.log(`mtTokens`, myTokens)
 
             if (!!currentWallet) {
                 console.log(`currentWallet`, currentWallet, chainId)
@@ -71,6 +86,7 @@ const MyWallet = () => {
                     }),
                     Number(chainId),
                 )
+
                 myTokens = myTokens.map((item: any, index: number) => {
                     return {
                         ...item,
@@ -78,12 +94,24 @@ const MyWallet = () => {
                     }
                 })
 
+                console.log(`myTokens`, myTokens, balances)
+
                 let totalAmountResult = '0'
 
                 let myTokensResult = []
 
-                for (const myToken of myTokens) {
-                    console.log(`myToken`, myToken)
+                // for (let i = 0; i < myTokens.length; i++) {
+                //     let myToken = myTokens[i]
+                //     if (Number(balances[i]) > 0) {
+                //         myToken.balance = balances[i]
+                //         let amount = new Decimal(myToken.balance).mul(myToken.price).toFixed(4)
+                //         myToken.amount = amount
+                //         totalAmountResult = new Decimal(totalAmountResult).add(amount).toFixed(4)
+                //         myTokensResult.push(myToken)
+                //     }
+                // }
+
+                for (let myToken of myTokens) {
                     if (myToken.balance > 0) {
                         let amount = new Decimal(myToken.balance).mul(myToken.price).toFixed(4)
                         myToken.amount = amount
@@ -121,7 +149,7 @@ const MyWallet = () => {
             {/*    <span className={styles.gift_title}>My Rewards</span>*/}
             {/*    <span className={styles.gift_amount}>$122.00</span>*/}
             {/*</div>*/}
-            
+
         </div>
         <div className={styles.balance_title}>Wallet Balance</div>
         <div className={styles.insigne_area}>
@@ -133,7 +161,6 @@ const MyWallet = () => {
         </div>
         <Space h={20}></Space>
         <div className={styles.wallet_line}></div>
-
 
 
         {/*<div className={styles.invitation_area}>*/}
@@ -162,7 +189,6 @@ const MyWallet = () => {
         {/*</div>*/}
         {/*<Space h={20}></Space>*/}
         {/*<div className={styles.wallet_line}></div>*/}
-
 
 
         <div className={styles.property_area}>
