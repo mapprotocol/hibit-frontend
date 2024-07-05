@@ -28,6 +28,18 @@ const CHAINS:{[key:string]:{chainId:string,name:String,key:string,chainImage:str
         name: "Linea",
         key: "linea",
         chainImage: "https://s3.amazonaws.com/map-static-file/mapSwap/linea.webp",
+    },
+    "324":{
+        chainId: "324",
+        name: "zksync",
+        key: "zksync",
+        chainImage: "https://icons.llamao.fi/icons/chains/rsz_zksync%20era?w=48&h=48",
+    },
+    "42161":{
+        chainId: "42161",
+        name: "arbitrum-one",
+        key: "arbitrum-one",
+        chainImage: "https://icons.llamao.fi/icons/chains/rsz_arbitrum?w=48&h=48",
     }
 };
 

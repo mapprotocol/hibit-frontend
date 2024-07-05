@@ -416,11 +416,14 @@ export default function Home() {
                 alt="hotcoins" />{"Hot Coins"}</div>
             {hotCoinList && <div className={styles.hotCoinsList}>
               {
-                hotCoinList.slice(0,12).map(item =>
+                hotCoinList.slice(0, 12).map(item =>
                   <div key={item.id} className={styles.hotCoinItem}>
                     <div className={styles.coinAvatar}>
                       <img
-                        style={{ objectFit: "contain" }}
+                        style={{
+                          width: '100%',
+                          height: '100%'
+                        }}
                         src={item.tokenLogoUrl}
                         alt="avatar" /></div>
                     <div className={styles.hotCoinName}>{item.tokenName}</div>
@@ -451,12 +454,15 @@ export default function Home() {
                 alt="topgainers" />{"Top Gainers"}</div>
             {hotCoinList && <div className={styles.topGainersList}>
               {
-                hotCoinList.slice(0,6).map(item =>
+                hotCoinList.slice(0, 6).map(item =>
                   <div key={item.id} className={styles.topGainersItem}>
                     <div className={styles.topGainersItemLeft}>
                       <div className={styles.coinAvatar}>
                         <img
-                          style={{ objectFit: "contain" }}
+                          style={{
+                            width: '100%',
+                            height: '100%'
+                          }}
                           src={item.tokenLogoUrl}
                           alt="avatar" /></div>
                       <div className={styles.hotCoinName}>{item.tokenName}</div>

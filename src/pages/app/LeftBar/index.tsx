@@ -25,7 +25,17 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
     const router = useRouter();
 
 
+    // useEffect(() => {
+    //     setInterval(fetchTokenListFunc, 60 * 1000)
+
+    // }, [])
+
     useEffect(() => {
+
+        fetchTokenListFunc()
+    }, [address])
+
+    const fetchTokenListFunc = () => {
         fetchTokenList().then(res => {
             console.log(res, 'tokenlist')
             setTokenList(res.data)
@@ -38,8 +48,7 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
                 setSelectedCoin(res?.data?.[0] || undefined)
             fetchWatchListFunc()
         })
-    }, [address])
-
+    }
     useEffect(() => {
         let like = false
         if (watchlist.length > 0)
@@ -66,7 +75,7 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
             if (watchlist.findIndex((item: any) => item.coingeckoId == selectedCoin?.coingeckoId) == -1) {
                 //@ts-ignore
                 setWatchlist([...watchlist, {
-                  
+
                     ...selectedCoin
                 }])
             }
@@ -115,7 +124,7 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
             </div>
             {selectedCoin && <div className={styles.coinslist}>
                 {(active == 0 ? tokenList : watchlist).map((coin: any, index) => {
-                    let item =  coin 
+                    let item = coin
                     let type = 'rise'
                     if (Number(item?.priceChangePercent) > 20) {
                         type = 'rise'

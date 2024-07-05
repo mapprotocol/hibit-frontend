@@ -182,7 +182,7 @@ const NearProvider: React.FC<{
                 justify={"center"}
                 w={"100vw"}
                 h={"100vh"}>
-                {process.env.NEXT_PUBLIC_APP_ENV === "dev" && "Loading NEAR"}
+                {process.env.NEXT_PUBLIC_APP_ENV === "dev" && ""}
                 <Loader></Loader>
             </Flex>
         )

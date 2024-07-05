@@ -22,7 +22,8 @@
     padding: 24px;
 }
 
-.buy_area{
+.buy_area {
     display: flex;
+    gap: 24px;
     justify-content: space-between;
 }

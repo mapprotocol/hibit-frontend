@@ -13,9 +13,20 @@
     z-index: 10;
 }
 
+.kLine {
+    width: 520px;
+    height: 500px;
+    z-index: 200;
+    position: absolute;
+    left: 20px;
+    top: -25px;
+}
+
 .pirce {
     position: absolute;
     top: 0;
+    width: 500px;
+    overflow: visible;
     color: #FFF;
 }
 
@@ -31,9 +42,10 @@
 
 .left {
     flex-shrink: 0;
+    overflow: visible;
     flex-grow: 0;
     width: 372px;
-    z-index: 12;
+    z-index: 300;
 }
 
 
@@ -60,6 +72,9 @@
 
 .infoItemValue {
     opacity: 0.95;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .coinsInfo {
@@ -134,21 +149,27 @@
     height: 1px;
 
 }
-.rightBottom{
+
+.rightBottom {
     padding-right: 24px;
 }
+
 .emoticons {
     margin-top: 12px;
     user-select: none;
     overflow-x: scroll;
     width: 100%;
     padding-left: 24px;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
-.emoticons  :-webkit-scrollbar {
+
+.emoticons :-webkit-scrollbar {
     display: none;
-  }
+}
+
 .emoticonsscroll {
     display: flex;
     align-items: center;
@@ -249,20 +270,22 @@
     height: 360px;
     display: flex;
     position: relative;
-    flex-direction: column;    
+    flex-direction: column;
 }
 
-.commentShadow{
+.commentShadow {
     content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none; /* 不阻挡鼠标事件 */
-      /* background: linear-gradient(to left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%); */
-    
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* 不阻挡鼠标事件 */
+    /* background: linear-gradient(to left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%); */
+
 }
+
 .commentLine {
     height: 60px;
     display: inline-flex;
@@ -272,9 +295,73 @@
     white-space: nowrap;
 }
 
-.commentLine0{
+.commentLine0 {
     animation: scroll0 50s linear infinite;
-   
+
+}
+
+.priceTitle {
+    color: #FFF;
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 17px;
+    /* 141.667% */
+    text-transform: uppercase;
+    opacity: 0.6;
+
+}
+
+.highPrice {
+    z-index: 200;
+}
+
+.priceLine {
+    color: #F5F5F5;
+    font-family: Hanson;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.44px;
+    opacity: 0.95;
+}
+
+.highPrice {
+
+    position: absolute;
+    top: 68px;
+    left: 240px;
+}
+
+.currentPrice {
+    z-index: 400;
+    position: absolute;
+    border-radius: 24px;
+    background-color: #48F17A;
+    top: 172px;
+    left: 220px;
+    padding: 3px 16px;
+    border: #FFF 3px solid;
+  
+}
+.currentText{
+    color: #0D0D0D;
+    font-family: Hanson;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.56px;
+    opacity: 0.95;
+}
+
+.lowProce {
+    position: absolute;
+    top: 310px;
+    left: 240px;
+
 }
 
 @keyframes scroll0 {
@@ -287,7 +374,7 @@
     }
 }
 
-.commentLine1{
+.commentLine1 {
     animation: scroll1 45s linear infinite;
 
 }
@@ -303,7 +390,7 @@
     }
 }
 
-.commentLine2{
+.commentLine2 {
     animation: scroll2 40s linear infinite;
 
 }
