@@ -115,11 +115,13 @@ const MyWallet = () => {
         </div>
         <div className={styles.balance_area}>
             <div className={styles.balance}>${totalAmount}</div>
-            <div className={styles.reward}>
-                <img className={styles.gift_icon} src="/images/wallet/gift.svg" alt=""/>
-                <span className={styles.gift_title}>My Rewards</span>
-                <span className={styles.gift_amount}>$122.00</span>
-            </div>
+
+            {/*<div className={styles.reward}>*/}
+            {/*    <img className={styles.gift_icon} src="/images/wallet/gift.svg" alt=""/>*/}
+            {/*    <span className={styles.gift_title}>My Rewards</span>*/}
+            {/*    <span className={styles.gift_amount}>$122.00</span>*/}
+            {/*</div>*/}
+            
         </div>
         <div className={styles.balance_title}>Wallet Balance</div>
         <div className={styles.insigne_area}>
@@ -131,32 +133,37 @@ const MyWallet = () => {
         </div>
         <Space h={20}></Space>
         <div className={styles.wallet_line}></div>
-        <div className={styles.invitation_area}>
-            <div className={styles.invitation_left}>
-                <img className={styles.invitation_icon} src="/images/wallet/invite.svg" alt=""/>
-                My Invitation Link
-                <img className={styles.invitation_help} src="/images/wallet/help.svg" alt=""/>
-                <div className={styles.invitation_num}>
-                    3<span className={styles.invitation_num_gray}>/3</span>
-                </div>
-            </div>
-            <div className={styles.invitation_link}>
-                www.bibobibo.xyz/quwwss
-                <img className={styles.invitation_copy_icon} src="/images/wallet/copy.svg" alt=""/>
-            </div>
-        </div>
-        <div className={styles.invitation_area}>
-            <div className={styles.invitation_left}>
-                <img className={styles.invitation_icon} src="/images/wallet/point.svg" alt=""/>
-                My Points
-                <img className={styles.invitation_help} src="/images/wallet/help.svg" alt=""/>
-                <div className={styles.invitation_num}>
-                    15
-                </div>
-            </div>
-        </div>
-        <Space h={20}></Space>
-        <div className={styles.wallet_line}></div>
+
+
+
+        {/*<div className={styles.invitation_area}>*/}
+        {/*    <div className={styles.invitation_left}>*/}
+        {/*        <img className={styles.invitation_icon} src="/images/wallet/invite.svg" alt=""/>*/}
+        {/*        My Invitation Link*/}
+        {/*        <img className={styles.invitation_help} src="/images/wallet/help.svg" alt=""/>*/}
+        {/*        <div className={styles.invitation_num}>*/}
+        {/*            3<span className={styles.invitation_num_gray}>/3</span>*/}
+        {/*        </div>*/}
+        {/*    </div>*/}
+        {/*    <div className={styles.invitation_link}>*/}
+        {/*        www.bibobibo.xyz/quwwss*/}
+        {/*        <img className={styles.invitation_copy_icon} src="/images/wallet/copy.svg" alt=""/>*/}
+        {/*    </div>*/}
+        {/*</div>*/}
+        {/*<div className={styles.invitation_area}>*/}
+        {/*    <div className={styles.invitation_left}>*/}
+        {/*        <img className={styles.invitation_icon} src="/images/wallet/point.svg" alt=""/>*/}
+        {/*        My Points*/}
+        {/*        <img className={styles.invitation_help} src="/images/wallet/help.svg" alt=""/>*/}
+        {/*        <div className={styles.invitation_num}>*/}
+        {/*            15*/}
+        {/*        </div>*/}
+        {/*    </div>*/}
+        {/*</div>*/}
+        {/*<Space h={20}></Space>*/}
+        {/*<div className={styles.wallet_line}></div>*/}
+
+
 
         <div className={styles.property_area}>
             <div className={styles.property_title}>My Portfolio</div>
