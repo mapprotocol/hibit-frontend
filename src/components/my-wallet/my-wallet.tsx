@@ -23,7 +23,7 @@ const MyWallet = () => {
     const currentWallet = useCurrentWallet();
     const {switchNetworkAsync} = useSwitchNetwork();
     const [totalAmount, setTotalAmount] = useState<string>('0');
-    const [tokensLoading,setTokensLoading] = useState<boolean>(false);
+    const [tokensLoading, setTokensLoading] = useState<boolean>(false);
     useEffect(() => {
         getInfos()
     }, [chainId]);
@@ -54,7 +54,7 @@ const MyWallet = () => {
         setTokensLoading(true)
         if (address) {
             let myTokensResult = await fetchUserPosition(address)
-            if(!myTokensResult || !myTokensResult.data){
+            if (!myTokensResult || !myTokensResult.data) {
                 return
             }
             let myTokens = myTokensResult.data
@@ -79,14 +79,20 @@ const MyWallet = () => {
                 })
 
                 let totalAmountResult = '0'
+
+                let myTokensResult = []
+
                 for (const myToken of myTokens) {
-                    console.log(`myToken`,myToken)
-                    let amount = new Decimal(myToken.balance).mul(myToken.price).toFixed(4)
-                    myToken.amount = amount
-                    totalAmountResult = new Decimal(totalAmountResult).add(amount).toFixed(4)
+                    console.log(`myToken`, myToken)
+                    if (myToken.balance > 0) {
+                        let amount = new Decimal(myToken.balance).mul(myToken.price).toFixed(4)
+                        myToken.amount = amount
+                        totalAmountResult = new Decimal(totalAmountResult).add(amount).toFixed(4)
+                        myTokensResult.push(myToken)
+                    }
                 }
                 setTotalAmount(totalAmountResult)
-                setTokens(myTokens)
+                setTokens(myTokensResult)
                 setTokensLoading(false)
             }
         }
@@ -161,20 +167,20 @@ const MyWallet = () => {
                             <Center w={"100%"} h={"50px"}>
                                 <Loader></Loader>
                             </Center>
-                        </Box>:
+                        </Box> :
 
-                    tokens.map((item, index) => (
-                    <div key={item.coingeckoId} className={styles.property}>
-                        <div className={styles.property_left}>
-                            <img className={styles.token_img} src={item.tokenLogoUrl} alt=""/>
-                            {item.tokenName}
-                        </div>
-                        <div className={styles.property_right}>
-                            <div className={styles.balance}>{fixAmountStr(item.balance)}</div>
-                            <div className={styles.amount}>${item.amount}</div>
-                        </div>
-                    </div>
-                ))}
+                        tokens.map((item, index) => (
+                            <div key={item.coingeckoId} className={styles.property}>
+                                <div className={styles.property_left}>
+                                    <img className={styles.token_img} src={item.tokenLogoUrl} alt=""/>
+                                    {item.tokenName}
+                                </div>
+                                <div className={styles.property_right}>
+                                    <div className={styles.balance}>{fixAmountStr(item.balance)}</div>
+                                    <div className={styles.amount}>${item.amount}</div>
+                                </div>
+                            </div>
+                        ))}
             </div>
         </div>
 

@@ -201,7 +201,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
             ))
         }
 
-    }, [currentChainBox]);
+    }, [currentChainBox,chainId]);
 
 
 

@@ -229,7 +229,7 @@
     font-style: normal;
     font-weight: 500;
     .sell_token_info_img{
-        border-radius: 50%;
+        border-radius: 12px;
         width: 24px;
         height: 24px;
     }
@@ -442,8 +442,9 @@
 .select_to_token_icon{
     cursor: pointer;
     position: absolute;
-    right: -20px;
+    right: -24px;
     top: -10px;
+    z-index: 99;
 }
 
 .btn_pointer{
