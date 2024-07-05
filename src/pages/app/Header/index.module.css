@@ -32,12 +32,12 @@
     width: 40px;
     height: 40px;
     position: relative;
-    border-radius: 50%;
     overflow: hidden;
 }
 
 
 .selectedCoin {
+    flex-shrink: 0;
     display: flex;
     gap: 24px;
     align-items: center;
@@ -89,6 +89,7 @@
     display: flex;
     gap: 12px;
 }
+
 .like {
     cursor: pointer;
 }
@@ -98,7 +99,7 @@
     background-color: #262626;
     overflow-y: scroll;
     width: 420px;
-    height: 448px;
+    height: 460px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -156,12 +157,12 @@
 
 }
 
-.connected{
+.connected {
     display: flex;
     gap: 10px;
 }
 
-.select_network{
+.select_network {
     border-radius: 12px;
     background: #191919;
     padding: 0 12px;
@@ -173,13 +174,14 @@
     justify-self: center;
     gap: 6px;
 }
-.selected_chain_img{
+
+.selected_chain_img {
     width: 26px;
     height: 26px;
     border-radius: 8px;
 }
 
-.selected_chain_icon{
+.selected_chain_icon {
     width: 12px;
     height: 6px;
 }
@@ -242,7 +244,15 @@
 
 }
 
-.coinAvatar {}
+.coinAvatar {
+    position: relative;
+}
+.chainLogo{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+}
 
 .hotCoinName {
     color: #FFF;

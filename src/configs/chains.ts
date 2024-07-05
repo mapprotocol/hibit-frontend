@@ -32,6 +32,20 @@ const CHAINS:{[key:string]:{chainId:string,name:String,key:string,chainImage:str
         name: "Linea",
         key: "linea",
         chainImage: "https://s3.amazonaws.com/map-static-file/mapSwap/linea.webp",
+        nativeToken:''
+    },
+    "324":{
+        chainId: "324",
+        name: "zksync",
+        key: "zksync",
+        chainImage: "https://icons.llamao.fi/icons/chains/rsz_zksync%20era?w=48&h=48",
+        nativeToken:''
+    },
+    "42161":{
+        chainId: "42161",
+        name: "arbitrum-one",
+        key: "arbitrum-one",
+        chainImage: "https://icons.llamao.fi/icons/chains/rsz_arbitrum?w=48&h=48",
         nativeToken:"{\"symbol\":\"ETH\",\"address\":\"0x0000000000000000000000000000000000000000\",\"coinKey\":\"ETH\",\"priceUSD\":\"0\",\"chainId\":59144,\"decimals\":18,\"name\":\"ETH\",\"logoURI\":\"https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png\"}"
     },
     "4200":{

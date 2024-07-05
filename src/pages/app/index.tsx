@@ -42,7 +42,7 @@ export default function Hibit() {
 
     useEffect(() => {
         const addressList = getLocalJWT();
-        console.log(addressList)
+        console.log(address,addressList,1111)
         if (address && typeof addressList[address] == "string") {
             api.interceptors.request.use(config => {
                 config.headers['Authorization'] = `${addressList[address]}`;
@@ -57,6 +57,7 @@ export default function Hibit() {
                 },
                 error => {
                     if (error.response && error.response.status === 403) {
+                        console.log("403 requeset")
                         requestJWT();
                     }
                     if (error.response && error.response.status === 401) {

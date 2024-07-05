@@ -1,6 +1,5 @@
 .order_area {
-    width: 800px;
-    flex-shrink: 0;
+    width: 2000px;
     margin-top: 24px;
     border-radius: 8px;
 }

@@ -13,7 +13,7 @@ export function ellipsis(value: string): string {
 
 
 
-export function formatNumber(num: number | string): string {
+export function formatNumber(num:string): string {
     const numStr = num.toString();
     const decimalIndex = numStr.indexOf('.');
 
