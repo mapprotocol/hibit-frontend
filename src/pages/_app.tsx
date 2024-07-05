@@ -61,6 +61,25 @@ const map: Chain = {
     contracts: {},
     testnet: false,
 };
+const merlin: Chain = {
+    id: 4200,
+    name: 'Merlin Chain',
+    network: 'Merlin Chain',
+    nativeCurrency: {
+        decimals: 18,
+        name: 'BTC',
+        symbol: 'BTC',
+    },
+    rpcUrls: {
+        public: {http: ['https://rpc.merlinchain.io']},
+        default: {http: ['https://rpc.merlinchain.io']},
+    },
+    blockExplorers: {
+        default: {name: 'Merlin Chain', url: 'https://scan.merlinchain.io/'},
+    },
+    contracts: {},
+    testnet: false,
+};
 
 const map_testnet: Chain = {
     id: 212,

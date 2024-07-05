@@ -21,14 +21,14 @@ import { ChangeEvent, forwardRef, use, useContext, useEffect, useMemo, useRef, u
 import MagicButton from "@/components/magic-button";
 import { TokenSelectorProps } from "@/components/token-selector/types";
 import { useIntersection, useViewportSize } from "@mantine/hooks";
-import type { ChainTokenSelectedItem, TokenItem } from "@/utils/api/types";
+import type {ChainItem, ChainTokenSelectedItem, TokenItem} from "@/utils/api/types";
 
 import {
     useAppDispatch,
     useAppSelector,
 } from "@/store/hooks";
 import { RootState } from "@/store";
-import { useAccount, useNetwork, usePublicClient, useSwitchNetwork, useWalletClient } from "wagmi";
+import {useAccount, useChainId, useNetwork, usePublicClient, useSwitchNetwork, useWalletClient} from "wagmi";
 import { useTranslation } from "next-i18next";
 import {
     useChainsSelector, useTokenLoading,
@@ -125,7 +125,7 @@ const TokenSelector = ({ show, onClose, onSelected, position }: TokenSelectorPro
     const [addressValue, setAddressValue] = useState("");
     const fromWallet = useFromWallet();
     const abortController = useRef<AbortController>();
-
+    const chainId = useChainId();
     const from = useAppSelector((state: RootState) => state.routes.from);
     const to = useAppSelector((state: RootState) => state.routes.to);
     const currentSelected = useMemo(() => {
@@ -135,6 +135,7 @@ const TokenSelector = ({ show, onClose, onSelected, position }: TokenSelectorPro
     // const [tokens, setTokens] = useState<TokenItem[]>([]);
     const dispatch = useAppDispatch();
     const [selectedChain, setSelectedChain] = useState(0);
+    const [chainsFromChain,setChainsFromChain] = useState<[any]>([{}]);
 
     const network = useMemo(() => {
         return chains[selectedChain].key;
@@ -165,6 +166,18 @@ const TokenSelector = ({ show, onClose, onSelected, position }: TokenSelectorPro
         }
     }, [show]);
 
+
+
+    //只展示同链token
+    useEffect(() => {
+        for (let i = 0; i <chains.length; i++) {
+            if(chains[i].chainId.toString() == chainId.toString()){
+                setChainsFromChain([chains[i]]);
+                setSelectedChain(i)
+                return
+            }
+        }
+    }, [chains,chainId]);
 
 
     const tokenListContainerRef = useRef(null);
@@ -259,7 +272,7 @@ const TokenSelector = ({ show, onClose, onSelected, position }: TokenSelectorPro
                     <Space h={10}></Space>
                     <Flex align={"center"} wrap={"wrap"} gap={"xs"} className={classes.chainList}>
                         {
-                            chains.map((item, index) => (
+                            chainsFromChain.map((item, index) => (
                                 <div key={index}>
                                     {item.isBlock == 0 &&
                                         <MagicButton

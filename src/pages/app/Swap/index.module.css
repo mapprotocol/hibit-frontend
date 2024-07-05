@@ -217,6 +217,28 @@
     }
 }
 
+.sell_token_info{
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+    align-items: center;
+
+    color: #FFF;
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    .sell_token_info_img{
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+    }
+    .sell_token_info_symbol{
+        opacity: 0.6;
+    }
+
+}
+
 .confirm_area {
     margin-top: 12px;
     width: 100%;
@@ -344,6 +366,10 @@
     .buy_area_img {
         width: 100%;
     }
+    .sell_area_img{
+        width: 100%;
+        margin-top: -12px;
+    }
 
     .buy_area_amount {
         position: relative;
@@ -411,4 +437,15 @@
         line-height: 30px; /* 100% */
         letter-spacing: 2.4px;
     }
+}
+
+.select_to_token_icon{
+    cursor: pointer;
+    position: absolute;
+    right: -20px;
+    top: -10px;
+}
+
+.btn_pointer{
+    cursor: pointer;
 }
