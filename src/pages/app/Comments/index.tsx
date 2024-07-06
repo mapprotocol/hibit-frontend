@@ -9,6 +9,7 @@ import { useAccount } from "wagmi";
 import { countCharacters, ellipsis, formatNumber } from "@/utils";
 import { notifications } from "@mantine/notifications";
 import CHAINS from "@/configs/chains";
+import { useClipboard } from "@mantine/hooks";
 
 const emoticons = [
     {
@@ -117,6 +118,8 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
     const [commentList, setCommentList] = useState<Comment[]>([])
     const [allowSend, setAllowSend] = useState(0)
     const [textValue, setTextValue] = useState("")
+    const { copy, copied } = useClipboard();
+
     useEffect(() => {
 
         return () => {
@@ -321,15 +324,31 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
                         <div className={styles.infoItem}>
                             <div className={styles.infoItemTitle}>{"Contract"}</div>
 
-                            <div className={styles.infoItemValue}>
+                            <div className={styles.infoItemValue}  >
                                 <img
                                     style={{ height: 20, width: 20, borderRadius: '50%' }}
                                     src={CHAINS[selectedCoin.chainId].chainImage}
                                     alt="avatar" />
-                                <div style={{ opacity: '0.6' }}>
+                                <div style={{ opacity: '0.6', }}>
                                     {CHAINS[selectedCoin.chainId].name}
                                 </div>
-                                {ellipsis(selectedCoin?.tokenAddress)}</div>
+                                <div>
+                                    {ellipsis(selectedCoin?.tokenAddress)}
+                                </div>
+                                <div>
+                                    <img
+                                        onClick={() => {
+                                            copy(selectedCoin?.tokenAddress)
+                                            
+                                        }}
+                                        style={{ cursor: 'pointer' }}
+                                        src={`/icons/copy.svg`}
+                                        height={20}
+
+                                        width={20}
+                                        alt="send" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {selectedCoin && <div className={styles.myInfo}>
