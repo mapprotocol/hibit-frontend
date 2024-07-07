@@ -9,6 +9,7 @@ import { useAccount } from "wagmi";
 import { countCharacters, ellipsis, formatNumber } from "@/utils";
 import { notifications } from "@mantine/notifications";
 import CHAINS from "@/configs/chains";
+import { useClipboard } from "@mantine/hooks";
 
 const emoticons = [
     {
@@ -20,7 +21,6 @@ const emoticons = [
                     <Image
                         fill
                         style={{ objectFit: "contain" }}
-                        className={styles.messageImageBig}
                         src={`/icons/message/rocket.svg`}
                         alt="hat" />
                 </div>
@@ -108,6 +108,112 @@ const emoticons = [
                     alt="hat" />
             </div>
     },
+
+    {
+        id: 7,
+        content:
+            <div className={styles.messageItemText}>
+                <div className={styles.messageImageBig}>
+
+                    <Image
+                        fill
+                        style={{ objectFit: "contain" }}
+                        src={`/icons/message/dyor-1.svg`}
+                        alt="hat" />
+                </div>
+                <span>DYOR</span>
+            </div>
+    },
+    {
+        id: 8,
+        content:
+            <div className={styles.messageItemText}>
+                <div className={styles.messageImageBig}>
+
+                    <Image
+                        fill
+                        style={{ objectFit: "contain" }}
+                        src={`/icons/message/dyor-2.svg`}
+                        alt="hat" />
+                </div>
+                <span>DYOR</span>
+            </div>
+    },
+    {
+        id: 9,
+        content:
+            <div className={styles.messageItemText}>
+                <div className={styles.messageImageBig} style={{ width: '56px' }}>
+
+                    <Image
+                        fill
+                        style={{ objectFit: "contain" }}
+                        src={`/icons/message/sellall-1.svg`}
+                        alt="hat" />
+                </div>
+                <span>Sell all</span>
+            </div>
+    },
+    {
+        id: 10,
+        content:
+            <div className={styles.messageItemText}>
+                <div className={styles.messageImageBig} style={{ width: '33px' }}>
+
+                    <Image
+                        fill
+                        style={{ objectFit: "contain" }}
+                        src={`/icons/message/sellall-2.svg`}
+                        alt="hat" />
+                </div>
+                <span>Sell all</span>
+            </div>
+    },
+    {
+        id: 11,
+        content:
+            <div className={styles.messageItemText}>
+                <div className={styles.messageImageBig} >
+
+                    <Image
+                        fill
+                        style={{ objectFit: "contain" }}
+                        src={`/icons/message/Allin-1.svg`}
+                        alt="hat" />
+                </div>
+                <span>All in</span>
+            </div>
+    },
+    {
+        id: 10,
+        content:
+            <div className={styles.messageItemText}>
+                <div className={styles.messageImageBig} >
+
+                    <Image
+                        fill
+                        style={{ objectFit: "contain" }}
+                        src={`/icons/message/allin-2.svg`}
+                        alt="hat" />
+                </div>
+                <span>All in</span>
+            </div>
+    },
+    {
+        id: 10,
+        content:
+            <div className={styles.messageItemText}>
+                <div className={styles.messageImageBig} style={{ width: '44px' }}>
+
+                    <Image
+                        fill
+                        style={{ objectFit: "contain" }}
+                        src={`/icons/message/ath.svg`}
+                        alt="hat" />
+                </div>
+                <span>ATH</span>
+            </div>
+    },
 ]
 
 let anim: any = null
@@ -117,6 +223,8 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
     const [commentList, setCommentList] = useState<Comment[]>([])
     const [allowSend, setAllowSend] = useState(0)
     const [textValue, setTextValue] = useState("")
+    const { copy, copied } = useClipboard();
+
     useEffect(() => {
 
         return () => {
@@ -159,7 +267,11 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
 
                     });
                     anim.setSpeed(0.5)
+                    // setTimeout(()=>{
 
+                    //     anim?.stop()
+
+                    // },400)
                 })
                 .catch(error => console.error('Error loading animation data:', error));
         }
@@ -267,7 +379,47 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
             sendText();
         }
     };
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+    const [dragged, setDragged] = useState(false); // 添加一个状态来跟踪是否有拖动发生
+    const [cardData, setCardData] = useState<any>([])
+    const onMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        setIsDragging(true);
+        setStartX(e.pageX - (containerRef.current?.offsetLeft ?? 0));
+        setScrollLeft(containerRef.current?.scrollLeft ?? 0);
+        setDragged(false); // 在开始拖动时，设置为false
+    };
+    const onMouseUp = () => {
+        setIsDragging(false);
+        // 如果有拖动发生，则阻止'click'事件
+        if (dragged) {
+            window.addEventListener(
+                'click',
+                (e) => {
+                    e.stopPropagation();
+                },
+                { capture: true, once: true }
+            );
+        }
+    };
 
+    const onMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - (containerRef.current?.offsetLeft ?? 0);
+        const walk = (x - startX) * 1; // 滑动速度
+        if (containerRef.current) {
+            containerRef.current.scrollLeft = scrollLeft - walk;
+        }
+        if (Math.abs(x - startX) > 10) { // 如果移动超过10像素，则认为是拖动
+            setDragged(true);
+        }
+    };
+    const onMouseLeave = () => {
+        setIsDragging(false);
+    };
     return (
         <div className={styles.comments}>
             {selectedCoin && <>  <div className={styles.shadow}>
@@ -321,15 +473,31 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
                         <div className={styles.infoItem}>
                             <div className={styles.infoItemTitle}>{"Contract"}</div>
 
-                            <div className={styles.infoItemValue}>
+                            <div className={styles.infoItemValue}  >
                                 <img
                                     style={{ height: 20, width: 20, borderRadius: '50%' }}
                                     src={CHAINS[selectedCoin.chainId].chainImage}
                                     alt="avatar" />
-                                <div style={{ opacity: '0.6' }}>
+                                <div style={{ opacity: '0.6', }}>
                                     {CHAINS[selectedCoin.chainId].name}
                                 </div>
-                                {ellipsis(selectedCoin?.tokenAddress)}</div>
+                                <div>
+                                    {ellipsis(selectedCoin?.tokenAddress)}
+                                </div>
+                                <div>
+                                    <img
+                                        onClick={() => {
+                                            copy(selectedCoin?.tokenAddress)
+
+                                        }}
+                                        style={{ cursor: 'pointer' }}
+                                        src={`/icons/copy.svg`}
+                                        height={20}
+
+                                        width={20}
+                                        alt="send" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {selectedCoin && <div className={styles.myInfo}>
@@ -364,7 +532,7 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
                                     [...Array(2)].flatMap(() =>
                                         commentList.slice(item * 16, (item + 1) * 16).map((itemComment: Comment) => {
                                             if (itemComment.commentType == "default")
-                                                return emoticons[extractNumbers(itemComment.text)[0] % 6].content
+                                                return emoticons[extractNumbers(itemComment.text)[0] % 9].content
                                             else if (itemComment.commentType == "mock")
                                                 return <div className={styles.messageItem}>
                                                     {itemComment.text}
@@ -388,7 +556,17 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
                 <div className={styles.rightBottom}>
                     <div className={styles.rightLine}></div>
                     <div className={styles.emoticons}>
-                        <div className={styles.emoticonsscroll}>
+                        <div className={styles.emoticonsscroll} 
+                        ref={containerRef}
+
+                            style={{
+                                cursor: isDragging ? 'grabbing' : 'grab',
+
+                            }}
+                            onMouseDown={onMouseDown}
+                            onMouseLeave={onMouseLeave}
+                            onMouseUp={onMouseUp}
+                            onMouseMove={onMouseMove}>
                             {emoticons.map((item, index) =>
                                 <div key={item.id} onClick={() => { sendEmoji(item.id) }}>{item.content}
                                 </div>

@@ -14,18 +14,22 @@
 }
 
 .kLine {
+    pointer-events: none;
+
     width: 520px;
     height: 500px;
-    z-index: 200;
+    z-index: 1;
     position: absolute;
     left: 20px;
     top: -25px;
 }
 
 .pirce {
+
     position: absolute;
     top: 0;
     width: 500px;
+    z-index: 400;
     overflow: visible;
     color: #FFF;
 }
@@ -81,6 +85,7 @@
     padding-left: 32px;
     margin-top: 360px;
     height: 100px;
+    z-index: 500;
 }
 
 .myInfo {
@@ -157,13 +162,10 @@
 .emoticons {
     margin-top: 12px;
     user-select: none;
-    overflow-x: scroll;
+    
     width: 100%;
+    overflow: hidden;
     padding-left: 24px;
-    -ms-overflow-style: none;
-    /* IE and Edge */
-    scrollbar-width: none;
-    /* Firefox */
 }
 
 .emoticons :-webkit-scrollbar {
@@ -171,6 +173,12 @@
 }
 
 .emoticonsscroll {
+
+    overflow-x: auto;
+    white-space: 'nowrap';
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -179,6 +187,8 @@
 .messageItemText {
     display: inline-flex;
     width: auto;
+    flex-shrink: 0;
+    text-wrap: nowrap;
     height: 32px;
     color: rgba(255, 255, 255, 0.95);
     flex-shrink: 0;
@@ -344,9 +354,10 @@
     left: 220px;
     padding: 3px 16px;
     border: #FFF 3px solid;
-  
+
 }
-.currentText{
+
+.currentText {
     color: #0D0D0D;
     font-family: Hanson;
     font-size: 28px;
