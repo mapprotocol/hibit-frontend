@@ -175,9 +175,9 @@ export const fetchUserInfo = async (walletAddress: string) => {
 };
 
 
-export const fetchUserPosition = async (walletAddress: string) => {
+export const fetchUserPosition = async (walletAddress: string,chainId:number) => {
     try {
-        const response = await api.get(`/user/position?walletAddress=${walletAddress}`);
+        const response = await api.get(`/user/position?walletAddress=${walletAddress}&chainId=${chainId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching nonce:', error);

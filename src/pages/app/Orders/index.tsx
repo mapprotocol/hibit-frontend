@@ -1,20 +1,22 @@
 import Image from "next/image";
 import styles from './index.module.css'
-import { useEffect, useState } from "react";
-import { Coin } from "@/type";
-import { fetchOrderList, fetchVoteList, updateVote, updateWatchList } from "@/api";
-import { ellipsisThree } from "@/utils/addresses";
-import { fixAmountStr } from "@/utils/numbers";
-import { Button } from "@mantine/core";
-import { useAccount } from "wagmi";
+import {useEffect, useState} from "react";
+import {Coin} from "@/type";
+import {fetchOrderList, fetchVoteList, updateVote, updateWatchList} from "@/api";
+import {ellipsisThree} from "@/utils/addresses";
+import {fixAmountStr} from "@/utils/numbers";
+import {Button} from "@mantine/core";
+import {useAccount} from "wagmi";
 import Decimal from "decimal.js";
-import { formatNumber } from "@/utils";
+import {formatNumber} from "@/utils";
+import useSWR from "swr";
+import getTokenBalance from "@/store/wallet/thunks/getTokenBalance";
 
-export default function Orders({ selectedCoin }: { selectedCoin: Coin | undefined }) {
+export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined }) {
     const [orderLists, setOrderLists] = useState<[]>([]);
-    const [votes, setVotes] = useState<any>({ bullishPercent: 0, trashPercent: 0 });
+    const [votes, setVotes] = useState<any>({bullishPercent: 0, trashPercent: 0});
     const [voteLoading, setVoteLoading] = useState<boolean>(false);
-    const { address, isConnected, isConnecting } = useAccount();
+    const {address, isConnected, isConnecting} = useAccount();
     useEffect(() => {
         if (selectedCoin) {
             fetchOrderList(selectedCoin?.coingeckoId).then(res => {
@@ -25,6 +27,19 @@ export default function Orders({ selectedCoin }: { selectedCoin: Coin | undefine
 
         }
     }, [selectedCoin])
+
+    useSWR([
+        "fetchOrders"
+    ], ([]) => {
+        if (selectedCoin) {
+            fetchOrderList(selectedCoin?.coingeckoId).then(res => {
+                console.log(res, 'orderList')
+                setOrderLists(res.data?.tickers)
+            })
+        }
+    }, {
+        refreshInterval: 3000,
+    })
 
     const getVoteList = () => {
         if (selectedCoin) {
@@ -83,7 +98,7 @@ export default function Orders({ selectedCoin }: { selectedCoin: Coin | undefine
                         <div style={{
                             width: `${votes.bullishPercent}%`
                         }} className={styles.progress_left}>
-                            <img className={styles.progress_icon} src="/images/evaluate/icon.svg" alt="" />
+                            <img className={styles.progress_icon} src="/images/evaluate/icon.svg" alt=""/>
                         </div>
                         <div className={styles.progress_right}></div>
                     </div>
@@ -119,7 +134,7 @@ export default function Orders({ selectedCoin }: { selectedCoin: Coin | undefine
                         orderLists && orderLists.map((order: any) => (
                             <div className={styles.order}>
                                 <div className={styles.order_user}>
-                                    <img className={styles.order_user_img} src="/images/evaluate/order.png" alt="" />
+                                    <img className={styles.order_user_img} src="/images/evaluate/order.png" alt=""/>
                                     {ellipsisThree(order.base)}
                                 </div>
                                 {
