@@ -532,7 +532,7 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
                                     [...Array(2)].flatMap(() =>
                                         commentList.slice(item * 16, (item + 1) * 16).map((itemComment: Comment) => {
                                             if (itemComment.commentType == "default")
-                                                return emoticons[extractNumbers(itemComment.text)[0] % 6].content
+                                                return emoticons[extractNumbers(itemComment.text)[0] % 9].content
                                             else if (itemComment.commentType == "mock")
                                                 return <div className={styles.messageItem}>
                                                     {itemComment.text}
