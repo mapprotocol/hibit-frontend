@@ -178,7 +178,7 @@ const emoticons = [
                     <Image
                         fill
                         style={{ objectFit: "contain" }}
-                        src={`/icons/message/Allin-1.svg`}
+                        src={`/icons/message/allin-1.svg`}
                         alt="hat" />
                 </div>
                 <span>All in</span>
