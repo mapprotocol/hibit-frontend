@@ -25,15 +25,21 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
     const router = useRouter();
 
 
-    // useEffect(() => {
-    //     setInterval(fetchTokenListFunc, 60 * 1000)
-
-    // }, [])
-
     useEffect(() => {
-
         fetchTokenListFunc()
-    }, [address])
+        const timer =  setInterval(() => { 
+            fetchTokenListFunc() 
+        
+        }, 30000)
+
+
+        return () => clearInterval(timer);
+    }, [])
+
+    // useEffect(() => {
+
+    //     fetchTokenListFunc()
+    // }, [address])
 
     const fetchTokenListFunc = () => {
         fetchTokenList().then(res => {
@@ -59,7 +65,7 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
             })
 
         setLike(like)
-    }, [selectedCoin, watchlist])
+    }, [selectedCoin?.coingeckoId, watchlist])
 
     const fetchWatchListFunc = () => {
         if (address) {

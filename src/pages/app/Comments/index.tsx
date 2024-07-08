@@ -185,7 +185,7 @@ const emoticons = [
             </div>
     },
     {
-        id: 10,
+        id: 12,
         content:
             <div className={styles.messageItemText}>
                 <div className={styles.messageImageBig} >
@@ -200,7 +200,7 @@ const emoticons = [
             </div>
     },
     {
-        id: 10,
+        id: 13,
         content:
             <div className={styles.messageItemText}>
                 <div className={styles.messageImageBig} style={{ width: '44px' }}>
@@ -212,6 +212,54 @@ const emoticons = [
                         alt="hat" />
                 </div>
                 <span>ATH</span>
+            </div>
+    },
+    {
+        id: 14,
+        content:
+            <div className={styles.messageItemImage}>
+
+                <Image
+                    height={40}
+                    width={40}
+                    src={`/icons/message/new-1.svg`}
+                    alt="hat" />
+            </div>
+    },
+    {
+        id: 15,
+        content:
+            <div className={styles.messageItemImage}>
+
+                <Image
+                    height={40}
+                    width={40}
+                    src={`/icons/message/new-2.svg`}
+                    alt="hat" />
+            </div>
+    },
+    {
+        id: 16,
+        content:
+            <div className={styles.messageItemImage}>
+
+                <Image
+                    height={40}
+                    width={40}
+                    src={`/icons/message/new-3.svg`}
+                    alt="hat" />
+            </div>
+    },
+    {
+        id: 17,
+        content:
+            <div className={styles.messageItemImage}>
+
+                <Image
+                    height={40}
+                    width={40}
+                    src={`/icons/message/new-4.svg`}
+                    alt="hat" />
             </div>
     },
 ]
@@ -267,15 +315,15 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
 
                     });
                     anim.setSpeed(0.5)
-                    // setTimeout(()=>{
+                    setTimeout(()=>{
 
-                    //     anim?.stop()
+                        anim?.stop()
 
-                    // },400)
+                    },400)
                 })
                 .catch(error => console.error('Error loading animation data:', error));
         }
-    }, [selectedCoin])
+    }, [selectedCoin?.coingeckoId])
 
     useEffect(() => {
         let timer: any;

@@ -24,7 +24,7 @@ export default function Orders({ selectedCoin }: { selectedCoin: Coin | undefine
             getVoteList()
 
         }
-    }, [selectedCoin])
+    }, [selectedCoin?.coingeckoId])
 
     const getVoteList = () => {
         if (selectedCoin) {
