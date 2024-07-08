@@ -26,6 +26,7 @@ const MyWallet = () => {
     const {switchNetworkAsync} = useSwitchNetwork();
     const [totalAmount, setTotalAmount] = useState<string>('0');
     const [tokensLoading, setTokensLoading] = useState<boolean>(false);
+    const [showNoDate,setShowNoDate] = useState<boolean>(false);
     useEffect(() => {
         getInfos()
     }, [chainId]);
@@ -38,28 +39,32 @@ const MyWallet = () => {
                     setUserInfo(res.data.user)
                 }
             })
-
             //钱包需要切换到base链
-            if (chainId != 8453 && switchNetworkAsync) {
-                try {
-                    await switchNetworkAsync(Number(8453));
-                } catch (err) {
-
-                }
-                return
-            }
+            // if (chainId != 8453 && switchNetworkAsync) {
+            //     try {
+            //         await switchNetworkAsync(Number(8453));
+            //     } catch (err) {
+            //
+            //     }
+            //     return
+            // }
             getTokens()
         }
     }
 
     const getTokens = async () => {
         setTokensLoading(true)
-        if (address) {
-            let myTokensResult = await fetchUserPosition(address)
+        if (address && chainId) {
+            let myTokensResult = await fetchUserPosition(address, chainId)
             if (!myTokensResult || !myTokensResult.data) {
                 return
             }
-            let myTokens = myTokensResult.data
+            let myTokens = myTokensResult.data.tokens
+
+            if (!myTokens || myTokens.length == 0) {
+
+                return
+            }
             //tokenName  tokenLogoUrl   tokenAddress  tokenDecimal
             if (myTokens && myTokens.length > 0 && chainId) {
                 //插入主币
@@ -121,6 +126,9 @@ const MyWallet = () => {
                 }
                 setTotalAmount(totalAmountResult)
                 setTokens(myTokensResult)
+                if(myTokensResult.length == 0) {
+                    setShowNoDate(true)
+                }
                 setTokensLoading(false)
             }
         }
@@ -213,7 +221,11 @@ const MyWallet = () => {
                                     <div className={styles.amount}>${item.amount}</div>
                                 </div>
                             </div>
-                        ))}
+                        ))
+                }
+                {
+                    showNoDate? <div className={styles.show_no_date}>No Portfolio</div>:null
+                }
             </div>
         </div>
 
