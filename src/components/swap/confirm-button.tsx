@@ -9,6 +9,8 @@ import useFromWallet from "@/hooks/useFromWallet";
 import {getWalletNameForChainId} from "@/lib/configs";
 import {setShowConfirmCard} from "@/store/global/global-slice";
 import styles from './scss/swap.module.scss'
+import { hansonFont } from "@/fonts";
+import hanson from "@/fonts/hanson";
 
 const EvmConfirmButton = ({
                               disabled,
@@ -41,12 +43,11 @@ const EvmConfirmButton = ({
             return (
                 <Button
                     variant="transparent"
-                    className={styles.confirm_btn}
+                    className={` ${hanson.className} ${styles.confirm_btn}`}
                     onClick={onSubmit}
                     disabled={disabled || !selectedRoute || selectedRoute === "empty"
                         || (selectedRoute?.dstChain?.chainId == '56' && to?.token?.id == 12264)}
                     h={44}
-                    w={120}
                 >
                     {"Confirm"}
                 </Button>
@@ -56,7 +57,7 @@ const EvmConfirmButton = ({
                 //Switch Network
                 <Button
                     variant="transparent"
-                    className={styles.switch_network_btn}
+                    className={` ${hanson.className} ${styles.switch_network_btn}`}
                     disabled={disabled}
                     onClick={handleSwitchNetwork}
                     h={49}
@@ -71,7 +72,7 @@ const EvmConfirmButton = ({
             //Connect Network
             <Button
                 variant="transparent"
-                className={styles.connect_btn}
+                className={` ${hanson.className} ${styles.connect_btn}`}
                 // loading={isConnecting}
                 onClick={() => {
                     connectWallet(WalletName.EVM);
@@ -116,9 +117,9 @@ const ConfirmButton = ({
             //Confirm
             <Button
                 variant="transparent"
-                className={styles.confirm_btn}
+                className={` ${hanson.className} ${styles.confirm_btn}`}
                 disabled={disabled || !selectedRoute || selectedRoute === "empty" || (selectedRoute?.dstChain?.chainId == '56' && to?.token?.id == 12264)}
-                onClick={onSubmit} h={44}   w={120}>
+                onClick={onSubmit} h={44}   >
                 {"Confirm"}
             </Button>
         )
@@ -127,7 +128,7 @@ const ConfirmButton = ({
         // "Connect Network"
         <Button
             variant="transparent"
-            className={styles.connect_btn}
+            className={` ${hanson.className} ${styles.connect_btn}`}
             onClick={async () => {
                 connectWallet(fromWalletName);
             }}

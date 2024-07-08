@@ -80,6 +80,9 @@ const MyWallet = () => {
             }
             console.log(`mtTokens`, myTokens)
 
+
+            try{
+
             if (!!currentWallet) {
                 console.log(`currentWallet`, currentWallet, chainId)
                 const balances = await currentWallet.getBalances(
@@ -129,6 +132,11 @@ const MyWallet = () => {
                 if(myTokensResult.length == 0) {
                     setShowNoDate(true)
                 }
+                setTokensLoading(false)
+            }
+
+            }catch(err) {
+                setShowNoDate(true)
                 setTokensLoading(false)
             }
         }
