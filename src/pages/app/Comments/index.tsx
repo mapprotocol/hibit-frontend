@@ -249,17 +249,17 @@ export default function Comments({ selectedCoin, setSelectedCoin, methodReferenc
                         setAnim2(_anim2)
                     })
                     .catch(error => console.error('Error loading animation data:', error));
-                // if (address && selectedCoin)
-                //     sendComment({
-                //         walletAddress: address,
-                //         tokenId: selectedCoin.coingeckoId,
-                //         commentType: 'trade',
-                //         tradeAmount: localComment.tradeAmount?.toString(),
-                //         tradeType: localComment.tradeType || 'buy',
-                //         text: localComment.text.toString()
-                //     }).then((res) => {
-                //         console.log(res, 'sendTradeComment')
-                //     })
+                if (address && selectedCoin)
+                    sendComment({
+                        walletAddress: address,
+                        tokenId: selectedCoin.coingeckoId,
+                        commentType: 'trade',
+                        tradeAmount: localComment.tradeAmount?.toString(),
+                        tradeType: localComment.tradeType || 'buy',
+                        text: localComment.text.toString()
+                    }).then((res) => {
+                        console.log(res, 'sendTradeComment')
+                    })
             }
         }
 
