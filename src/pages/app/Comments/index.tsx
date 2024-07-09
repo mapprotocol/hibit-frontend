@@ -1,7 +1,7 @@
 import Image from "next/image";
 import styles from './index.module.css'
 import lottie from 'lottie-web';
-import { use, useEffect, useRef, useState } from "react";
+import { use, useCallback, useEffect, useRef, useState } from "react";
 import CylinderCanvas from "@/components/cylinder";
 import { Coin, Comment } from "@/type";
 import { fetchMyTokenTrade, fetchTokenComments, sendComment, trades } from "@/api";
@@ -10,277 +10,24 @@ import { countCharacters, ellipsis, formatNumber } from "@/utils";
 import { notifications } from "@mantine/notifications";
 import CHAINS from "@/configs/chains";
 import { useClipboard } from "@mantine/hooks";
-
-const emoticons = [
-    {
-        id: 0,
-        content:
-            <div className={styles.messageItemText}>
-                <div className={styles.messageImageBig}>
-
-                    <Image
-                        fill
-                        style={{ objectFit: "contain" }}
-                        src={`/icons/message/rocket.svg`}
-                        alt="hat" />
-                </div>
-                <span>Rocket High</span>
-            </div>
-    },
-    {
-        id: 1,
-        content:
-            <div className={styles.messageItemText}>
-                <div className={styles.messageImageBig}>
-
-                    <Image
-                        fill
-                        style={{ objectFit: "contain" }}
-                        src={`/icons/message/etf.svg`}
-                        alt="hat" />
-                </div>
-
-                <span>ETF</span>
+import { emoticons } from "@/components/default-comment";
+import TradeComment from "@/components/trade-comment";
 
 
-            </div>
-    },
-    {
-        id: 2,
-        content:
-            <div className={styles.messageItemText}>
-                <div className={styles.messageImageBig}>
-                    <Image
-                        fill
-                        style={{ objectFit: "contain" }}
-                        src={`/icons/message/todamoon.svg`}
-                        alt="hat" />
-                </div>
 
-                To da moon
-            </div>
-    },
-    {
-        id: 3,
-        content:
-            <div className={styles.messageItemText}>
-                <div className={styles.messageImageBig}>
-                    <img
-
-                        src={`/icons/message/LFG.svg`}
-                        alt="hat" />
-                </div>
-                LFG
-            </div>
-    },
-    {
-        id: 4,
-        content:
-            <div className={styles.messageItemImage}>
-                <Image
-                    height={22}
-                    width={22}
-
-                    src={`/icons/message/heart.svg`}
-                    alt="hat" />
-            </div>
-    },
-    {
-        id: 5,
-        content:
-            <div className={styles.messageItemImage}>
-
-                <Image
-                    height={22}
-                    width={22}
-                    src={`/icons/message/hot.svg`}
-                    alt="hat" />
-            </div>
-    },
-    {
-        id: 6,
-        content:
-            <div className={styles.messageItemImage}>
-                <Image
-                    height={22}
-                    width={22}
-                    src={`/icons/message/tip.svg`}
-                    alt="hat" />
-            </div>
-    },
-
-    {
-        id: 7,
-        content:
-            <div className={styles.messageItemText}>
-                <div className={styles.messageImageBig}>
-
-                    <Image
-                        fill
-                        style={{ objectFit: "contain" }}
-                        src={`/icons/message/dyor-1.svg`}
-                        alt="hat" />
-                </div>
-                <span>DYOR</span>
-            </div>
-    },
-    {
-        id: 8,
-        content:
-            <div className={styles.messageItemText}>
-                <div className={styles.messageImageBig}>
-
-                    <Image
-                        fill
-                        style={{ objectFit: "contain" }}
-                        src={`/icons/message/dyor-2.svg`}
-                        alt="hat" />
-                </div>
-                <span>DYOR</span>
-            </div>
-    },
-    {
-        id: 9,
-        content:
-            <div className={styles.messageItemText}>
-                <div className={styles.messageImageBig} style={{ width: '56px' }}>
-
-                    <Image
-                        fill
-                        style={{ objectFit: "contain" }}
-                        src={`/icons/message/sellall-1.svg`}
-                        alt="hat" />
-                </div>
-                <span>Sell all</span>
-            </div>
-    },
-    {
-        id: 10,
-        content:
-            <div className={styles.messageItemText}>
-                <div className={styles.messageImageBig} style={{ width: '33px' }}>
-
-                    <Image
-                        fill
-                        style={{ objectFit: "contain" }}
-                        src={`/icons/message/sellall-2.svg`}
-                        alt="hat" />
-                </div>
-                <span>Sell all</span>
-            </div>
-    },
-    {
-        id: 11,
-        content:
-            <div className={styles.messageItemText}>
-                <div className={styles.messageImageBig} >
-
-                    <Image
-                        fill
-                        style={{ objectFit: "contain" }}
-                        src={`/icons/message/allin-1.svg`}
-                        alt="hat" />
-                </div>
-                <span>All in</span>
-            </div>
-    },
-    {
-        id: 12,
-        content:
-            <div className={styles.messageItemText}>
-                <div className={styles.messageImageBig} >
-
-                    <Image
-                        fill
-                        style={{ objectFit: "contain" }}
-                        src={`/icons/message/allin-2.svg`}
-                        alt="hat" />
-                </div>
-                <span>All in</span>
-            </div>
-    },
-    {
-        id: 13,
-        content:
-            <div className={styles.messageItemText}>
-                <div className={styles.messageImageBig} style={{ width: '44px' }}>
-
-                    <Image
-                        fill
-                        style={{ objectFit: "contain" }}
-                        src={`/icons/message/ath.svg`}
-                        alt="hat" />
-                </div>
-                <span>ATH</span>
-            </div>
-    },
-    {
-        id: 14,
-        content:
-            <div className={styles.messageItemImage}>
-
-                <Image
-                    height={40}
-                    width={40}
-                    src={`/icons/message/new-1.svg`}
-                    alt="hat" />
-            </div>
-    },
-    {
-        id: 15,
-        content:
-            <div className={styles.messageItemImage}>
-
-                <Image
-                    height={40}
-                    width={40}
-                    src={`/icons/message/new-2.svg`}
-                    alt="hat" />
-            </div>
-    },
-    {
-        id: 16,
-        content:
-            <div className={styles.messageItemImage}>
-
-                <Image
-                    height={40}
-                    width={40}
-                    src={`/icons/message/new-3.svg`}
-                    alt="hat" />
-            </div>
-    },
-    {
-        id: 17,
-        content:
-            <div className={styles.messageItemImage}>
-
-                <Image
-                    height={40}
-                    width={40}
-                    src={`/icons/message/new-4.svg`}
-                    alt="hat" />
-            </div>
-    },
-]
-
-let anim: any = null
-export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCoin: Coin | undefined, setSelectedCoin?: Function }) {
+export default function Comments({ selectedCoin, setSelectedCoin, methodReference }: { selectedCoin: Coin | undefined, setSelectedCoin?: Function, methodReference: any }) {
     const { address, isConnected, isConnecting } = useAccount();
     const lottieContainerRef = useRef(null);
+    const commentAni = useRef(null);
     const [commentList, setCommentList] = useState<Comment[]>([])
     const [allowSend, setAllowSend] = useState(0)
     const [textValue, setTextValue] = useState("")
     const { copy, copied } = useClipboard();
 
-    useEffect(() => {
+    const [anim1, setAnim1] = useState<any>(null);
+    const [anim2, setAnim2] = useState<any>(null);
+    const [localComment, setLocalComment] = useState<Comment>()
 
-        return () => {
-            if (anim) {
-                anim.destroy();
-            }
-        };
-    }, []);
     const extractNumbers = (str: string) => {
         const regex = /\d+/g;
         const matches = str.match(regex);
@@ -301,28 +48,35 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
             fetch(`/lottie/${Number(selectedCoin.priceChangePercent) > 0 ? 'k-up' : 'k-down'}/${Number(selectedCoin.priceChangePercent) > 0 ? 'klinehighestup' : 'Klinedown'}.json`)
                 .then(response => response.json())
                 .then(animationData => {
-                    if (anim) {
-                        anim.destroy();
+                    if (anim1) {
+                        anim1.destroy();
                     }
-                    anim = lottie.loadAnimation({
+                    const _anim1 = lottie.loadAnimation({
                         container: lottieContainerRef.current!,
                         renderer: 'svg',
-                        loop: true,
+                        loop: false,
                         autoplay: true,
 
                         animationData: animationData,
                         assetsPath: `/lottie/${Number(selectedCoin.priceChangePercent) > 0 ? 'k-up' : 'k-down'}/images/`,
 
                     });
-                    anim.setSpeed(0.5)
-                    setTimeout(()=>{
+                    setAnim1(_anim1)
 
-                        anim?.stop()
+                    _anim1.setSpeed(0.5)
+                    setTimeout(() => {
+                        _anim1?.pause()
 
-                    },400)
+                    }, 1000)
                 })
                 .catch(error => console.error('Error loading animation data:', error));
+
+
         }
+        return () => {
+            if (anim1) anim1.destroy();
+            if (anim2) anim2.destroy();
+        };
     }, [selectedCoin?.coingeckoId])
 
     useEffect(() => {
@@ -355,10 +109,9 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
             setAllowSend(60)
             //@ts-ignore
 
-            setCommentList([{
+            setLocalComment({
                 commentType: 'default', text: id.toString(), "user.walletAddress": address as string
-            }
-                , ...commentList])
+            })
             if (address && selectedCoin)
                 sendComment({
                     walletAddress: address,
@@ -406,10 +159,10 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
             setAllowSend(60)
             setTextValue("")
             //@ts-ignoreƒ
-            setCommentList([{
+            setLocalComment({
                 commentType: 'text', text: textValue.toString(), "user.walletAddress": address as string
-            }
-                , ...commentList])
+            })
+
             if (address && selectedCoin)
                 sendComment({
                     walletAddress: address,
@@ -427,6 +180,90 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
             sendText();
         }
     };
+
+    useEffect(() => {
+        if (methodReference) {
+            methodReference.current = sendTrade;
+        }
+    }, [methodReference]);
+
+    const sendTrade = useCallback(({
+        text,
+        tradeType,
+        tradeAmount
+    }: any) => {
+
+        // if (Number(text) === 0) {
+        //     notifications.show({
+        //         title: 'Failed to send',
+        //         message: `Message cannot be empty`,
+        //         color: 'red'
+        //     })
+        //     return;
+
+        // }
+        // if (allowSend > 0) {
+        //     notifications.show({
+        //         title: 'Sending messages frequently',
+        //         message: `You need to wait ${allowSend}s before sending`,
+        //         color: 'red'
+        //     })
+        // }
+        // else {
+        //     setAllowSend(60)
+        //@ts-ignore
+        setLocalComment({
+            commentType: 'trade', text: text.toString(), tradeAmount: tradeAmount, tradeType: tradeType
+        })
+        const contentElement = document.getElementById('content');
+        if (contentElement) {
+            contentElement.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+
+
+
+    }, [commentList.length])
+
+    useEffect(() => {
+        if (localComment?.commentType) {
+            setCommentList([localComment as Comment, ...commentList])
+            if (localComment.commentType == 'trade') {
+                fetch(`/lottie/${localComment.tradeType == 'buy' ? 'buybig' : 'sellbig'}/${localComment.tradeType == 'buy' ? 'buybig' : 'sellbig'}.json`)
+                    .then(response => response.json())
+                    .then(animationData => {
+
+                        if (anim2) {
+                            anim2.destroy();
+                        }
+                        const _anim2 = lottie.loadAnimation({
+                            container: commentAni.current!,
+                            renderer: 'svg',
+                            loop: false,
+                            autoplay: true,
+
+                            animationData: animationData,
+                            assetsPath: `/lottie/${localComment.tradeType == 'buy' ? 'buybig' : 'sellbig'}/images/`,
+
+                        });
+                        setAnim2(_anim2)
+                    })
+                    .catch(error => console.error('Error loading animation data:', error));
+                // if (address && selectedCoin)
+                //     sendComment({
+                //         walletAddress: address,
+                //         tokenId: selectedCoin.coingeckoId,
+                //         commentType: 'trade',
+                //         tradeAmount: localComment.tradeAmount?.toString(),
+                //         tradeType: localComment.tradeType || 'buy',
+                //         text: localComment.text.toString()
+                //     }).then((res) => {
+                //         console.log(res, 'sendTradeComment')
+                //     })
+            }
+        }
+
+    }, [localComment])
     const containerRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
@@ -579,17 +416,18 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
                                 {
                                     [...Array(2)].flatMap(() =>
                                         commentList.slice(item * 16, (item + 1) * 16).map((itemComment: Comment) => {
-                                            if (itemComment.commentType == "default")
-                                                return emoticons[extractNumbers(itemComment.text)[0] % 16].content
-                                            else if (itemComment.commentType == "mock")
+                                            if (itemComment?.commentType == "default")
+                                                return emoticons[extractNumbers(itemComment.text)[0] % (emoticons.length - 1)].content
+                                            else if (itemComment?.commentType == "mock")
                                                 return <div className={styles.messageItem}>
                                                     {itemComment.text}
                                                 </div>
-                                            else if (itemComment.commentType == "text")
+                                            else if (itemComment?.commentType == "text")
                                                 return <div className={styles.messageItem}>
                                                     {itemComment.text}
                                                 </div>
-
+                                            else if (itemComment?.commentType == "trade")
+                                                return <TradeComment comment={itemComment} />
                                         })
                                     )
                                 }
@@ -597,15 +435,15 @@ export default function Comments({ selectedCoin, setSelectedCoin }: { selectedCo
                         </div>
                     )}
                     <div className={styles.commentShadow}>
-
+                        <div ref={commentAni} className={styles.commentAni}></div>
                     </div>
                 </div>
 
                 <div className={styles.rightBottom}>
                     <div className={styles.rightLine}></div>
                     <div className={styles.emoticons}>
-                        <div className={styles.emoticonsscroll} 
-                        ref={containerRef}
+                        <div className={styles.emoticonsscroll}
+                            ref={containerRef}
 
                             style={{
                                 cursor: isDragging ? 'grabbing' : 'grab',

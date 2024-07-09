@@ -38,7 +38,7 @@ export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined 
             })
         }
     }, {
-        refreshInterval: 3000,
+        refreshInterval: 10000,
     })
 
     const getVoteList = () => {

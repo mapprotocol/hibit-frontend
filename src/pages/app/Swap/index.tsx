@@ -1,34 +1,34 @@
 import Image from "next/image";
 import styles from './index.module.css'
-import {ChangeEvent, useEffect, useMemo, useState} from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import ChainBox from "@/components/swap/chain-box";
-import {useAmount, useAppDispatch, useFrom, useNewOrder, useShowSwapPop, useTo} from "@/store/hooks";
+import { useAmount, useAppDispatch, useFrom, useNewOrder, useShowSwapPop, useTo } from "@/store/hooks";
 import TokenSelector from "@/components/token-selector/token-selector";
-import {ChainItem, TokenItem} from "@/utils/api/types";
-import {Chain} from "@ethereumjs/common";
-import {Box, Button, Center, Loader, TextInput} from "@mantine/core";
-import {updateAmount, updateBuyOrSell, updateFrom, updateShowSwapPop, updateTo} from "@/store/route/routes-slice";
-import {useBestRoute, useFetchRouteError, useLoadingRoute} from "@/store/route/hooks";
+import { ChainItem, TokenItem } from "@/utils/api/types";
+import { Chain } from "@ethereumjs/common";
+import { Box, Button, Center, Loader, TextInput } from "@mantine/core";
+import { updateAmount, updateBuyOrSell, updateFrom, updateShowSwapPop, updateTo } from "@/store/route/routes-slice";
+import { useBestRoute, useFetchRouteError, useLoadingRoute } from "@/store/route/hooks";
 import Decimal from 'decimal.js'
 import ConfirmCard from "@/components/swap/confirm-card";
 import ConfirmButton from "@/components/swap/confirm-button";
-import {Coin} from "@/type";
-import {fetchMyTokenTrade, fetchTokenComments, sendComment} from "@/api";
+import { Coin } from "@/type";
+import { fetchMyTokenTrade, fetchTokenComments, sendComment } from "@/api";
 import useFromTokenBalance from "@/hooks/useFromTokenBalance";
 import useSWR from "swr";
 import useFromWallet from "@/hooks/useFromWallet";
 import getTokenBalance from "@/store/wallet/thunks/getTokenBalance";
-import {fixAmountStr} from "@/utils/numbers";
+import { fixAmountStr } from "@/utils/numbers";
 import CHAINS from "@/configs/chains";
 import SwapPop from "@/components/swap/swap-pop";
-import {notifications} from "@mantine/notifications";
-import {countCharacters} from "@/utils";
-import {useAccount, useChainId} from "wagmi";
+import { notifications } from "@mantine/notifications";
+import { countCharacters } from "@/utils";
+import { useAccount, useChainId } from "wagmi";
 
-export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined }) {
+export default function Swap({ selectedCoin, sendComment }: { selectedCoin: Coin | undefined, sendComment: any }) {
     const dispatch = useAppDispatch();
     const wallet = useFromWallet();
-    const {address, isConnected, isConnecting} = useAccount();
+    const { address, isConnected, isConnecting } = useAccount();
     const chainId = useChainId();
     const [currentChainBox, setCurrentChainBox] = useState(0);
     const [showTokenSelector, setShowTokenSelector] = useState(false);
@@ -111,7 +111,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
 
 
     useEffect(() => {
-        if(showSwapPop == true){
+        if (showSwapPop == true) {
             setTextValue('')
         }
     }, [showSwapPop]);
@@ -201,7 +201,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
             ))
         }
 
-    }, [currentChainBox,chainId]);
+    }, [currentChainBox, chainId]);
 
 
 
@@ -244,7 +244,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
             return;
 
         }
-        const {len, spaceCount} = countCharacters(textValue);
+        const { len, spaceCount } = countCharacters(textValue);
 
         if (len > 20 || textValue.length > 40) {
             notifications.show({
@@ -260,7 +260,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                 tokenId: selectedCoin.coingeckoId,
                 commentType: 'text',
                 text: textValue.toString()
-            }).then((res) => {
+            }).then((res: any) => {
                 console.log(res, 'sendText')
             })
 
@@ -281,7 +281,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
             {
                 currentChainBox === 0 ?
                     <div className={styles.buy_buy}>
-                        <img className={styles.buy_btn} src="/images/swap/buy.png" alt=""/>
+                        <img className={styles.buy_btn} src="/images/swap/buy.png" alt="" />
                         <div className={styles.buy_text} onClick={() => {
                             setCurrentChainBox(1)
                         }}>Sell
@@ -293,7 +293,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                             setCurrentChainBox(0)
                         }}>Buy
                         </div>
-                        <img className={styles.buy_btn} src="/images/swap/sell.png" alt=""/>
+                        <img className={styles.buy_btn} src="/images/swap/sell.png" alt="" />
                     </div>
             }
 
@@ -327,7 +327,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                     </TextInput>
 
                     {
-                        currentChainBox == 0 ?<ChainBox
+                        currentChainBox == 0 ? <ChainBox
                             onClick={() => {
                                 handleTapChainBox();
                             }}
@@ -337,10 +337,10 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                             token={from?.token}
                         ></ChainBox>
                             :
-                           <div className={styles.sell_token_info}>
-                               <img className={styles.sell_token_info_img} src={from?.token?.image} alt=""/>
-                               <span className={styles.sell_token_info_symbol}>{from?.token?.symbol}</span>
-                           </div>
+                            <div className={styles.sell_token_info}>
+                                <img className={styles.sell_token_info_img} src={from?.token?.image} alt="" />
+                                <span className={styles.sell_token_info_symbol}>{from?.token?.symbol}</span>
+                            </div>
                     }
 
                     {/*<div className={styles.token}>*/}
@@ -353,7 +353,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                 <div className={styles.wallet}>
                     <div className={styles.total}></div>
                     <div className={styles.balance}>
-                        <img className={styles.balance_img} src="/images/swap/wallet.svg" alt=""/>
+                        <img className={styles.balance_img} src="/images/swap/wallet.svg" alt="" />
                         {from?.chain?.chainId ? balance : 0}
                         <span className={styles.balance_all} onClick={() => {
                             handleAmount(1)
@@ -388,12 +388,12 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                             <div className={styles.buy_area_img_div}>
                                 {
                                     currentChainBox === 0 ? <img className={styles.buy_area_img}
-                                                                 src="/images/swap/buy_bg.png"
-                                                                 alt=""/>
+                                        src="/images/swap/buy_bg.png"
+                                        alt="" />
                                         :
                                         <img className={`${styles.sell_area_img}`}
-                                             src="/images/swap/sell_bg.png"
-                                             alt=""/>
+                                            src="/images/swap/sell_bg.png"
+                                            alt="" />
                                 }
 
                             </div>
@@ -404,8 +404,8 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                                             <div className={styles.token_area_left}>
                                                 <div className={styles.token_img_div}>
                                                     <img className={styles.token_img}
-                                                         src={to?.token?.image}
-                                                         alt=""/>
+                                                        src={to?.token?.image}
+                                                        alt="" />
                                                 </div>
                                                 <div className={styles.token_name}>
                                                     <div className={styles.token_name_title}>
@@ -417,12 +417,12 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                                             </div>
                                             :
                                             <div
-                                                onClick={()=>{handleTapChainBox()}}
+                                                onClick={() => { handleTapChainBox() }}
                                                 className={`${styles.token_area_left} ${styles.btn_pointer}`}>
                                                 <div className={styles.token_img_div}>
                                                     <img className={styles.token_img}
-                                                         src={to?.token?.image}
-                                                         alt=""/>
+                                                        src={to?.token?.image}
+                                                        alt="" />
                                                 </div>
                                                 <div className={styles.token_name}>
                                                     <div className={styles.token_name_title}>
@@ -430,7 +430,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                                                     </div>
                                                     <div className={styles.token_name_bg}>
                                                         <img className={styles.select_to_token_icon}
-                                                             src="/images/swap/select_to_token.svg" alt=""/>
+                                                            src="/images/swap/select_to_token.svg" alt="" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -445,8 +445,8 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                                             </Box>
                                             :
                                             (!bestRoute ? null :
-                                                    <div
-                                                        className={styles.token_amount}> +{fixAmountStr(bestRoute?.minAmountOut.amount)}</div>
+                                                <div
+                                                    className={styles.token_amount}> +{fixAmountStr(bestRoute?.minAmountOut.amount)}</div>
                                             )
                                     }
                                 </div>
@@ -460,7 +460,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                 <div className={styles.confirm}>
                     <div className={styles.left}>
                         <div className={styles.left_content}>
-                            <img src="/images/swap/wallet.svg" alt=""/>
+                            <img src="/images/swap/wallet.svg" alt="" />
                             213,413
                         </div>
                     </div>
@@ -475,7 +475,7 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
                                         setTextValue(event.target.value)
                                     }}
                                     className={styles.swap_popover_input} placeholder={'Broadcast a message...'}
-                                    type="text"/>
+                                    type="text" />
                                 <div className={styles.bottom_btns}>
                                     <div className={styles.bottom_btns_left}>
                                         <div
@@ -531,6 +531,22 @@ export default function Swap({selectedCoin}: { selectedCoin: Coin | undefined })
             {/*        <SwapPop onClose={handleCloseSwapPop()} newOrder={newOrder} textValue={textValue}></SwapPop>*/}
             {/*        :null*/}
             {/*}*/}
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-around', marginTop: '20px' }}>
+                <Button onClick={() => {
+                    sendComment({
+                        text: 'mock', 
+                        tradeType: "buy",
+                        tradeAmount: '1000'
+                    })
+                }} style={{ backgroundColor: 'green' }}>{'Mock buy'} </Button>
+                <Button onClick={() => {
+                    sendComment({
+                        text: 'mock', 
+                        tradeType: "sell",
+                        tradeAmount: '1000'
+                    })
+                }} style={{ backgroundColor: 'red' }}>{'Mock sell'} </Button>
+            </div>
         </div>
     );
 }

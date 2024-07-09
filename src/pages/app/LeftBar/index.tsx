@@ -30,7 +30,7 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
         const timer =  setInterval(() => { 
             fetchTokenListFunc() 
         
-        }, 30000)
+        }, 20000)
 
 
         return () => clearInterval(timer);
@@ -45,8 +45,9 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
         fetchTokenList().then(res => {
             console.log(res, 'tokenlist')
             setTokenList(res.data)
-            if (router?.query?.coingeckoId)
-                fetchTokenInfo(router?.query?.coingeckoId as string).then(res => {
+            const queryParams = new URLSearchParams(window.location.search);
+            if (queryParams.get('coingeckoId'))
+                fetchTokenInfo(queryParams.get('coingeckoId') as string).then(res => {
                     setSelectedCoin(res.data)
 
                 })

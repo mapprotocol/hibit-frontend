@@ -1,7 +1,7 @@
 import Image from "next/image";
 import styles from './index.module.css'
 import LeftBar from "./LeftBar";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Comments from "./Comments";
 import Swap from "./Swap";
 import Orders from "@/pages/app/Orders";
@@ -35,14 +35,13 @@ export default function Hibit() {
                 query: {
                     coingeckoId: `${selectedCoin?.coingeckoId}`
                 }
-            }, undefined,
-                { shallow: true })
+            })
     }, [selectedCoin?.coingeckoId])
 
 
     useEffect(() => {
         const addressList = getLocalJWT();
-        console.log(address,addressList,1111)
+        console.log(address, addressList, 1111)
         if (address && typeof addressList[address] == "string") {
             api.interceptors.request.use(config => {
                 config.headers['Authorization'] = `${addressList[address]}`;
@@ -107,6 +106,15 @@ export default function Hibit() {
             console.error('Error in requestJWT:', error);
         }
     }
+    const childBMethodRef = useRef(null);
+
+    // Function to trigger the method in ChildB
+    const sendComment = (param: any) => {
+        if (childBMethodRef.current) {
+            //@ts-ignore
+            childBMethodRef?.current(param);
+        }
+    };
     return (<>
         <Head>
 
@@ -119,11 +127,11 @@ export default function Hibit() {
             <LeftBar selectedCoin={selectedCoin} setSelectedCoin={setSelectedCoin} like={like} setLike={setLike} />
             <div className={styles.rightContent}>
                 <Header selectedCoin={selectedCoin} setSelectedCoin={setSelectedCoin} like={like} setLike={setLike} />
-                <div className={styles.content}>
-                    <Comments selectedCoin={selectedCoin} />
+                <div id={'content'} className={styles.content}>
+                    <Comments methodReference={childBMethodRef} selectedCoin={selectedCoin} />
                     <div className={styles.buy_area}>
                         <SwapSearchContainer>
-                            <Swap selectedCoin={selectedCoin} />
+                            <Swap sendComment={sendComment} selectedCoin={selectedCoin} />
                         </SwapSearchContainer>
                         <Orders selectedCoin={selectedCoin} />
                     </div>
