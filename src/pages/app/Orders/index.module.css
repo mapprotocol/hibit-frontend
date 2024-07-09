@@ -1,7 +1,7 @@
 .order_area {
-    width: 3000px;
     margin-top: 24px;
     border-radius: 8px;
+    flex: 1;
 }
 
 .evaluate {
