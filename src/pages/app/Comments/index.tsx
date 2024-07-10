@@ -348,8 +348,8 @@ export default function Comments({ selectedCoin, setSelectedCoin, methodReferenc
                             <div className={styles.infoItemValue}>{"$" + Number(selectedCoin?.volume24).toLocaleString()}</div>
                         </div>
                         <div className={styles.infoItem}>
-                            <div className={styles.infoItemTitle}>{"Holders"}</div>
-                            <div className={styles.infoItemValue}>{Number(selectedCoin?.holders).toLocaleString()}</div>
+                            <div className={styles.infoItemTitle}>{"Liquidity"}</div>
+                            <div className={styles.infoItemValue}>{"$" +Number(selectedCoin?.liquidity).toLocaleString()}</div>
                         </div>
                         <div className={styles.infoItem}>
                             <div className={styles.infoItemTitle}>{"Total Supply"}</div>
