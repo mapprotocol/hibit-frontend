@@ -10,6 +10,7 @@ import {ellipsisThree} from "@/utils/addresses";
 import {fixAmountStr} from "@/utils/numbers";
 import Decimal from "decimal.js";
 import moment from 'moment';
+import suppercell from "@/fonts/supercell";
 
 const SwapPop = (props: { onClose: (val: boolean) => void, newOrder: NewOrderObj | null, textValue: string }) => {
     const {onClose, newOrder, textValue} = props;
@@ -98,7 +99,7 @@ const SwapPop = (props: { onClose: (val: boolean) => void, newOrder: NewOrderObj
                         <div className={styles.token_name_bg}></div>
                     </div>
                 </div>
-                <div className={styles.pop_text}>
+                <div className={ ` ${styles.pop_text} ${suppercell.className}`}>
                     {textValue}
                 </div>
             </div>
