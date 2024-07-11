@@ -363,7 +363,7 @@ export default function Swap({ selectedCoin, sendComment }: { selectedCoin: Coin
                     <div className={styles.total}></div>
                     <div className={styles.balance}>
                         <img className={styles.balance_img} src="/images/swap/wallet.svg" alt="" />
-                        {from?.chain?.chainId ? balance : 0}
+                        {new Decimal(from?.chain?.chainId ? balance : 0).toFixed(4,Decimal.ROUND_DOWN)}
                         <span className={styles.balance_all} onClick={() => {
                             handleAmount(1)
                         }}>ALL</span>
