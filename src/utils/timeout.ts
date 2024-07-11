@@ -20,14 +20,14 @@ export function timeSince(timestamp:string) {
     const days = Math.floor(hours / 24);
 
     if (days > 0) {
-        return `${days}天前`;
+        return `${days}d 前`;
     } else if (hours > 0) {
-        return `${hours}小时前`;
+        return `${hours}h 前`;
     } else if (minutes > 0) {
-        return `${minutes}分钟前`;
+        return `${minutes}m 前`;
     } else if (seconds > 0) {
-        return `${seconds}秒前`;
+        return `${seconds}s 前`;
     } else {
-        return "刚刚";
+        return "Recently";
     }
 }
