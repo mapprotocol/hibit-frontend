@@ -267,19 +267,16 @@ export default function Swap({ selectedCoin, sendComment }: { selectedCoin: Coin
         }
 
         //newOrder
-        if (address && selectedCoin)
+        if (address && selectedCoin){
             sendComment({
-                walletAddress: address,
-                tokenId: selectedCoin.coingeckoId,
-                commentType: 'text',
+                // walletAddress: address,
+                // tokenId: selectedCoin.coingeckoId,
+                // commentType: 'text',
                 tradeType: newOrder?.tradeType,
                 tradeAmount: newOrder?.tradeAmount,
                 text: textValue.toString()
-            }).then((res: any) => {
-                console.log(res, 'sendText')
             })
-
-
+        }
         //弹窗输出
         dispatch(updateShowSwapPop(false))
         if (showShare) {
