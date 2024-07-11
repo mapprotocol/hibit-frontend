@@ -99,9 +99,18 @@ const SwapPop = (props: { onClose: (val: boolean) => void, newOrder: NewOrderObj
                         <div className={styles.token_name_bg}></div>
                     </div>
                 </div>
-                <div className={ ` ${styles.pop_text} ${suppercell.className}`}>
-                    {textValue}
-                </div>
+                {
+                    newOrder?.tradeType == 'sell' ?
+                        <div className={` ${styles.pop_text_sell} ${suppercell.className}`}>
+                            {textValue}
+                        </div>
+                        :
+                        <div className={` ${styles.pop_text} ${suppercell.className}`}>
+                            {textValue}
+                        </div>
+                }
+
+
             </div>
             <div className={styles.share_area}>
                 <div className={styles.share_area_content}>
