@@ -100,7 +100,7 @@
 
     .orders_title {
         display: grid;
-        grid-template-columns: 2fr 2fr 2fr 2fr 4fr;
+        grid-template-columns: 2fr 2fr 2fr 2fr 2fr 2fr 4fr;
         margin-bottom: 20px;
 
         .orders_title_content {
@@ -123,7 +123,7 @@
         border-top: 1px solid #333;
         line-height: 42px;
         display: grid;
-        grid-template-columns: 2fr 2fr 2fr 2fr 4fr;
+        grid-template-columns: 2fr 2fr 2fr 2fr 2fr 2fr 4fr;
         color: #fff;
         opacity: 0.95;
         font-size: 12px;

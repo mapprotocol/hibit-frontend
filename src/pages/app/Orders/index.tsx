@@ -11,6 +11,8 @@ import Decimal from "decimal.js";
 import {formatNumber} from "@/utils";
 import useSWR from "swr";
 import getTokenBalance from "@/store/wallet/thunks/getTokenBalance";
+import {timeSince} from "@/utils/timeout";
+import {showError, showSuccess} from "@/utils/notifications";
 
 export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined }) {
     const [orderLists, setOrderLists] = useState<[]>([]);
@@ -68,6 +70,12 @@ export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined 
                 address,
                 voteType
             ).then(res => {
+                console.log(`res`,res)
+                if(res.msg == 'success'){
+                    showSuccess('Success!')
+                }else{
+                    showError(res.msg)
+                }
                 setVoteLoading(false)
                 getVoteList()
             })
@@ -123,19 +131,27 @@ export default function Orders({selectedCoin}: { selectedCoin: Coin | undefined 
             </div>
             <div className={styles.orders}>
                 <div className={styles.orders_title}>
+                    <div className={styles.orders_title_content}>Date</div>
                     <div className={styles.orders_title_content}>User</div>
+                    <div className={styles.orders_title_content}>Rep.</div>
                     <div className={styles.orders_title_content}>Side</div>
-                    <div className={styles.orders_title_content}>Amount</div>
-                    <div className={styles.orders_title_content}>Price(USDT)</div>
+                    <div className={styles.orders_title_content}>Total USD</div>
+                    <div className={styles.orders_title_content}>Price</div>
                     <div className={styles.orders_title_content}>Message</div>
                 </div>
                 <div className={styles.orders_area}>
                     {
                         orderLists && orderLists.map((order: any) => (
                             <div className={styles.order}>
+                                <div>
+                                    {timeSince(order.timestamp)}
+                                </div>
                                 <div className={styles.order_user}>
                                     <img className={styles.order_user_img} src="/images/evaluate/order.png" alt=""/>
                                     {ellipsisThree(order.base)}
+                                </div>
+                                <div>
+                                    aaa
                                 </div>
                                 {
                                     order.type == "sell" ?

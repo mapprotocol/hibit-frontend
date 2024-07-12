@@ -57,12 +57,15 @@ const MyWallet = () => {
         if (address && chainId) {
             let myTokensResult = await fetchUserPosition(address, chainId)
             if (!myTokensResult || !myTokensResult.data) {
+                setShowNoDate(true)
+                setTokensLoading(false)
                 return
             }
             let myTokens = myTokensResult.data.tokens
 
             if (!myTokens || myTokens.length == 0) {
-
+                setShowNoDate(true)
+                setTokensLoading(false)
                 return
             }
             //tokenName  tokenLogoUrl   tokenAddress  tokenDecimal

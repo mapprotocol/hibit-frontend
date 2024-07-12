@@ -213,7 +213,6 @@ export const sendComment = async ({
     tradeAmount?: string
 }) => {
     try {
-        console.log()
         const response = await api.post(`/comments/token/user`, {
             walletAddress,
             tokenId,

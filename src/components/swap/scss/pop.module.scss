@@ -191,16 +191,29 @@
 
   .pop_text{
     text-align: center;
-    text-shadow: 0px 2px 0px #484848;
-    -webkit-text-stroke-width: 1.5;
-    -webkit-text-stroke-color: #000;
-    font-family: Supercell-Magic;
+    //-webkit-text-stroke-width: 1.5px;
+    //-webkit-text-stroke-color: #000;
     font-size: 22px;
     font-style: normal;
     font-weight: 400;
     line-height: 36px; /* 163.636% */
 
     background: linear-gradient(90deg, #EBFF00 0%, #33FFA9 76.43%, #FFD60C 134.68%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .pop_text_sell{
+    text-align: center;
+    //-webkit-text-stroke-width: 1.5px;
+    //-webkit-text-stroke-color: #000;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 36px; /* 163.636% */
+
+    background: linear-gradient(90deg, #FFBC1A 13.99%, #FF5990 51.66%, #F37 89.34%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

@@ -239,6 +239,11 @@
 
 }
 
+.router_error{
+    padding: 10px 10px;
+    color: red;
+}
+
 .confirm_area {
     margin-top: 12px;
     width: 100%;

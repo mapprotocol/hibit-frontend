@@ -13,7 +13,6 @@ import Decimal from 'decimal.js'
 import ConfirmCard from "@/components/swap/confirm-card";
 import ConfirmButton from "@/components/swap/confirm-button";
 import { Coin } from "@/type";
-import { fetchMyTokenTrade, fetchTokenComments, sendComment } from "@/api";
 import useFromTokenBalance from "@/hooks/useFromTokenBalance";
 import useSWR from "swr";
 import useFromWallet from "@/hooks/useFromWallet";
@@ -34,6 +33,8 @@ export default function Swap({ selectedCoin, sendComment }: { selectedCoin: Coin
     const [showTokenSelector, setShowTokenSelector] = useState(false);
     const [textValue, setTextValue] = useState<string>('');
     const [showBarragePop, setShowBarragePop] = useState<boolean>(false);
+    const [currentSelectedCoin,setCurrentSelectedCoin] = useState<any>({});
+    const [currentSelectedChainBox,setCurrentSelectedChainBox] = useState(0);
     const handleTapChainBox = () => {
         // setCurrentChainBox(index);
         setShowTokenSelector(true);
@@ -118,6 +119,18 @@ export default function Swap({ selectedCoin, sendComment }: { selectedCoin: Coin
 
     //左边列表切换时候获取选中的token信息
     useEffect(() => {
+        console.log(`ssssss`,selectedCoin,currentSelectedCoin)
+        //如果没有切换token 保持不变
+        if(selectedCoin && currentSelectedCoin){
+            if(selectedCoin.coingeckoId == currentSelectedCoin.coingeckoId && currentChainBox == currentSelectedChainBox){
+                return
+            }
+            else{
+                setCurrentSelectedCoin(selectedCoin)
+                setCurrentSelectedChainBox(currentChainBox)
+            }
+        }
+
         if (selectedCoin) {
             //买入
             if (currentChainBox === 0) {
@@ -212,7 +225,6 @@ export default function Swap({ selectedCoin, sendComment }: { selectedCoin: Coin
 
     const handleValueChange = (e: ChangeEvent<HTMLInputElement>) => {
 
-
         let inputValue = e.target.value;
         // 允许输入的正则表达式：整数部分最多可以有任意位数，小数部分最多4位
         const regex = /^\d*\.?\d{0,4}$/;
@@ -234,7 +246,6 @@ export default function Swap({ selectedCoin, sendComment }: { selectedCoin: Coin
 
     const handleSubmitBarrage = (showShare: boolean) => {
 
-
         if (Number(textValue) === 0) {
             notifications.show({
                 title: 'Failed to send',
@@ -254,27 +265,25 @@ export default function Swap({ selectedCoin, sendComment }: { selectedCoin: Coin
             })
             return;
         }
-        if (address && selectedCoin)
+
+        //newOrder
+        if (address && selectedCoin){
             sendComment({
-                walletAddress: address,
-                tokenId: selectedCoin.coingeckoId,
-                commentType: 'text',
+                // walletAddress: address,
+                // tokenId: selectedCoin.coingeckoId,
+                // commentType: 'text',
+                tradeType: newOrder?.tradeType,
+                tradeAmount: newOrder?.tradeAmount,
                 text: textValue.toString()
-            }).then((res: any) => {
-                console.log(res, 'sendText')
             })
-
-
+        }
         //弹窗输出
         dispatch(updateShowSwapPop(false))
         if (showShare) {
             setShowBarragePop(true)
         }
         //同步弹幕内容
-
-
     }
-
 
     return (
         <div className={styles.swap}>
@@ -354,7 +363,7 @@ export default function Swap({ selectedCoin, sendComment }: { selectedCoin: Coin
                     <div className={styles.total}></div>
                     <div className={styles.balance}>
                         <img className={styles.balance_img} src="/images/swap/wallet.svg" alt="" />
-                        {from?.chain?.chainId ? balance : 0}
+                        {new Decimal(from?.chain?.chainId ? balance : 0).toFixed(4,Decimal.ROUND_DOWN)}
                         <span className={styles.balance_all} onClick={() => {
                             handleAmount(1)
                         }}>ALL</span>
@@ -379,7 +388,11 @@ export default function Swap({ selectedCoin, sendComment }: { selectedCoin: Coin
                     </div>
                 </div>
             </div>
-
+            {
+                empty && <div className={styles.router_error}>
+                    {routeError?.message}
+                </div>
+            }
             <div className={styles.confirm_area}>
                 <div>
                     {
@@ -534,14 +547,14 @@ export default function Swap({ selectedCoin, sendComment }: { selectedCoin: Coin
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-around', marginTop: '20px' }}>
                 <Button onClick={() => {
                     sendComment({
-                        text: 'mock', 
+                        text: 'mock',
                         tradeType: "buy",
                         tradeAmount: '1000'
                     })
                 }} style={{ backgroundColor: 'green' }}>{'Mock buy'} </Button>
                 <Button onClick={() => {
                     sendComment({
-                        text: 'mock', 
+                        text: 'mock',
                         tradeType: "sell",
                         tradeAmount: '1000'
                     })

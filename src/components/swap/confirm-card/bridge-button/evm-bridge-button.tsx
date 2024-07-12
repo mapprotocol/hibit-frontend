@@ -123,14 +123,18 @@ const EvmBridgeButton = () => {
             }
 
             //订单入库
-            await fetchNewOrder(
-                tokenId,
-                fromWallet?.address,
-                buyOrSell,
-                route?.minAmountOut?.amount,
-                tradePrice,
-                hash
-            )
+            try {
+                await fetchNewOrder(
+                    tokenId,
+                    fromWallet?.address,
+                    buyOrSell,
+                    route?.minAmountOut?.amount,
+                    tradePrice,
+                    hash
+                )
+            }catch (ex){
+                console.log(ex)
+            }
 
 
             //更新store 同步到动画展示
