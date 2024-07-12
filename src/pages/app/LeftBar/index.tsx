@@ -2,7 +2,7 @@ import Image from "next/image";
 import styles from './index.module.css'
 import { useEffect, useState } from "react";
 import { fetchTokenInfo, fetchTokenList, fetchWatchList } from "@/api";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import axios from "axios";
 import { formatNumber } from "@/utils";
 import { Coin } from "@/type";
@@ -19,6 +19,7 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
         setLike: Function
     }) {
     const { address } = useAccount();
+    const { chain } = useNetwork();
     const [tokenList, setTokenList] = useState([])
     const [watchlist, setWatchlist] = useState([])
     const [list, setList] = useState([])
@@ -27,14 +28,19 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
 
     useEffect(() => {
         fetchTokenListFunc()
-        const timer =  setInterval(() => { 
-            fetchTokenListFunc() 
-        
+        const timer = setInterval(() => {
+            fetchTokenListFunc()
         }, 20000)
 
+        const timer2 = setInterval(() => {
+            fetchTokenInfoFuc()
+        }, 5000)
 
-        return () => clearInterval(timer);
-    }, [])
+        return () => {
+            clearInterval(timer)
+            clearInterval(timer2)
+        };
+    }, [chain?.id])
 
     // useEffect(() => {
 
@@ -42,7 +48,7 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
     // }, [address])
 
     const fetchTokenListFunc = () => {
-        fetchTokenList().then(res => {
+        fetchTokenList(chain?.id || '1').then(res => {
             console.log(res, 'tokenlist')
             setTokenList(res.data)
             const queryParams = new URLSearchParams(window.location.search);
@@ -56,6 +62,17 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
             fetchWatchListFunc()
         })
     }
+
+
+    const fetchTokenInfoFuc = () => {
+        const queryParams = new URLSearchParams(window.location.search);
+        if (queryParams.get('coingeckoId'))
+            fetchTokenInfo(queryParams.get('coingeckoId') as string).then(res => {
+                setSelectedCoin(res.data)
+            })
+    }
+
+
     useEffect(() => {
         let like = false
         if (watchlist.length > 0)

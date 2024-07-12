@@ -23,7 +23,7 @@ export default function TradeComment({ comment }: { comment: Comment }) {
                 <div className={styles.commentRight}>
                     <div className={styles.tradeAmount}
                         style={{ backgroundColor: comment.tradeType == 'buy' ? '#3BF873' : '#FF4B87' }}>
-                        {(comment.tradeType == 'buy' ? 'Buy' : 'Sell') + "$" + (comment?.tradeAmount || '1000')}
+                        {(comment.tradeType == 'buy' ? 'Buy' : 'Sell') + "$" + (Number(comment?.tradeAmount).toFixed(2) || '1000')}
                     </div>
                     <div className={styles.image1}>
                         <Image

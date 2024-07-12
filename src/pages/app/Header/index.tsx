@@ -131,6 +131,7 @@ export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
     const performSearch = (query: string) => {
         if (query == "") {
             setLoading(false)
+            setSearchList([])
             return
         }
         console.log(`搜索关键字: ${query}`);
@@ -321,7 +322,7 @@ const CoinItem = ({ item, changeSelectToken }: { item: Coin, changeSelectToken: 
                         style={{
                             width: '100%',
                             height: '100%',
-                            borderRadius:'50%'
+                            borderRadius: '50%'
                         }}
                         src={item.tokenLogoUrl}
                         alt="avatar" />  <div className={styles.chainLogo}>

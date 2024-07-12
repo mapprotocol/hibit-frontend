@@ -5,13 +5,14 @@ import { use, useCallback, useEffect, useRef, useState } from "react";
 import CylinderCanvas from "@/components/cylinder";
 import { Coin, Comment } from "@/type";
 import { fetchMyTokenTrade, fetchTokenComments, sendComment, trades } from "@/api";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import { countCharacters, ellipsis, formatNumber } from "@/utils";
 import { notifications } from "@mantine/notifications";
 import CHAINS from "@/configs/chains";
 import { useClipboard } from "@mantine/hooks";
 import { emoticons } from "@/components/default-comment";
 import TradeComment from "@/components/trade-comment";
+import useCurrentWallet from "@/hooks/useCurrentWallet";
 
 
 
@@ -23,27 +24,40 @@ export default function Comments({ selectedCoin, setSelectedCoin, methodReferenc
     const [allowSend, setAllowSend] = useState(0)
     const [textValue, setTextValue] = useState("")
     const { copy, copied } = useClipboard();
-
+    const [position, setPosition] = useState<string>();
     const [anim1, setAnim1] = useState<any>(null);
     const [anim2, setAnim2] = useState<any>(null);
     const [localComment, setLocalComment] = useState<Comment>()
+    const currentWallet = useCurrentWallet();
+    const { chain } = useNetwork();
+
 
     const extractNumbers = (str: string) => {
         const regex = /\d+/g;
         const matches = str.match(regex);
         return matches ? matches.map(Number) : [];
     }
+
     useEffect(() => {
         if (selectedCoin) {
+            if (currentWallet) {
 
+                currentWallet.getBalances(
+                    [{
+                        address: selectedCoin.tokenAddress,
+                        decimals: selectedCoin.tokenDecimal,
+                    }],
+                    Number(selectedCoin.chainId),
+                ).then(amount => {
+                    setPosition(amount[0])
+                })
+            }
             fetchTokenComments(selectedCoin?.coingeckoId).then(res => {
-                console.log(res, 'tokenComment')
                 setCommentList(res.data)
 
             })
             if (address)
                 fetchMyTokenTrade(address, selectedCoin?.coingeckoId).then(res => {
-                    console.log(res, 'myTokenTrade')
                 })
             fetch(`/lottie/${Number(selectedCoin.priceChangePercent) > 0 ? 'k-up' : 'k-down'}/${Number(selectedCoin.priceChangePercent) > 0 ? 'klinehighestup' : 'Klinedown'}.json`)
                 .then(response => response.json())
@@ -228,7 +242,7 @@ export default function Comments({ selectedCoin, setSelectedCoin, methodReferenc
     useEffect(() => {
         if (localComment?.commentType) {
             setCommentList([localComment as Comment, ...commentList])
-            if (localComment.commentType == 'trade') {
+            if (localComment.commentType == 'trade' && Number(localComment.tradeAmount) >= 1000) {
                 fetch(`/lottie/${localComment.tradeType == 'buy' ? 'buybig' : 'sellbig'}/${localComment.tradeType == 'buy' ? 'buybig' : 'sellbig'}.json`)
                     .then(response => response.json())
                     .then(animationData => {
@@ -349,7 +363,7 @@ export default function Comments({ selectedCoin, setSelectedCoin, methodReferenc
                         </div>
                         <div className={styles.infoItem}>
                             <div className={styles.infoItemTitle}>{"Liquidity"}</div>
-                            <div className={styles.infoItemValue}>{"$" +Number(selectedCoin?.liquidity).toLocaleString()}</div>
+                            <div className={styles.infoItemValue}>{"$" + Number(selectedCoin?.liquidity).toLocaleString()}</div>
                         </div>
                         <div className={styles.infoItem}>
                             <div className={styles.infoItemTitle}>{"Total Supply"}</div>
@@ -389,7 +403,7 @@ export default function Comments({ selectedCoin, setSelectedCoin, methodReferenc
                         <div className={styles.myInfoItem}>
 
                             <div className={styles.myInfoTitle}>{"My Position"}</div>
-                            <div className={styles.myInfoValue}>{"$0"}</div>
+                            <div className={styles.myInfoValue}>{"$" + Number(position).toLocaleString()}</div>
 
                         </div>
                         <div className={styles.myInfoItem}>

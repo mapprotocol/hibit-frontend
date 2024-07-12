@@ -27,7 +27,6 @@ const EvmProvider = ({children}: PropsWithChildren) => {
     const chains = useMetamaskChains();
     const dispatch = useAppDispatch();
     useEffect(() => {
-        console.log(333333)
         dispatch(fetchChainsData());
     }, [])
 

@@ -10,9 +10,7 @@ const isEmptyAddress = (address: string) => {
 
 const useFromTokenBalance = () => {
     const from = useFrom();
-    console.log(333333,from)
     const balance = useTokenBalance(from?.token?.address || "", from?.chain?.chainId || "");
-    console.log(44444,balance)
     return balance || "0";
 }
 

@@ -29,10 +29,10 @@ export const fetchWatchList = async (address: string) => {
     }
 };
 
-export const fetchTokenList = async () => {
+export const fetchTokenList = async (chainId: string | number = 1) => {
     try {
         console.log()
-        const response = await api.get(`/token/list`);
+        const response = await api.get(`/token/list?chainId=${chainId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching nonce:', error);
@@ -41,7 +41,7 @@ export const fetchTokenList = async () => {
 };
 
 
-export const fetchOrderList = async (tokenId:string|number) => {
+export const fetchOrderList = async (tokenId: string | number) => {
     try {
         console.log()
         const response = await api.get(`/trades/history?tokenId=${tokenId}`);
@@ -52,7 +52,7 @@ export const fetchOrderList = async (tokenId:string|number) => {
     }
 };
 
-export const fetchTokenInfo = async (tokenId:string) => {
+export const fetchTokenInfo = async (tokenId: string) => {
     try {
         console.log()
         const response = await api.get(`/token/info?tokenId=${tokenId}`);
@@ -63,7 +63,7 @@ export const fetchTokenInfo = async (tokenId:string) => {
     }
 };
 
-export const fetchVoteList = async (tokenId:string|number) => {
+export const fetchVoteList = async (tokenId: string | number) => {
     try {
         console.log()
         const response = await api.get(`/token/votes?tokenId=${tokenId}`);
@@ -75,12 +75,12 @@ export const fetchVoteList = async (tokenId:string|number) => {
 };
 
 
-export const updateVote = async (tokenId:string|number,walletAddress: string, voteType: string) => {
+export const updateVote = async (tokenId: string | number, walletAddress: string, voteType: string) => {
     try {
         const response = await api.post(`/token/votes`, {
-            tokenId:tokenId,
+            tokenId: tokenId,
             walletAddress: walletAddress,
-            voteType:voteType
+            voteType: voteType
         });
         return response.data;
     } catch (error) {
@@ -91,15 +91,15 @@ export const updateVote = async (tokenId:string|number,walletAddress: string, vo
 
 
 
-export const fetchNewOrder = async (tokenId:string|undefined,walletAddress: string,tradeType:string,tradeAmount:string|undefined,tradePrice:string|undefined,hash:string|undefined) => {
+export const fetchNewOrder = async (tokenId: string | undefined, walletAddress: string, tradeType: string, tradeAmount: string | undefined, tradePrice: string | undefined, hash: string | undefined) => {
     try {
         const response = await api.post(`/trades/user`, {
-            tokenId:tokenId,
+            tokenId: tokenId,
             walletAddress: walletAddress,
-            tradeType:tradeType,
-            tradeAmount:tradeAmount,
-            tradePrice:tradePrice,
-            hash:hash
+            tradeType: tradeType,
+            tradeAmount: tradeAmount,
+            tradePrice: tradePrice,
+            hash: hash
         });
         return response.data;
     } catch (error) {
@@ -175,7 +175,7 @@ export const fetchUserInfo = async (walletAddress: string) => {
 };
 
 
-export const fetchUserPosition = async (walletAddress: string,chainId:number) => {
+export const fetchUserPosition = async (walletAddress: string, chainId: number) => {
     try {
         const response = await api.get(`/user/position?walletAddress=${walletAddress}&chainId=${chainId}`);
         return response.data;
