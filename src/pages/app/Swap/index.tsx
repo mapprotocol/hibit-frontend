@@ -23,6 +23,8 @@ import SwapPop from "@/components/swap/swap-pop";
 import { notifications } from "@mantine/notifications";
 import { countCharacters } from "@/utils";
 import { useAccount, useChainId } from "wagmi";
+import {useTokenBalance} from "@/store/wallet/hooks";
+import useToTokenBalance from "@/hooks/useToTokenBalance";
 
 export default function Swap({ selectedCoin, sendComment }: { selectedCoin: Coin | undefined, sendComment: any }) {
     const dispatch = useAppDispatch();
@@ -48,6 +50,7 @@ export default function Swap({ selectedCoin, sendComment }: { selectedCoin: Coin
     const routeError = useFetchRouteError();
     const bestRoute = useBestRoute();
     const balance = useFromTokenBalance();
+    const toBalance = useToTokenBalance();
     const showSwapPop = useShowSwapPop();
     const newOrder = useNewOrder()
 
@@ -474,7 +477,7 @@ export default function Swap({ selectedCoin, sendComment }: { selectedCoin: Coin
                     <div className={styles.left}>
                         <div className={styles.left_content}>
                             <img src="/images/swap/wallet.svg" alt="" />
-                            213,413
+                            { new Decimal( toBalance).toFixed(4)}
                         </div>
                     </div>
                     <div className={styles.confirm_btn}>
