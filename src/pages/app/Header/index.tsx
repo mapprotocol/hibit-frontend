@@ -248,7 +248,14 @@ export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
                         <Popover opened={opened} onChange={setOpened} position="bottom-end" shadow="md">
                             <Popover.Target>
                                 <div onClick={() => setOpened((o) => !o)} className={styles.select_network}>
-                                    <img className={styles.selected_chain_img} src={CHAINS[chainId.toString()]?.chainImage} alt="" />
+                                    {
+                                        CHAINS[chainId.toString()] ?
+                                            <img className={styles.selected_chain_img}
+                                                 src={CHAINS[chainId.toString()]?.chainImage} alt=""/>
+                                            :
+                                            <div className={styles.wrong_network}>Wrong Network</div>
+                                    }
+
                                     {
                                         opened ?
                                             <img className={styles.selected_chain_icon} src="/images/swap/up_icon.svg"
