@@ -276,3 +276,7 @@
     line-height: 14px;
     /* 100% */
 }
+
+.wrong_network{
+    color: #ea3d4d;
+}

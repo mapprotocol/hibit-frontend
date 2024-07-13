@@ -146,7 +146,7 @@ export default function LeftBar({ selectedCoin, setSelectedCoin, like, setLike }
                     {active == 1 && <div className={styles.bottomBorder}></div>}
                 </div>
             </div>
-            {selectedCoin && <div className={styles.coinslist}>
+            {selectedCoin && tokenList && <div className={styles.coinslist}>
                 {(active == 0 ? tokenList : watchlist).map((coin: any, index) => {
                     let item = coin
                     let type = 'rise'

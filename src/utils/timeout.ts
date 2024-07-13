@@ -20,13 +20,13 @@ export function timeSince(timestamp:string) {
     const days = Math.floor(hours / 24);
 
     if (days > 0) {
-        return `${days}d 前`;
+        return `${days}d before`;
     } else if (hours > 0) {
-        return `${hours}h 前`;
+        return `${hours}h before`;
     } else if (minutes > 0) {
-        return `${minutes}m 前`;
+        return `${minutes}m before`;
     } else if (seconds > 0) {
-        return `${seconds}s 前`;
+        return `${seconds}s before`;
     } else {
         return "Recently";
     }
