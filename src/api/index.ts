@@ -197,6 +197,33 @@ export const fetchTokenComments = async (tokenid: string) => {
     }
 };
 
+
+
+
+export const sendUpdateUsername = async ({
+                                      walletAddress,
+                                             userName,
+                                  }: {
+
+    walletAddress: string
+    userName: string
+
+}) => {
+    try {
+        const response = await api.post(`/user/edit`, {
+            walletAddress,
+            userName,
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching nonce:', error);
+        throw error;
+    }
+};
+
+
+
+
 export const sendComment = async ({
     walletAddress,
     tokenId,

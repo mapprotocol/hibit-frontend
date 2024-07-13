@@ -1,5 +1,5 @@
 import styles from './scss/wallet.module.scss'
-import {Box, Button, Center, Loader, Space} from "@mantine/core";
+import {Box, Button, Center, Loader, Popover, Space} from "@mantine/core";
 import {useClipboard} from "@mantine/hooks";
 import {useEffect, useState} from "react";
 import {showSuccess} from "@/utils/notifications";
@@ -13,6 +13,7 @@ import useFromWallet from "@/hooks/useFromWallet";
 import useCurrentWallet from "@/hooks/useCurrentWallet";
 import CHAINS from "@/configs/chains";
 import {toNumber} from "lodash";
+import UpdateUsername from "@/components/my-wallet/update-username";
 
 const MyWallet = () => {
 
@@ -27,6 +28,8 @@ const MyWallet = () => {
     const [totalAmount, setTotalAmount] = useState<string>('0');
     const [tokensLoading, setTokensLoading] = useState<boolean>(false);
     const [showNoDate,setShowNoDate] = useState<boolean>(false);
+    const [opened, setOpened] = useState(false);
+
     useEffect(() => {
         getInfos()
     }, [chainId]);
@@ -63,6 +66,7 @@ const MyWallet = () => {
             }
             let myTokens = myTokensResult.data.tokens
 
+
             if (!myTokens || myTokens.length == 0) {
                 setShowNoDate(true)
                 setTokensLoading(false)
@@ -81,8 +85,7 @@ const MyWallet = () => {
                     // })
                 }
             }
-            console.log(`mtTokens`, myTokens)
-
+            console.log(`myTokens`, myTokens)
 
             try{
 
@@ -150,8 +153,17 @@ const MyWallet = () => {
             <div className={styles.user_info}>
                 <img className={styles.user_info_img} src="/images/wallet/metamask.svg" alt=""/>
                 <div className={styles.user_info_desc}>
-                    <div className={styles.user_username}>{userInfo.username}
+
+                    <Popover opened={opened} onChange={setOpened} position="bottom-end" shadow="md">
+                        <Popover.Target>
+                    <div onClick={() => setOpened((o) => !o)} className={styles.user_username}>{userInfo.username}
                         <img className={styles.user_username_edit} src="/images/wallet/edit.svg" alt=""/></div>
+                        </Popover.Target>
+                        <Popover.Dropdown>
+                        <UpdateUsername onClose={setOpened} refreshUserInfo={getInfos}></UpdateUsername>
+                        </Popover.Dropdown>
+                    </Popover>
+
                     <div className={styles.user_address}>{ellipsisThree(userInfo.walletAddress)}</div>
                 </div>
             </div>
