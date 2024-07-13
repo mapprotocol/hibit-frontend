@@ -162,7 +162,7 @@
 .emoticons {
     margin-top: 12px;
     user-select: none;
-    
+
     width: 100%;
     overflow: hidden;
     padding-left: 24px;
@@ -254,7 +254,8 @@
     /* background: linear-gradient(to left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%); */
 
 }
-.commentAni{
+
+.commentAni {
     position: absolute;
     width: 600px;
     height: 600px;
@@ -332,6 +333,33 @@
     opacity: 0.95;
 }
 
+.defaultItem {
+    position: relative;
+}
+
+.fold {
+    position: absolute;
+    right: -6px;
+    top: -2px;
+    color: #FFF;
+    text-shadow: 0px 1px 0px #000;
+    -webkit-text-stroke-width: 1;
+    -webkit-text-stroke-color: #0D0D0D;
+    font-family: Hanson;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 12px;
+    /* 100% */
+    letter-spacing: 0.24px;
+    background: #FFD60C;
+    transform: rotate(-8deg);
+    flex-shrink: 0;
+}
+.foldText{
+    transform: translateX(4px);
+
+}
 .lowProce {
     position: absolute;
     top: 310px;

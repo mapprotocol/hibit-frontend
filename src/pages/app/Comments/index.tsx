@@ -24,7 +24,9 @@ export default function Comments({ selectedCoin, setSelectedCoin, methodReferenc
     const [allowSend, setAllowSend] = useState(0)
     const [textValue, setTextValue] = useState("")
     const { copy, copied } = useClipboard();
-    const [position, setPosition] = useState<string>();
+    const [position, setPosition] = useState<Number>(0);
+    const [profit, setProfit] = useState<Number>(0);
+
     const [anim1, setAnim1] = useState<any>(null);
     const [anim2, setAnim2] = useState<any>(null);
     const [localComment, setLocalComment] = useState<Comment>()
@@ -49,7 +51,7 @@ export default function Comments({ selectedCoin, setSelectedCoin, methodReferenc
                     }],
                     Number(selectedCoin.chainId),
                 ).then(amount => {
-                    setPosition(amount[0])
+                    setPosition(Number(amount[0]) * Number(selectedCoin.price) || 0)
                 })
             }
             fetchTokenComments(selectedCoin?.coingeckoId).then(res => {
@@ -57,7 +59,7 @@ export default function Comments({ selectedCoin, setSelectedCoin, methodReferenc
 
             })
             if (address)
-                fetchMyTokenTrade(address, selectedCoin?.coingeckoId).then(res => {
+                fetchMyTokenTrade("0x3bB8f935Bc19ac4f2F2cdaE5b7E5432394CcDc18", selectedCoin?.coingeckoId).then(res => {
                 })
             fetch(`/lottie/${Number(selectedCoin.priceChangePercent) > 0 ? 'k-up' : 'k-down'}/${Number(selectedCoin.priceChangePercent) > 0 ? 'klinehighestup' : 'Klinedown'}.json`)
                 .then(response => response.json())
@@ -430,8 +432,12 @@ export default function Comments({ selectedCoin, setSelectedCoin, methodReferenc
                                 {
                                     [...Array(2)].flatMap(() =>
                                         commentList.slice(item * 16, (item + 1) * 16).map((itemComment: Comment) => {
-                                            if (itemComment?.commentType == "default")
-                                                return emoticons[extractNumbers(itemComment.text)[0] % (emoticons.length - 1)].content
+                                            if (itemComment?.commentType == "default" || itemComment?.commentType == "fold")
+                                                return <div className={styles.defaultItem}> {emoticons[extractNumbers(itemComment.text)[0] % (emoticons.length - 1)].content}
+                                                    {itemComment?.commentType == "fold" && <div className={styles.fold}>
+                                                        <div className={styles.foldText}>{"10x"}</div>
+                                                    </div>}
+                                                </div>
                                             else if (itemComment?.commentType == "mock")
                                                 return <div className={styles.messageItem}>
                                                     {itemComment.text}
@@ -442,6 +448,10 @@ export default function Comments({ selectedCoin, setSelectedCoin, methodReferenc
                                                 </div>
                                             else if (itemComment?.commentType == "trade")
                                                 return <TradeComment comment={itemComment} />
+                                            else if (itemComment?.commentType == "fold")
+                                                return <div className={styles.messageItem}>
+                                                    {itemComment.text}
+                                                </div>
                                         })
                                     )
                                 }
