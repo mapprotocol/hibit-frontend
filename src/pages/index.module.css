@@ -98,16 +98,35 @@
 
 .messages {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+
     position: absolute;
     left: 0;
-    gap: 12px;
-    max-height: 112px;
+    gap: 16px;
     overflow: hidden;
     padding: 32px 0;
     margin-top: 24px;
     background: linear-gradient(180deg, #262626 31.56%, rgba(38, 38, 38, 0.00) 100%);
+    width: 100%;
 }
+.messagesContent{
+    display: flex;
+    gap: 12px;
+
+    animation: scroll1 45s linear infinite;
+
+
+}
+@keyframes scroll1 {
+    0% {
+        transform: translateX(4px);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
 
 .messages::before,
 .messages::after {
@@ -146,6 +165,7 @@
     line-height: 12px;
     border-radius: 20px;
     background: rgba(0, 0, 0, 0.50);
+    flex-shrink: 0;
     /* 100% */
     letter-spacing: 0.24px;
 }
@@ -155,7 +175,6 @@ align-self: flex-end;
 
 }
 .coin {
-    border-radius: 50%;
     overflow: hidden;
 }
 
@@ -308,3 +327,5 @@ align-self: flex-end;
     line-height: 16px;
     /* 100% */
 }
+
+

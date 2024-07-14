@@ -126,9 +126,9 @@ const messages = [
     content: <>  <img
       className={styles.coin}
 
-      height={24}
-      width={24}
-      src={`https://www.dextools.io/resources/tokens/logos/ether/0x80795a7bb55f003b1572411a271e31f73e03dd73.png`}
+      height={40}
+      width={40}
+      src={`/icons/message/new-2.svg`}
       alt="doge" />
       <Image
         height={40}
@@ -144,7 +144,7 @@ const messages = [
       className={styles.coin}
       height={24}
       width={24}
-      src={`https://www.dextools.io/resources/tokens/logos/ether/0x80795a7bb55f003b1572411a271e31f73e03dd73.png`}
+      src={`/icons/message/hot.svg`}
       alt="doge" />
       <Image
         height={40}
@@ -179,9 +179,9 @@ const messages = [
   {
     content: <>  <img
       className={styles.coin}
-      height={24}
-      width={24}
-      src={`https://static.alchemyapi.io/images/assets/27659.png`}
+      height={40}
+      width={40}
+      src={`/icons/message/new-4.svg`}
       alt="doge" />
       <Image
         height={40}
@@ -195,9 +195,9 @@ const messages = [
     content: <>  <img
       className={styles.coin}
 
-      height={24}
-      width={24}
-      src={`https://static.alchemyapi.io/images/assets/27659.png`}
+      height={40}
+      width={40}
+      src={`/icons/message/new-2.svg`}
       alt="doge" />
       <Image
         height={40}
@@ -233,7 +233,7 @@ const messages = [
       className={styles.coin}
       height={24}
       width={24}
-      src={`https://www.dextools.io/resources/tokens/logos/ether/0xdf82ad29f859e7c25d155d9e35d8533f46928ca9.png`}
+      src={`/icons/message/heart.svg`}
       alt="doge" />
       <Image
         height={40}
@@ -248,7 +248,7 @@ const messages = [
       className={styles.coin}
       height={24}
       width={24}
-      src={`https://www.dextools.io/resources/tokens/logos/ether/0xdf82ad29f859e7c25d155d9e35d8533f46928ca9.png`}
+      src={`/icons/message/heart.svg`}
       alt="doge" />
       <Image
         height={40}
@@ -261,9 +261,9 @@ const messages = [
   {
     content: <>  <img
       className={styles.coin}
-      height={24}
-      width={24}
-      src={`https://www.dextools.io/resources/tokens/logos/ether/0xdf82ad29f859e7c25d155d9e35d8533f46928ca9.png`}
+      height={40}
+      width={40}
+      src={`/icons/message/new-3.svg`}
       alt="doge" />
       <Image
         height={40}
@@ -281,6 +281,14 @@ const messages = [
 
   }
 ]
+function shuffleArray(array: any[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 
 export default function Home() {
   const [topGainers, setTopGainers] = useState()
@@ -394,13 +402,22 @@ export default function Home() {
             {"Keywords Today"}</div>
 
           <div className={styles.messages}>
-
-            {messages.map((item, index) => <div key={index} className={styles.messageItem}>
-              {item.content}
-            </div>)}
-            {messages.map((item, index) => <div key={index} className={styles.messageItem}>
-              {item.content}
-            </div>)}
+            <div  className={styles.messagesContent}>
+              {shuffleArray(messages).map((item, index) => <div key={index} className={styles.messageItem}>
+                {item.content}
+              </div>)}
+              {shuffleArray(messages).map((item, index) => <div key={index} className={styles.messageItem}>
+                {item.content}
+              </div>)}
+            </div>
+            <div  className={styles.messagesContent}>
+              {shuffleArray(messages).map((item, index) => <div key={index} className={styles.messageItem}>
+                {item.content}
+              </div>)}
+              {shuffleArray(messages).map((item, index) => <div key={index} className={styles.messageItem}>
+                {item.content}
+              </div>)}
+            </div>  
           </div>
           <div></div>
 
@@ -477,7 +494,7 @@ export default function Home() {
                         {Math.abs(Number(item.priceChangePercent)).toFixed(1) + "%"}
                       </div>
                     </div>
-                    <div className={styles.topGainersItemTime}>{'Apr 12'}</div>
+                    <div className={styles.topGainersItemTime}>{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
                   </div>
                 )
               }
