@@ -11,6 +11,7 @@ import {fixAmountStr} from "@/utils/numbers";
 import Decimal from "decimal.js";
 import moment from 'moment';
 import suppercell from "@/fonts/supercell";
+import fangzheng from "@/fonts/fangzheng";
 
 const SwapPop = (props: { onClose: (val: boolean) => void, newOrder: NewOrderObj | null, textValue: string }) => {
     const {onClose, newOrder, textValue} = props;
@@ -101,11 +102,11 @@ const SwapPop = (props: { onClose: (val: boolean) => void, newOrder: NewOrderObj
                 </div>
                 {
                     newOrder?.tradeType == 'sell' ?
-                        <div className={` ${styles.pop_text_sell} ${suppercell.className}`}>
+                        <div className={` ${styles.pop_text_sell} ${fangzheng.className}`}>
                             {textValue}
                         </div>
                         :
-                        <div className={` ${styles.pop_text} ${suppercell.className}`}>
+                        <div className={` ${styles.pop_text} ${fangzheng.className}`}>
                             {textValue}
                         </div>
                 }

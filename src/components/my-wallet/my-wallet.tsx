@@ -1,5 +1,5 @@
 import styles from './scss/wallet.module.scss'
-import {Box, Button, Center, Loader, Space} from "@mantine/core";
+import {Box, Button, Center, Loader, Popover, Space} from "@mantine/core";
 import {useClipboard} from "@mantine/hooks";
 import {useEffect, useState} from "react";
 import {showSuccess} from "@/utils/notifications";
@@ -13,6 +13,7 @@ import useFromWallet from "@/hooks/useFromWallet";
 import useCurrentWallet from "@/hooks/useCurrentWallet";
 import CHAINS from "@/configs/chains";
 import {toNumber} from "lodash";
+import UpdateUsername from "@/components/my-wallet/update-username";
 
 const MyWallet = () => {
 
@@ -27,6 +28,9 @@ const MyWallet = () => {
     const [totalAmount, setTotalAmount] = useState<string>('0');
     const [tokensLoading, setTokensLoading] = useState<boolean>(false);
     const [showNoDate,setShowNoDate] = useState<boolean>(false);
+    const [opened, setOpened] = useState(false);
+    const [mainAmount,setMainAmount] = useState<string>('0');
+
     useEffect(() => {
         getInfos()
     }, [chainId]);
@@ -54,6 +58,7 @@ const MyWallet = () => {
 
     const getTokens = async () => {
         setTokensLoading(true)
+        let mainTokenPrice = 0
         if (address && chainId) {
             let myTokensResult = await fetchUserPosition(address, chainId)
             if (!myTokensResult || !myTokensResult.data) {
@@ -61,7 +66,32 @@ const MyWallet = () => {
                 setTokensLoading(false)
                 return
             }
+
+            mainTokenPrice = myTokensResult.data.gas.price
+
+            let defaultToken = JSON.parse(CHAINS[chainId.toString()].nativeToken)
+
+            if (!!currentWallet) {
+                const mainBalance = await currentWallet.getBalances([
+                    {
+                        address: defaultToken.address,
+                        decimals: defaultToken.decimals,
+                    }
+                ]
+                   ,
+                    Number(chainId),
+                )
+                console.log(`mainBalance`,mainBalance)
+
+                setMainAmount(new Decimal(mainBalance[0]).mul(mainTokenPrice).toFixed(4))
+            }
+
+
+
+
             let myTokens = myTokensResult.data.tokens
+
+
 
             if (!myTokens || myTokens.length == 0) {
                 setShowNoDate(true)
@@ -71,7 +101,7 @@ const MyWallet = () => {
             //tokenName  tokenLogoUrl   tokenAddress  tokenDecimal
             if (myTokens && myTokens.length > 0 && chainId) {
                 //插入主币
-                let defaultToken = JSON.parse(CHAINS[chainId.toString()].nativeToken)
+
                 if (defaultToken) {
                     // myTokens.unshift({
                     //     tokenName:defaultToken.name,
@@ -81,8 +111,7 @@ const MyWallet = () => {
                     // })
                 }
             }
-            console.log(`mtTokens`, myTokens)
-
+            console.log(`myTokens`, myTokens)
 
             try{
 
@@ -145,13 +174,23 @@ const MyWallet = () => {
         }
     }
 
+
     return <div className={styles.my_wallet}>
         <div className={styles.top}>
             <div className={styles.user_info}>
                 <img className={styles.user_info_img} src="/images/wallet/metamask.svg" alt=""/>
                 <div className={styles.user_info_desc}>
-                    <div className={styles.user_username}>{userInfo.username}
+
+                    <Popover opened={opened} onChange={setOpened} position="bottom-end" shadow="md">
+                        <Popover.Target>
+                    <div onClick={() => setOpened((o) => !o)} className={styles.user_username}>{userInfo.username}
                         <img className={styles.user_username_edit} src="/images/wallet/edit.svg" alt=""/></div>
+                        </Popover.Target>
+                        <Popover.Dropdown>
+                        <UpdateUsername onClose={setOpened} refreshUserInfo={getInfos}></UpdateUsername>
+                        </Popover.Dropdown>
+                    </Popover>
+
                     <div className={styles.user_address}>{ellipsisThree(userInfo.walletAddress)}</div>
                 </div>
             </div>
@@ -161,7 +200,7 @@ const MyWallet = () => {
             </div>
         </div>
         <div className={styles.balance_area}>
-            <div className={styles.balance}>${totalAmount}</div>
+            <div className={styles.balance}>${mainAmount}</div>
 
             {/*<div className={styles.reward}>*/}
             {/*    <img className={styles.gift_icon} src="/images/wallet/gift.svg" alt=""/>*/}
