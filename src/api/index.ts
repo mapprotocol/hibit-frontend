@@ -128,9 +128,9 @@ export const searchToken = async (content: string) => {
         throw error;
     }
 };
-export const searchTokenTrending = async () => {
+export const searchTokenTrending = async (chainId: string|number) => {
     try {
-        const response = await api.get(`/token/trending`);
+        const response = await api.get(`/token/trending?chainId=${chainId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching nonce:', error);
@@ -201,9 +201,9 @@ export const fetchTokenComments = async (tokenid: string) => {
 
 
 export const sendUpdateUsername = async ({
-                                      walletAddress,
-                                             userName,
-                                  }: {
+    walletAddress,
+    userName,
+}: {
 
     walletAddress: string
     userName: string

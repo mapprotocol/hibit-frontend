@@ -122,7 +122,7 @@ export default function Comments({ selectedCoin, setSelectedCoin, methodReferenc
             })
         }
         else {
-            setAllowSend(60)
+            setAllowSend(2)
             //@ts-ignore
 
             setLocalComment({
@@ -172,7 +172,7 @@ export default function Comments({ selectedCoin, setSelectedCoin, methodReferenc
             })
         }
         else {
-            setAllowSend(60)
+            setAllowSend(2)
             setTextValue("")
             //@ts-ignoreƒ
             setLocalComment({

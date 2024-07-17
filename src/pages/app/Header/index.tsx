@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount, useChainId } from "wagmi";
+import { useAccount, useChainId, useNetwork } from "wagmi";
 import { ellipsis, formatNumber } from "@/utils";
 import { fetchNonce, loginRequest, searchToken, searchTokenTrending, updateWatchList } from "@/api";
 import axios from "axios";
@@ -40,6 +40,8 @@ export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
     const chainId = useChainId();
     const inputRef = useRef(null);
     const { copy, copied } = useClipboard();
+    const { chain } = useNetwork();
+
     useEffect(() => {
         if (copied) {
             showSuccess("Copied!");
@@ -47,14 +49,15 @@ export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
     }, [copied])
 
     useEffect(() => {
-        searchTokenTrending().then(res => {
+
+        searchTokenTrending(chain?.id || '1').then(res => {
             console.log(res.data, 'search hot token')
             setHotTokens(res.data)
         })
         let list = localStorage.getItem('recent')
         if (list)
             setRecent(JSON.parse(list))
-    }, [])
+    }, [chain?.id])
 
     const handleFocus = () => {
         if (timeoutRef.current) {
@@ -251,7 +254,7 @@ export default function Header({ selectedCoin, setSelectedCoin, like, setLike }:
                                     {
                                         CHAINS[chainId.toString()] ?
                                             <img className={styles.selected_chain_img}
-                                                 src={CHAINS[chainId.toString()]?.chainImage} alt=""/>
+                                                src={CHAINS[chainId.toString()]?.chainImage} alt="" />
                                             :
                                             <div className={styles.wrong_network}>Wrong Network</div>
                                     }
